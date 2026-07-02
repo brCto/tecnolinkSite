@@ -1,0 +1,378 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- ============================== HERO ============================== -->
+<section class="tk-hero" id="home">
+    <canvas id="tkHeroCanvas" class="tk-hero-canvas"></canvas>
+    <div class="container-xl">
+        <div class="tk-hero-grid">
+            <div>
+                <span class="tk-hero-badge"><i class="bi bi-shield-check"></i> 20 anni di esperienza a Firenze</span>
+                <h1>La sicurezza informatica <span class="gradient-text">su misura</span>, senza compromessi tra privacy e sicurezza.</h1>
+                <p class="lead">Progettiamo sistemi informatici, protezione cyber e soluzioni data science pensate sulle esigenze reali della tua azienda. Non ti chiediamo di scegliere: ti offriamo il meglio di entrambi.</p>
+                <div class="tk-hero-cta">
+                    <a href="#contatti" class="btn-tk btn-tk-primary"><i class="bi bi-calendar-check"></i> Richiedi una Consulenza Gratuita</a>
+                    <a href="#tecnoshield" class="btn-tk btn-tk-ghost"><i class="bi bi-shield-lock"></i> Scopri tecnoSHIELD</a>
+                </div>
+                <div class="tk-hero-trust">
+                    <div><strong>20+</strong> Anni di esperienza</div>
+                    <div><strong>24/7</strong> Monitoraggio continuo</div>
+                    <div><strong>100%</strong> Soluzioni su misura</div>
+                </div>
+            </div>
+            <div class="tk-hero-visual">
+                <div class="frame">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80" alt="Specialista Tecnolink al lavoro su sistemi di sicurezza informatica" loading="eager" />
+                </div>
+                <div class="tk-float-card card-top">
+                    <div class="icon-wrap"><i class="bi bi-hdd-network"></i></div>
+                    <div>
+                        <div class="label">Backup Monitor</div>
+                        <div class="value">Sempre protetti</div>
+                    </div>
+                </div>
+                <div class="tk-float-card card-bottom">
+                    <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
+                    <div>
+                        <div class="label">Check Sicurezza</div>
+                        <div class="value">Zero pensieri</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== STATS ============================== -->
+<section class="tk-stats">
+    <div class="container-xl">
+        <div class="tk-stats-grid">
+            <div class="reveal">
+                <div class="num"><span class="counter" data-target="20" data-suffix="+">0</span></div>
+                <div class="label">Anni di esperienza</div>
+            </div>
+            <div class="reveal">
+                <div class="num"><span>24/7</span></div>
+                <div class="label">Monitoraggio continuo</div>
+            </div>
+            <div class="reveal">
+                <div class="num"><span class="counter" data-target="3" data-suffix="">0</span></div>
+                <div class="label">Aree di competenza</div>
+            </div>
+            <div class="reveal">
+                <div class="num"><span class="counter" data-target="100" data-suffix="%">0</span></div>
+                <div class="label">Servizi personalizzati</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== SERVIZI ============================== -->
+<section class="tk-section" id="servizi">
+    <div class="container-xl">
+        <div class="tk-section-head center reveal">
+            <span class="eyebrow" style="justify-content:center;">I nostri servizi</span>
+            <h2>Soluzioni IT pensate per la tua azienda</h2>
+            <p>Consulenza, progettazione e fornitura di sistemi informatici per aziende e professionisti che gestiscono dati sensibili, con un occhio sempre attento alla sicurezza e all'efficienza.</p>
+        </div>
+
+        <div class="tk-services-grid">
+            <div class="tk-service-card reveal">
+                <div class="icon-wrap"><i class="bi bi-diagram-3"></i></div>
+                <h3>Sistemi Informatici</h3>
+                <p>Progettiamo con attenzione le soluzioni più adatte alla tua realtà: costruzione, fornitura e manutenzione degli apparati, con un supporto costante nel tempo.</p>
+                <ul>
+                    <li><i class="bi bi-check-circle-fill"></i> Progettazione su misura</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Fornitura e installazione apparati</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Monitoraggio continuo</li>
+                </ul>
+            </div>
+            <div class="tk-service-card reveal">
+                <div class="icon-wrap"><i class="bi bi-shield-lock"></i></div>
+                <h3>Sicurezza Informatica</h3>
+                <p>Supporto, protezione e formazione per affrontare un panorama di minacce in continua evoluzione, con monitoraggio dei server e assistenza tecnica dedicata.</p>
+                <ul>
+                    <li><i class="bi bi-check-circle-fill"></i> Assistenza tecnica specializzata</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Strumentazione all'avanguardia</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Tranquillità garantita</li>
+                </ul>
+            </div>
+            <div class="tk-service-card reveal">
+                <div class="icon-wrap"><i class="bi bi-bar-chart-line"></i></div>
+                <h3>Data Science</h3>
+                <p>Pochi pensieri, molti vantaggi: analizziamo e valorizziamo i tuoi dati con competenza e riservatezza, offrendo un supporto costante e soluzioni personalizzate.</p>
+                <ul>
+                    <li><i class="bi bi-check-circle-fill"></i> Competenza e sicurezza</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Supporto costante</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Soluzioni personalizzate</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tk-feature-grid" style="margin-top:1.75rem;">
+            <div class="tk-feature-card reveal">
+                <div class="icon-wrap"><i class="bi bi-cloud-arrow-up"></i></div>
+                <div>
+                    <h4>Backup Monitor</h4>
+                    <p>Monitoraggio continuo per mantenere sempre efficiente il backup e prevenire ogni perdita di dati.</p>
+                </div>
+            </div>
+            <div class="tk-feature-card reveal">
+                <div class="icon-wrap"><i class="bi bi-search"></i></div>
+                <div>
+                    <h4>Check Sicurezza</h4>
+                    <p>Controllo e manutenzione della sicurezza informatica svolti da operatori esperti, giorno dopo giorno.</p>
+                </div>
+            </div>
+            <div class="tk-feature-card reveal">
+                <div class="icon-wrap"><i class="bi bi-cpu"></i></div>
+                <div>
+                    <h4>Verifica Hardware</h4>
+                    <p>Diagnostica periodica dell'hardware con strumenti sempre aggiornati, per anticipare ogni guasto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== TECNOSHIELD ============================== -->
+<section class="tk-shield" id="tecnoshield">
+    <div class="container-xl">
+        <div class="tk-shield-grid">
+            <div class="tk-shield-visual reveal">
+                <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=900&q=80" alt="tecnoSHIELD, protezione cyber avanzata" />
+                <div class="badge-shield"><i class="bi bi-shield-fill-check" style="color:var(--cyan-300);font-size:1.4rem;"></i> Servizio esclusivo Tecnolink</div>
+            </div>
+            <div class="reveal">
+                <div class="tk-shield-tagline">Fiducia. Trasparenza. Tranquillità.</div>
+                <h2>tecno<span class="gradient-text">SHIELD</span></h2>
+                <p class="desc">Il servizio di cybersecurity esclusivo pensato per proteggere la tua azienda dagli attacchi informatici. Analizziamo i rischi, valutiamo la tua situazione e costruiamo un piano d'azione su misura, orientato alla prevenzione più che alla reazione.</p>
+                <ul class="tk-shield-benefits">
+                    <li><i class="bi bi-check-circle-fill"></i> Personalizzazione del servizio</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Attenzione ad ogni cliente</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Anticipazione dei problemi</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Gestione trasparente</li>
+                </ul>
+                <a href="#contatti" class="btn-tk btn-tk-primary"><i class="bi bi-arrow-right-circle"></i> Richiedi tecnoSHIELD</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== CHI SIAMO ============================== -->
+<section class="tk-section bg-soft" id="chi-siamo">
+    <div class="container-xl">
+        <div class="tk-about-grid">
+            <div class="tk-about-visual reveal">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" alt="Il team Tecnolink al lavoro" />
+                <div class="years-badge">
+                    <div class="n">20+</div>
+                    <div class="t">Anni</div>
+                </div>
+            </div>
+            <div class="reveal">
+                <span class="eyebrow">Chi siamo</span>
+                <h2>Tecnolink si fa in tre</h2>
+                <p style="color:var(--ink-soft);font-size:1.05rem;">Da vent'anni offriamo ai nostri clienti un servizio affidabile e innovativo. Con sede a Firenze, affianchiamo aziende e professionisti nella gestione dei propri sistemi informatici, garantendo sempre sicurezza, efficienza e attenzione al dettaglio.</p>
+                <blockquote class="tk-quote">"Non chiediamo ai nostri clienti di scegliere tra privacy o sicurezza. Noi offriamo loro il meglio di entrambi."</blockquote>
+                <div class="tk-value-grid">
+                    <div class="tk-value-card">
+                        <i class="bi bi-award"></i>
+                        <h4>Affidabilità</h4>
+                        <p>Sistemi monitorati costantemente per garantire tranquillità e competenza tecnica sicura.</p>
+                    </div>
+                    <div class="tk-value-card">
+                        <i class="bi bi-lightning-charge"></i>
+                        <h4>Innovazione</h4>
+                        <p>Personale specializzato e sempre aggiornato per contrastare le nuove minacce informatiche.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== SECURITY CHECK WIDGET ============================== -->
+<section class="tk-section" style="padding-top:0;">
+    <div class="container-xl">
+        <div class="tk-scan reveal">
+            <div class="tk-scan-grid">
+                <div>
+                    <span class="eyebrow" style="color:var(--cyan-300);">Security Check gratuito</span>
+                    <h2>Scopri il livello di protezione della tua azienda</h2>
+                    <p class="desc">Richiedi un'analisi preliminare gratuita: un nostro tecnico esamina la tua situazione attuale e ti invia un report con i punti da rafforzare, senza impegno.</p>
+
+                    <form class="tk-scan-form" id="tkScanForm">
+                        <input type="text" id="scanCompany" name="azienda" placeholder="Nome azienda" required />
+                        <input type="email" id="scanEmail" name="email" placeholder="La tua email aziendale" required />
+                        <p class="fine-print">Nessuno spam: riceverai solo il report della tua richiesta.</p>
+                        <button type="submit" class="btn-tk btn-tk-primary" id="tkScanBtn" style="width:100%;">
+                            <i class="bi bi-shield-lock"></i> Avvia il Security Check
+                        </button>
+                    </form>
+                </div>
+
+                <div>
+                    <ul class="tk-scan-steps" id="tkScanSteps">
+                        <li class="tk-scan-step" data-step="0">
+                            <i class="bi bi-circle pending-icon"></i>
+                            <span class="spin"></span>
+                            <i class="bi bi-check-circle-fill done-icon"></i>
+                            <span>Verifica configurazione di rete e accessi</span>
+                        </li>
+                        <li class="tk-scan-step" data-step="1">
+                            <i class="bi bi-circle pending-icon"></i>
+                            <span class="spin"></span>
+                            <i class="bi bi-check-circle-fill done-icon"></i>
+                            <span>Controllo aggiornamenti e patch di sicurezza</span>
+                        </li>
+                        <li class="tk-scan-step" data-step="2">
+                            <i class="bi bi-circle pending-icon"></i>
+                            <span class="spin"></span>
+                            <i class="bi bi-check-circle-fill done-icon"></i>
+                            <span>Analisi policy di backup e recovery</span>
+                        </li>
+                        <li class="tk-scan-step" data-step="3">
+                            <i class="bi bi-circle pending-icon"></i>
+                            <span class="spin"></span>
+                            <i class="bi bi-check-circle-fill done-icon"></i>
+                            <span>Valutazione formazione del personale</span>
+                        </li>
+                    </ul>
+                    <div class="tk-scan-result" id="tkScanResult">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <strong>Richiesta ricevuta!</strong>
+                        <p style="color:rgba(255,255,255,0.75);margin:0.5rem 0 0;">Un nostro tecnico ti contatterà entro 24 ore con il report preliminare e i prossimi passi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== FAQ ============================== -->
+<section class="tk-section bg-soft">
+    <div class="container-xl">
+        <div class="tk-section-head center reveal">
+            <span class="eyebrow" style="justify-content:center;">Domande frequenti</span>
+            <h2>Tutto quello che vuoi sapere</h2>
+        </div>
+        <div class="tk-faq reveal">
+            <div class="accordion" id="tkFaqAccordion">
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Quanto tempo serve per attivare un servizio di sicurezza informatica?
+                        </button>
+                    </h3>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#tkFaqAccordion">
+                        <div class="accordion-body">Dopo un primo colloquio conoscitivo definiamo insieme le priorità: nella maggior parte dei casi i primi interventi di messa in sicurezza partono già entro pochi giorni dalla consulenza iniziale.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            tecnoSHIELD è adatto anche a piccole realtà e liberi professionisti?
+                        </button>
+                    </h3>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#tkFaqAccordion">
+                        <div class="accordion-body">Sì. Il servizio viene calibrato sulla dimensione e sulle esigenze reali di ogni cliente: costruiamo un piano su misura sia per piccoli studi professionali sia per aziende strutturate.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            L'assistenza è disponibile da remoto o solo on-site a Firenze?
+                        </button>
+                    </h3>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#tkFaqAccordion">
+                        <div class="accordion-body">Offriamo entrambe le modalità: gran parte del monitoraggio e del supporto tecnico viene erogata da remoto, con interventi on-site quando la situazione lo richiede.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            Come vengono gestiti i miei dati con il servizio di Backup Monitor?
+                        </button>
+                    </h3>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#tkFaqAccordion">
+                        <div class="accordion-body">Il monitoraggio verifica costantemente che le copie di backup siano integre e aggiornate, così da intervenire subito in caso di anomalie e ridurre al minimo il rischio di perdita dei dati.</div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            Posso richiedere una prima consulenza senza impegno?
+                        </button>
+                    </h3>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#tkFaqAccordion">
+                        <div class="accordion-body">Certamente: il primo confronto serve a capire le tue esigenze e a proporti la soluzione più adatta, senza alcun obbligo di attivazione.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== CONTATTI ============================== -->
+<section class="tk-section" id="contatti">
+    <div class="container-xl">
+        <div class="tk-section-head center reveal">
+            <span class="eyebrow" style="justify-content:center;">Contatti</span>
+            <h2>Parliamo del tuo progetto</h2>
+            <p>Siamo a Firenze e rispondiamo rapidamente a ogni richiesta: scrivici o chiamaci per una consulenza gratuita.</p>
+        </div>
+
+        <div class="tk-contact-grid">
+            <div class="reveal">
+                <div class="tk-contact-card">
+                    <div class="icon-wrap"><i class="bi bi-geo-alt"></i></div>
+                    <div>
+                        <h4>Sede</h4>
+                        <p>Via Aretina 167/M, 50136 Firenze (FI)</p>
+                    </div>
+                </div>
+                <div class="tk-contact-card">
+                    <div class="icon-wrap"><i class="bi bi-telephone"></i></div>
+                    <div>
+                        <h4>Telefono</h4>
+                        <a href="tel:+390556617008">055 617008</a>
+                    </div>
+                </div>
+                <div class="tk-contact-card">
+                    <div class="icon-wrap"><i class="bi bi-envelope"></i></div>
+                    <div>
+                        <h4>Email</h4>
+                        <a href="mailto:info@tecnolink.it">info@tecnolink.it</a>
+                    </div>
+                </div>
+                <div class="tk-map">
+                    <iframe src="https://www.google.com/maps?q=Via+Aretina+167/M,+50136+Firenze+FI&output=embed" loading="lazy" title="Mappa sede Tecnolink"></iframe>
+                </div>
+            </div>
+
+            <form class="tk-form reveal" id="tkContactForm">
+                <div class="tk-form-row">
+                    <div>
+                        <label for="nome">Nome e cognome</label>
+                        <input type="text" id="nome" name="nome" placeholder="Mario Rossi" required />
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="mario.rossi@email.it" required />
+                    </div>
+                </div>
+                <label for="azienda">Azienda</label>
+                <input type="text" id="azienda" name="azienda" placeholder="Nome della tua azienda" />
+                <label for="messaggio">Messaggio</label>
+                <textarea id="messaggio" name="messaggio" rows="4" placeholder="Raccontaci le tue esigenze di sicurezza o sistemi informatici..." required></textarea>
+                <p class="fine-print">Inviando il modulo accetti il trattamento dei dati secondo la nostra <a asp-page="/Privacy" style="text-decoration:underline;">Privacy Policy</a>.</p>
+                <button type="submit" class="btn-tk btn-tk-dark" style="width:100%;"><i class="bi bi-send"></i> Invia richiesta</button>
+                <div id="tk-form-success" class="mt-3" style="color:var(--success);font-weight:600;"><i class="bi bi-check-circle-fill"></i> Grazie! Ti contatteremo al più presto.</div>
+            </form>
+        </div>
+    </div>
+</section>
