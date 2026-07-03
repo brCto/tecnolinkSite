@@ -1,26 +1,40 @@
-﻿@page
+@page "{statusCode:int?}"
 @model ErrorModel
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = Model.ErrorStatusCode == 404 ? "Pagina non trovata" : "Si è verificato un errore";
+    ViewData["Description"] = "La pagina richiesta non è disponibile. Torna alla home di Tecnolink o contattaci per assistenza.";
+    ViewData["Robots"] = "noindex, follow";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<section class="tk-hero" style="padding:10rem 0 6rem; min-height:70vh; display:flex; align-items:center;">
+    <div class="container-xl">
+        <div style="max-width:38rem; margin:0 auto; text-align:center; position:relative; z-index:1;">
+            <div style="font-family:var(--font-head); font-weight:700; font-size:clamp(4rem,12vw,7rem); line-height:1; margin-bottom:1rem;" class="gradient-text">
+                @(Model.ErrorStatusCode == 404 ? "404" : Model.ErrorStatusCode.ToString())
+            </div>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+            @if (Model.ErrorStatusCode == 404)
+            {
+                <h1 style="color:#fff;">Questa pagina si è persa nella rete.</h1>
+                <p class="lead" style="margin-left:auto;margin-right:auto;">L'indirizzo che hai seguito non esiste o è stato spostato. Nel frattempo, la tua sicurezza informatica resta la nostra priorità: torniamo a occuparcene insieme.</p>
+            }
+            else
+            {
+                <h1 style="color:#fff;">Si è verificato un errore imprevisto.</h1>
+                <p class="lead" style="margin-left:auto;margin-right:auto;">Il nostro team è già al lavoro. Riprova tra qualche istante o contattaci se il problema persiste.</p>
+            }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to the <strong>Development</strong> environment displays detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+            <div class="tk-hero-cta" style="justify-content:center;">
+                <a href="/" class="btn-tk btn-tk-primary"><i class="bi bi-house-door"></i> Torna alla Home</a>
+                <a href="/#contatti" class="btn-tk btn-tk-ghost"><i class="bi bi-headset"></i> Contatta l'assistenza</a>
+            </div>
+
+            @if (Model.ShowRequestId)
+            {
+                <p style="margin-top:2.5rem; color:rgba(255,255,255,0.4); font-size:0.8rem;">
+                    Codice riferimento: <code style="color:rgba(255,255,255,0.55); background:rgba(255,255,255,0.08); padding:0.15rem 0.5rem; border-radius:4px;">@Model.RequestId</code>
+                </p>
+            }
+        </div>
+    </div>
+</section>

@@ -12,10 +12,12 @@ namespace tecnolinkSite.Pages
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        public void OnGet()
+        public int ErrorStatusCode { get; set; }
+
+        public void OnGet(int? statusCode)
         {
+            ErrorStatusCode = statusCode ?? 500;
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }
-
 }

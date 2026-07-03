@@ -9,13 +9,21 @@
     });
   }
 
+  function setMenuOpen(open) {
+    nav.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Chiudi menu' : 'Apri menu');
+    var icon = toggle.querySelector('i');
+    if (icon) icon.className = open ? 'bi bi-x-lg' : 'bi bi-list';
+  }
+
   if (toggle && nav) {
     toggle.addEventListener('click', function () {
-      nav.classList.toggle('menu-open');
+      setMenuOpen(!nav.classList.contains('menu-open'));
     });
     nav.querySelectorAll('.tk-nav-links a').forEach(function (link) {
       link.addEventListener('click', function () {
-        nav.classList.remove('menu-open');
+        setMenuOpen(false);
       });
     });
   }

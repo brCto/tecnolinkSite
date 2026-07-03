@@ -57,6 +57,16 @@ h1, h2, h3, h4, h5, .display-font {
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
+:focus-visible {
+  outline: 2px solid var(--cyan-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.tk-nav a:focus-visible,
+.btn-tk:focus-visible {
+  outline-offset: 2px;
+}
+
 .container-xl {
   width: 100%;
   max-width: 1240px;
