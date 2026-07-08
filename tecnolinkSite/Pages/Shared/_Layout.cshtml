@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 @{
     var pageTitle = ViewData["Title"] as string;
     var fullTitle = string.IsNullOrEmpty(pageTitle)
@@ -8,6 +9,9 @@
     var robots = ViewData["Robots"] as string ?? "index, follow";
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
     var ogImage = $"{Context.Request.Scheme}://{Context.Request.Host}/img/og-image.png";
+    var ga4Id = Configuration["Analytics:GA4MeasurementId"] ?? "";
+    var metaPixelId = Configuration["Analytics:MetaPixelId"] ?? "";
+    var analyticsEnabled = !string.IsNullOrWhiteSpace(ga4Id) || !string.IsNullOrWhiteSpace(metaPixelId);
 }
 <!DOCTYPE html>
 <html lang="it">
@@ -52,7 +56,7 @@
         "@@context": "https://schema.org",
         "@@type": "ProfessionalService",
         "name": "Tecnolink",
-        "description": "Sistemi informatici, sicurezza informatica e data science su misura per aziende e professionisti.",
+        "description": "Sistemi informatici, helpdesk e assistenza tecnica, cybersicurezza e consulenza per aziende e professionisti di Firenze e zone limitrofe.",
         "image": "@ogImage",
         "url": "https://www.tecnolink.it",
         "telephone": "+39-055-617008",
@@ -66,13 +70,39 @@
             "addressRegion": "FI",
             "addressCountry": "IT"
         },
-        "areaServed": "IT",
+        "areaServed": {
+            "@@type": "GeoCircle",
+            "geoMidpoint": {
+                "@@type": "GeoCoordinates",
+                "latitude": 43.7809,
+                "longitude": 11.3149
+            },
+            "geoRadius": "30000"
+        },
         "sameAs": []
     }
+    </script>
+
+    <script>
+        window.TK_ANALYTICS = {
+            ga4: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ga4Id)),
+            metaPixel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(metaPixelId))
+        };
     </script>
 </head>
 <body>
     <div class="tk-progress" id="tkProgress"></div>
+
+    @if (analyticsEnabled)
+    {
+        <div class="tk-cookie-banner" id="tkCookieBanner">
+            <p>Utilizziamo cookie di analisi per capire come viene usato il sito e migliorarlo. Puoi accettare o rifiutare in qualsiasi momento — trovi i dettagli nella <a asp-page="/Privacy">Privacy Policy</a>.</p>
+            <div class="tk-cookie-actions">
+                <button type="button" class="btn-tk btn-tk-outline" id="tkCookieDecline">Rifiuta</button>
+                <button type="button" class="btn-tk btn-tk-dark" id="tkCookieAccept">Accetta</button>
+            </div>
+        </div>
+    }
     <nav class="tk-nav" id="tkNav">
         <div class="container-xl">
             <a class="tk-brand" asp-area="" asp-page="/Index">
@@ -107,7 +137,7 @@
                     <a class="tk-brand" asp-area="" asp-page="/Index" style="margin-bottom:1rem;">
                         <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
                     </a>
-                    <p>Da 20 anni progettiamo sistemi informatici e soluzioni di sicurezza su misura, senza chiedere ai nostri clienti di scegliere tra privacy e sicurezza.</p>
+                    <p>Da 20 anni progettiamo sistemi informatici e soluzioni di sicurezza su misura per aziende e professionisti di Firenze e delle zone limitrofe, senza chiedere ai nostri clienti di scegliere tra privacy e sicurezza.</p>
                     <div class="tk-social">
                         <a href="tel:+390556617008" aria-label="Telefono"><i class="bi bi-telephone"></i></a>
                         <a href="mailto:info@tecnolink.it" aria-label="Email"><i class="bi bi-envelope"></i></a>
@@ -118,8 +148,10 @@
                     <h5>Servizi</h5>
                     <ul>
                         <li><a asp-page="/Index" asp-fragment="servizi">Sistemi Informatici</a></li>
-                        <li><a asp-page="/Index" asp-fragment="servizi">Sicurezza Informatica</a></li>
-                        <li><a asp-page="/Index" asp-fragment="servizi">Data Science</a></li>
+                        <li><a asp-page="/Index" asp-fragment="servizi">Helpdesk e Assistenza</a></li>
+                        <li><a asp-page="/Index" asp-fragment="servizi">Cybersicurezza</a></li>
+                        <li><a asp-page="/Index" asp-fragment="servizi">Consulenza e Formazione</a></li>
+                        <li><a asp-page="/Index" asp-fragment="soluzioni-avanzate">Soluzioni Avanzate</a></li>
                         <li><a asp-page="/Index" asp-fragment="tecnoshield">tecnoSHIELD</a></li>
                     </ul>
                 </div>

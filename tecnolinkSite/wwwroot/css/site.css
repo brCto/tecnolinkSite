@@ -189,6 +189,36 @@ section { position: relative; }
 .tk-logo { height: 32px; width: auto; display: block; }
 
 /* --------------------------------------------------------------------- */
+/* Cookie consent banner */
+/* --------------------------------------------------------------------- */
+
+.tk-cookie-banner {
+  position: fixed;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  max-width: 460px;
+  width: calc(100% - 3rem);
+  background: var(--navy-950);
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-md);
+  padding: 1.4rem;
+  box-shadow: 0 20px 50px -15px rgba(0,0,0,0.5);
+  z-index: 1200;
+  display: none;
+}
+.tk-cookie-banner.show { display: block; animation: tk-fade-in 0.4s ease; }
+.tk-cookie-banner p { font-size: 0.85rem; line-height: 1.55; margin-bottom: 1rem; }
+.tk-cookie-banner a { text-decoration: underline; color: var(--cyan-300); }
+.tk-cookie-actions { display: flex; gap: 0.7rem; }
+.tk-cookie-actions .btn-tk { padding: 0.6rem 1.1rem; font-size: 0.85rem; flex: 1; }
+.tk-cookie-actions .btn-tk-outline { border-color: rgba(255,255,255,0.25); color: #fff; }
+.tk-cookie-actions .btn-tk-outline:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.08); }
+@media (max-width: 500px) {
+  .tk-cookie-banner { left: 1rem; right: 1rem; bottom: 1rem; width: auto; max-width: none; }
+}
+
+/* --------------------------------------------------------------------- */
 /* Navbar */
 /* --------------------------------------------------------------------- */
 
@@ -460,6 +490,14 @@ section { position: relative; }
 @media (max-width: 991px) { .tk-services-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 650px) { .tk-services-grid { grid-template-columns: 1fr; } }
 
+.tk-services-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1150px) { .tk-services-grid.cols-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 650px) { .tk-services-grid.cols-4 { grid-template-columns: 1fr; } }
+
+.tk-service-card.compact { padding: 1.8rem; }
+.tk-service-card.compact .icon-wrap { width: 48px; height: 48px; font-size: 1.3rem; margin-bottom: 1.1rem; }
+.tk-service-card.compact h3 { font-size: 1.1rem; }
+
 .tk-service-card {
   background: #fff;
   border: 1px solid var(--line);
@@ -509,6 +547,8 @@ section { position: relative; }
   gap: 1.5rem;
 }
 @media (max-width: 767px) { .tk-feature-grid { grid-template-columns: 1fr; } }
+.tk-feature-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 767px) { .tk-feature-grid.cols-2 { grid-template-columns: 1fr; } }
 .tk-feature-card {
   display: flex;
   gap: 1rem;
@@ -530,6 +570,55 @@ section { position: relative; }
 }
 .tk-feature-card h4 { font-size: 1.02rem; margin-bottom: 0.35rem; }
 .tk-feature-card p { font-size: 0.88rem; color: var(--ink-soft); margin: 0; }
+
+/* --------------------------------------------------------------------- */
+/* Highlight card (custom project development, etc.) */
+/* --------------------------------------------------------------------- */
+
+.tk-highlight-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.8rem;
+  align-items: flex-start;
+  background: var(--navy-900);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 2.4rem;
+  margin-top: 1.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.tk-highlight-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 85% 20%, rgba(34,211,238,0.18), transparent 45%);
+  pointer-events: none;
+}
+@media (max-width: 650px) { .tk-highlight-card { grid-template-columns: 1fr; } }
+.tk-highlight-card .icon-wrap {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  background: var(--gradient-brand);
+  color: #061021;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  position: relative; z-index: 1;
+}
+.tk-highlight-card .content { position: relative; z-index: 1; }
+.tk-highlight-card h3 { color: #fff; font-size: 1.35rem; margin-bottom: 0.6rem; }
+.tk-highlight-card p { color: rgba(255,255,255,0.72); font-size: 0.98rem; margin-bottom: 1.1rem; }
+.tk-example-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; list-style: none; padding: 0; margin: 0; }
+.tk-example-tags li {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 100px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.tk-example-tags li i { color: var(--cyan-300); }
 
 /* --------------------------------------------------------------------- */
 /* tecnoSHIELD spotlight */
@@ -864,6 +953,25 @@ section { position: relative; }
 .tk-form .fine-print { font-size: 0.78rem; color: var(--ink-soft); margin-top: -0.4rem; }
 #tk-form-success { display: none; }
 #tk-form-success.show { display: block; }
+.tk-form-error, .tk-scan-form-error {
+  display: none;
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+}
+.tk-form-error.show, .tk-scan-form-error.show { display: block; }
+
+/* Honeypot: hidden from sighted users but present in the DOM for bots to fill */
+.tk-hp {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* --------------------------------------------------------------------- */
 /* Footer */

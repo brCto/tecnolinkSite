@@ -1,3 +1,93 @@
+// Analytics: consent-gated GA4 / Meta Pixel loading + conversion tracking
+(function () {
+  var cfg = window.TK_ANALYTICS || { ga4: '', metaPixel: '' };
+  var hasGa4 = !!cfg.ga4;
+  var hasPixel = !!cfg.metaPixel;
+  var CONSENT_KEY = 'tk_cookie_consent';
+
+  function loadGA4() {
+    if (!hasGa4 || window.__tkGa4Loaded) return;
+    window.__tkGa4Loaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(cfg.ga4);
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', cfg.ga4);
+  }
+
+  function loadMetaPixel() {
+    if (!hasPixel || window.__tkPixelLoaded) return;
+    window.__tkPixelLoaded = true;
+    /* eslint-disable */
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+      t = b.createElement(e); t.async = !0; t.src = v;
+      s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    /* eslint-enable */
+    window.fbq('init', cfg.metaPixel);
+    window.fbq('track', 'PageView');
+  }
+
+  function activateTracking() {
+    loadGA4();
+    loadMetaPixel();
+  }
+
+  // Global helper used by the contact form and security-check widget on successful submit.
+  window.tkTrackConversion = function (formName) {
+    if (window.gtag) window.gtag('event', 'generate_lead', { form_name: formName });
+    if (window.fbq) window.fbq('track', 'Lead', { content_name: formName });
+  };
+
+  var banner = document.getElementById('tkCookieBanner');
+  var hasAnalyticsConfigured = hasGa4 || hasPixel;
+  var consent = null;
+  try { consent = window.localStorage.getItem(CONSENT_KEY); } catch (e) { /* storage unavailable */ }
+
+  if (hasAnalyticsConfigured && consent === 'granted') {
+    activateTracking();
+  } else if (hasAnalyticsConfigured && consent !== 'denied' && banner) {
+    banner.classList.add('show');
+  }
+
+  if (banner) {
+    var acceptBtn = document.getElementById('tkCookieAccept');
+    var declineBtn = document.getElementById('tkCookieDecline');
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', function () {
+        try { window.localStorage.setItem(CONSENT_KEY, 'granted'); } catch (e) { /* ignore */ }
+        banner.classList.remove('show');
+        activateTracking();
+      });
+    }
+    if (declineBtn) {
+      declineBtn.addEventListener('click', function () {
+        try { window.localStorage.setItem(CONSENT_KEY, 'denied'); } catch (e) { /* ignore */ }
+        banner.classList.remove('show');
+      });
+    }
+  }
+
+  // Secondary engagement signals: phone / email link clicks.
+  document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.gtag) window.gtag('event', 'phone_click');
+      if (window.fbq) window.fbq('trackCustom', 'PhoneClick');
+    });
+  });
+  document.querySelectorAll('a[href^="mailto:"]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (window.gtag) window.gtag('event', 'email_click');
+      if (window.fbq) window.fbq('trackCustom', 'EmailClick');
+    });
+  });
+})();
+
 // Navbar: scrolled shadow + mobile toggle
 (function () {
   var nav = document.getElementById('tkNav');
@@ -51,18 +141,61 @@
   items.forEach(function (el) { observer.observe(el); });
 })();
 
-// Contact form (demo submit — wire up to a backend endpoint when available)
+// Contact form — submits to the /api/contact endpoint
 (function () {
   var form = document.getElementById('tkContactForm');
   if (!form) return;
+  var successEl = document.getElementById('tk-form-success');
+  var errorEl = document.getElementById('tk-form-error');
+  var submitBtn = form.querySelector('button[type="submit"]');
+  var originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var success = document.getElementById('tk-form-success');
-    if (success) {
-      success.classList.add('show');
+    if (successEl) successEl.classList.remove('show');
+    if (errorEl) errorEl.classList.remove('show');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Invio in corso...';
     }
-    form.reset();
+
+    var payload = {
+      nome: form.nome ? form.nome.value : '',
+      email: form.email ? form.email.value : '',
+      azienda: form.azienda ? form.azienda.value : '',
+      messaggio: form.messaggio ? form.messaggio.value : '',
+      source: form.getAttribute('data-source') || 'Home',
+      hpField: form.hp_field ? form.hp_field.value : ''
+    };
+
+    fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return { httpOk: res.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        if (result.httpOk && result.data && result.data.ok) {
+          if (successEl) successEl.classList.add('show');
+          form.reset();
+          if (typeof tkTrackConversion === 'function') tkTrackConversion('contact_form');
+        } else if (errorEl) {
+          errorEl.classList.add('show');
+        }
+      })
+      .catch(function () {
+        if (errorEl) errorEl.classList.add('show');
+      })
+      .finally(function () {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      });
   });
 })();
 
@@ -224,19 +357,39 @@
   }
 })();
 
-// Security Check widget — simulated multi-step analysis leading to a lead capture
+// Security Check widget — animated multi-step analysis, backed by a real lead submission
 (function () {
   var form = document.getElementById('tkScanForm');
   if (!form) return;
   var btn = document.getElementById('tkScanBtn');
   var steps = document.querySelectorAll('#tkScanSteps .tk-scan-step');
   var result = document.getElementById('tkScanResult');
+  var errorEl = document.getElementById('tkScanFormError');
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (btn.disabled) return;
     btn.disabled = true;
     btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Analisi in corso...';
+    if (errorEl) errorEl.classList.remove('show');
+
+    var payload = {
+      azienda: form.azienda ? form.azienda.value : '',
+      email: form.email ? form.email.value : '',
+      hpField: form.hp_field ? form.hp_field.value : ''
+    };
+
+    var submitPromise = fetch('/api/security-check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return res.ok && data && data.ok;
+        });
+      })
+      .catch(function () { return false; });
 
     steps.forEach(function (s) { s.classList.remove('active', 'done'); });
     result.classList.remove('show');
@@ -249,10 +402,17 @@
         i++;
         setTimeout(runStep, 650);
       } else {
-        result.classList.add('show');
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Invia un\'altra richiesta';
-        form.reset();
+        submitPromise.then(function (success) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Invia un\'altra richiesta';
+          if (success) {
+            result.classList.add('show');
+            form.reset();
+            if (typeof tkTrackConversion === 'function') tkTrackConversion('security_check');
+          } else if (errorEl) {
+            errorEl.classList.add('show');
+          }
+        });
       }
     }
     runStep();
