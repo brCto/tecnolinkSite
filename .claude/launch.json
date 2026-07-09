@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tecnolinkSite-http",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "tecnolinkSite/tecnolinkSite.csproj", "--launch-profile", "http"],
+      "port": 5033
+    },
+    {
+      "name": "tecnolinkSite-https",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "tecnolinkSite/tecnolinkSite.csproj", "--launch-profile", "https"],
+      "port": 7112
+    }
+  ]
+}
