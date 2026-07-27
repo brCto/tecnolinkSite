@@ -1,8 +1,44 @@
-// Analytics: consent-gated GA4 / Meta Pixel loading + conversion tracking
+// Attribuzione campagne: memorizza i parametri UTM del primo ingresso per tutta
+// la sessione, così il lead resta collegato all'annuncio anche dopo altri click.
 (function () {
-  var cfg = window.TK_ANALYTICS || { ga4: '', metaPixel: '' };
+  var KEY = 'tk_campaign';
+  var FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+
+  function read() {
+    try { return JSON.parse(window.sessionStorage.getItem(KEY)) || null; } catch (e) { return null; }
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  var fromUrl = {};
+  var found = false;
+  FIELDS.forEach(function (f) {
+    var v = params.get(f);
+    if (v) { fromUrl[f] = v.slice(0, 120); found = true; }
+  });
+  // Click id delle piattaforme: utili quando gli UTM non vengono passati.
+  ['fbclid', 'li_fat_id', 'gclid'].forEach(function (f) {
+    var v = params.get(f);
+    if (v) { fromUrl[f] = v.slice(0, 200); found = true; }
+  });
+
+  if (found) {
+    fromUrl.landing = window.location.pathname;
+    try { window.sessionStorage.setItem(KEY, JSON.stringify(fromUrl)); } catch (e) { /* ignore */ }
+  }
+
+  window.tkCampaign = function () {
+    var data = found ? fromUrl : read();
+    if (!data) return '';
+    return Object.keys(data).map(function (k) { return k + '=' + data[k]; }).join(' | ');
+  };
+})();
+
+// Analytics: consent-gated GA4 / Meta Pixel / LinkedIn Insight Tag + conversion tracking
+(function () {
+  var cfg = window.TK_ANALYTICS || { ga4: '', metaPixel: '', linkedIn: '', linkedInLeadConversionId: '' };
   var hasGa4 = !!cfg.ga4;
   var hasPixel = !!cfg.metaPixel;
+  var hasLinkedIn = !!cfg.linkedIn;
   var CONSENT_KEY = 'tk_cookie_consent';
 
   function loadGA4() {
@@ -33,19 +69,39 @@
     window.fbq('track', 'PageView');
   }
 
+  function loadLinkedIn() {
+    if (!hasLinkedIn || window.__tkLinkedInLoaded) return;
+    window.__tkLinkedInLoaded = true;
+    window._linkedin_partner_id = String(cfg.linkedIn);
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(window._linkedin_partner_id);
+    if (!window.lintrk) {
+      window.lintrk = function (a, b) { window.lintrk.q.push([a, b]); };
+      window.lintrk.q = [];
+    }
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+    document.head.appendChild(s);
+  }
+
   function activateTracking() {
     loadGA4();
     loadMetaPixel();
+    loadLinkedIn();
   }
 
   // Global helper used by the contact form and security-check widget on successful submit.
   window.tkTrackConversion = function (formName) {
     if (window.gtag) window.gtag('event', 'generate_lead', { form_name: formName });
     if (window.fbq) window.fbq('track', 'Lead', { content_name: formName });
+    if (window.lintrk && cfg.linkedInLeadConversionId) {
+      window.lintrk('track', { conversion_id: Number(cfg.linkedInLeadConversionId) });
+    }
   };
 
   var banner = document.getElementById('tkCookieBanner');
-  var hasAnalyticsConfigured = hasGa4 || hasPixel;
+  var hasAnalyticsConfigured = hasGa4 || hasPixel || hasLinkedIn;
   var consent = null;
   try { consent = window.localStorage.getItem(CONSENT_KEY); } catch (e) { /* storage unavailable */ }
 
@@ -162,9 +218,12 @@
     var payload = {
       nome: form.nome ? form.nome.value : '',
       email: form.email ? form.email.value : '',
+      telefono: form.telefono ? form.telefono.value : '',
       azienda: form.azienda ? form.azienda.value : '',
+      dimensione: form.dimensione ? form.dimensione.value : '',
       messaggio: form.messaggio ? form.messaggio.value : '',
       source: form.getAttribute('data-source') || 'Home',
+      campagna: typeof tkCampaign === 'function' ? tkCampaign() : '',
       hpField: form.hp_field ? form.hp_field.value : ''
     };
 

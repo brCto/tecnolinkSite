@@ -23,13 +23,18 @@ public static class LeadEndpoints
 
             var nome = Truncate(req.Nome, MaxShortField);
             var emailAddr = Truncate(req.Email, MaxShortField);
+            var telefono = Truncate(req.Telefono, MaxShortField);
             var azienda = Truncate(req.Azienda, MaxShortField);
+            var dimensione = Truncate(req.Dimensione, MaxShortField);
             var messaggio = Truncate(req.Messaggio, MaxMessageField);
             var source = Truncate(req.Source, MaxShortField);
+            var campagna = Truncate(req.Campagna, MaxShortField);
 
-            if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(messaggio))
+            // Il messaggio è facoltativo: sulle landing delle campagne un campo di
+            // testo obbligatorio costa più lead di quanti ne qualifichi.
+            if (string.IsNullOrWhiteSpace(nome))
             {
-                return Results.BadRequest(new { ok = false, error = "Nome e messaggio sono obbligatori." });
+                return Results.BadRequest(new { ok = false, error = "Il nome è obbligatorio." });
             }
             if (string.IsNullOrWhiteSpace(emailAddr) || !new EmailAddressAttribute().IsValid(emailAddr))
             {
@@ -41,8 +46,11 @@ public static class LeadEndpoints
                 <p><strong>Pagina:</strong> {WebUtility.HtmlEncode(source ?? "n/d")}</p>
                 <p><strong>Nome:</strong> {WebUtility.HtmlEncode(nome)}</p>
                 <p><strong>Email:</strong> {WebUtility.HtmlEncode(emailAddr)}</p>
-                <p><strong>Azienda:</strong> {WebUtility.HtmlEncode(string.IsNullOrWhiteSpace(azienda) ? "n/d" : azienda)}</p>
-                <p><strong>Messaggio:</strong><br/>{WebUtility.HtmlEncode(messaggio).Replace("\n", "<br/>")}</p>
+                <p><strong>Telefono:</strong> {WebUtility.HtmlEncode(Or(telefono))}</p>
+                <p><strong>Azienda:</strong> {WebUtility.HtmlEncode(Or(azienda))}</p>
+                <p><strong>Dimensione rete:</strong> {WebUtility.HtmlEncode(Or(dimensione))}</p>
+                <p><strong>Campagna:</strong> {WebUtility.HtmlEncode(Or(campagna))}</p>
+                <p><strong>Messaggio:</strong><br/>{WebUtility.HtmlEncode(Or(messaggio)).Replace("\n", "<br/>")}</p>
                 """;
 
             var sent = await email.SendAsync($"Nuova richiesta dal sito — {nome}", body, emailAddr, nome, ct);
@@ -79,6 +87,8 @@ public static class LeadEndpoints
             return Results.Ok(new { ok = true, delivered = sent });
         });
     }
+
+    private static string Or(string? value) => string.IsNullOrWhiteSpace(value) ? "n/d" : value;
 
     private static string? Truncate(string? value, int maxLength)
     {

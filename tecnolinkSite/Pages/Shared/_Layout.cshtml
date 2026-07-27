@@ -11,7 +11,16 @@
     var ogImage = $"{Context.Request.Scheme}://{Context.Request.Host}/img/og-image.png";
     var ga4Id = Configuration["Analytics:GA4MeasurementId"] ?? "";
     var metaPixelId = Configuration["Analytics:MetaPixelId"] ?? "";
-    var analyticsEnabled = !string.IsNullOrWhiteSpace(ga4Id) || !string.IsNullOrWhiteSpace(metaPixelId);
+    var linkedInPartnerId = Configuration["Analytics:LinkedInPartnerId"] ?? "";
+    var linkedInLeadConversionId = Configuration["Analytics:LinkedInLeadConversionId"] ?? "";
+    var analyticsEnabled = !string.IsNullOrWhiteSpace(ga4Id)
+        || !string.IsNullOrWhiteSpace(metaPixelId)
+        || !string.IsNullOrWhiteSpace(linkedInPartnerId);
+
+    // Landing mode: pagine di destinazione delle campagne a pagamento. Nascondono
+    // menu e footer completo per non offrire vie d'uscita al traffico acquistato.
+    // Le pagine restano comunque raggiungibili dal menu del sito generale.
+    var isLanding = (ViewData["Landing"] as bool?) ?? false;
 }
 <!DOCTYPE html>
 <html lang="it">
@@ -86,7 +95,9 @@
     <script>
         window.TK_ANALYTICS = {
             ga4: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ga4Id)),
-            metaPixel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(metaPixelId))
+            metaPixel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(metaPixelId)),
+            linkedIn: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(linkedInPartnerId)),
+            linkedInLeadConversionId: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(linkedInLeadConversionId))
         };
     </script>
 </head>
@@ -103,27 +114,46 @@
             </div>
         </div>
     }
-    <nav class="tk-nav" id="tkNav">
+    <nav class="tk-nav @(isLanding ? "is-landing" : "")" id="tkNav">
         <div class="container-xl">
-            <a class="tk-brand" asp-area="" asp-page="/Index">
-                <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
-            </a>
+            @if (isLanding)
+            {
+                @* Landing: il logo non è un link verso l'esterno, resta sulla pagina. *@
+                <span class="tk-brand">
+                    <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
+                </span>
 
-            <ul class="tk-nav-links">
-                <li><a asp-page="/Index" asp-fragment="home">Home</a></li>
-                <li><a asp-page="/Index" asp-fragment="servizi">Servizi</a></li>
-                <li><a asp-page="/Index" asp-fragment="tecnoshield">tecnoSHIELD</a></li>
-                <li><a asp-page="/Offerte/VulnerabilityAssessment">Vulnerability Assessment</a></li>
-                <li><a asp-page="/Index" asp-fragment="chi-siamo">Chi siamo</a></li>
-                <li><a asp-page="/Index" asp-fragment="contatti">Contatti</a></li>
-                <li class="d-lg-none"><a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a></li>
-            </ul>
+                <div class="tk-nav-actions">
+                    <a class="tk-nav-phone" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="btn-tk btn-tk-primary" href="#contatti">Richiedi un'analisi</a>
+                </div>
+            }
+            else
+            {
+                <a class="tk-brand" asp-area="" asp-page="/Index">
+                    <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
+                </a>
 
-            <div class="tk-nav-actions">
-                <a class="tk-nav-phone d-none d-lg-flex" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
-                <a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a>
-                <button class="tk-nav-toggle" id="tkNavToggle" aria-label="Apri menu" aria-expanded="false"><i class="bi bi-list"></i></button>
-            </div>
+                <ul class="tk-nav-links">
+                    <li><a asp-page="/Index" asp-fragment="home">Home</a></li>
+                    <li><a asp-page="/Index" asp-fragment="servizi">Servizi</a></li>
+                    <li><a asp-page="/Index" asp-fragment="tecnoshield">tecnoSHIELD</a></li>
+                    <li><a asp-page="/Offerte/VulnerabilityAssessment">Check-up di sicurezza</a></li>
+                    @* TEMP — accesso interno alle landing delle campagne (rimuovere prima del lancio degli ads) *@
+                    <li><a asp-page="/Offerte/VulnerabilityAssessmentAziende">VA · Aziende</a></li>
+                    <li><a asp-page="/Offerte/VulnerabilityAssessmentPrivati">VA · Privati</a></li>
+                    @* /TEMP *@
+                    <li><a asp-page="/Index" asp-fragment="chi-siamo">Chi siamo</a></li>
+                    <li><a asp-page="/Index" asp-fragment="contatti">Contatti</a></li>
+                    <li class="d-lg-none"><a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a></li>
+                </ul>
+
+                <div class="tk-nav-actions">
+                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a>
+                    <button class="tk-nav-toggle" id="tkNavToggle" aria-label="Apri menu" aria-expanded="false"><i class="bi bi-list"></i></button>
+                </div>
+            }
         </div>
     </nav>
 
@@ -131,6 +161,29 @@
         @RenderBody()
     </main>
 
+    @if (isLanding)
+    {
+        <footer class="tk-footer tk-footer-landing">
+            <div class="container-xl">
+                <div class="tk-footer-landing-grid">
+                    <span class="tk-brand">
+                        <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
+                    </span>
+                    <ul>
+                        <li><i class="bi bi-geo-alt me-2"></i>Via Aretina 167/M, 50136 Firenze</li>
+                        <li><i class="bi bi-telephone me-2"></i><a href="tel:+390556617008">055 617008</a></li>
+                        <li><i class="bi bi-envelope me-2"></i><a href="mailto:info@tecnolink.it">info@tecnolink.it</a></li>
+                    </ul>
+                </div>
+                <div class="tk-footer-bottom">
+                    <span>&copy; @DateTime.Now.Year Tecnolink — P.IVA 04609110483</span>
+                    <span><a asp-page="/Privacy">Privacy Policy</a></span>
+                </div>
+            </div>
+        </footer>
+    }
+    else
+    {
     <footer class="tk-footer">
         <div class="container-xl">
             <div class="tk-footer-grid">
@@ -179,6 +232,7 @@
             </div>
         </div>
     </footer>
+    }
 
     <button id="tkBackToTop" class="tk-back-to-top" aria-label="Torna in cima"><i class="bi bi-arrow-up"></i></button>
 

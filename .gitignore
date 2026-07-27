@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Creativi campagne: gli HTML sono output intermedio di docs/creativi/genera.mjs,
+# si rigenerano con "node genera.mjs". I PNG invece sono il deliverable e restano versionati.
+docs/creativi/html/

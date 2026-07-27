@@ -313,6 +313,16 @@ section { position: relative; }
     padding: 1.5rem;
     gap: 1.1rem;
   }
+
+  /* Landing: senza menu, telefono e CTA devono restare visibili anche su mobile. */
+  .tk-nav.is-landing .tk-nav-phone,
+  .tk-nav.is-landing .tk-nav-actions .btn-tk-primary { display: flex; }
+}
+
+@media (max-width: 575px) {
+  /* Sotto i 576px logo + telefono + CTA non ci stanno: resta la sola CTA. */
+  .tk-nav.is-landing .tk-nav-phone { display: none; }
+  .tk-nav.is-landing .tk-nav-actions .btn-tk-primary { padding: 0.6rem 1rem; font-size: 0.82rem; }
 }
 
 /* --------------------------------------------------------------------- */
@@ -933,7 +943,7 @@ section { position: relative; }
 .tk-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media (max-width: 575px) { .tk-form-row { grid-template-columns: 1fr; } }
 .tk-form label { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; display: block; color: var(--navy-900); }
-.tk-form input, .tk-form textarea {
+.tk-form input, .tk-form textarea, .tk-form select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
@@ -943,12 +953,23 @@ section { position: relative; }
   margin-bottom: 1.1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   background: var(--paper-soft);
+  color: var(--ink);
 }
-.tk-form input:focus, .tk-form textarea:focus {
+.tk-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 2.6rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%234a5372'%3E%3Cpath d='M4.5 6.2h7L8 10.5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 14px;
+}
+.tk-form input:focus, .tk-form textarea:focus, .tk-form select:focus {
   outline: none;
   border-color: var(--violet-500);
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-  background: #fff;
+  background-color: #fff;
 }
 .tk-form .fine-print { font-size: 0.78rem; color: var(--ink-soft); margin-top: -0.4rem; }
 #tk-form-success { display: none; }
@@ -1001,6 +1022,22 @@ section { position: relative; }
   display: flex; justify-content: space-between; align-items: center;
   padding: 1.6rem 0; font-size: 0.82rem; flex-wrap: wrap; gap: 0.6rem;
 }
+/* Landing mode — footer ridotto per le pagine di destinazione delle campagne */
+.tk-footer-landing { padding-top: 3rem; }
+.tk-footer-landing-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.tk-footer-landing-grid ul { display: flex; flex-wrap: wrap; gap: 0.4rem 1.6rem; }
+.tk-footer-landing-grid ul li { margin-bottom: 0; }
+.tk-footer-landing .tk-footer-bottom a { text-decoration: underline; }
+.tk-footer-landing .tk-footer-bottom a:hover { color: var(--cyan-300); }
+
 .tk-social { display: flex; gap: 0.7rem; }
 .tk-social a {
   width: 36px; height: 36px;
