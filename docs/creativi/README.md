@@ -19,6 +19,12 @@ Sulla pagina aziende il termine tecnico *Vulnerability Assessment* resta — ser
 gare, questionari dei clienti e ricerche su Google — ma nel corpo del testo, non nel
 nome. Sulla pagina privati non compare da nessuna parte.
 
+La landing aziende promette ora un ricontatto "entro 24 ore lavorative" nel passo
+"Cosa succede dopo che compili il modulo". Se in futuro si vuole testare questo impegno
+anche nel creativo o nella CTA, o nelle varianti di copy in `docs/campagne-ads.md`, va
+tenuto allineato a quanto scritto sulla landing — vale lo stesso principio di coerenza
+annuncio/pagina descritto sopra.
+
 ### Le due palette
 
 | Palette | Com'è | Quando conviene |
