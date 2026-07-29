@@ -1,8 +1,16 @@
 # Creativi — presentazione del servizio
 
+> Questo è il visual di presentazione per l'**immagine singola**, uno solo, da affiancare
+> a tutte le varianti di copy. I **caroselli in bianco e nero**, differenziati per
+> pubblico, sono un formato a sé e stanno in [`caroselli/`](caroselli/).
+
 Un solo visual, generale sul servizio, pensato per essere letto in verticale dal
 telefono. Lo stesso impianto in **due pubblici**, **due palette** e **tre misure**.
-I file si chiamano `png/<pubblico>-<palette>-<misura>.png`.
+
+I PNG stanno dentro il sito, in
+`tecnolinkSite/wwwroot/img/campagne/singola/<pubblico>-<palette>-<misura>.png`, e si
+guardano tutti insieme da **`/interno/materiali-campagne`** — la pagina interna che
+indicizza i materiali delle campagne.
 
 ### I due pubblici
 
@@ -56,8 +64,9 @@ palette chiara viene portato a nero con `filter: brightness(0)`.
 node genera.mjs && ./render.sh
 ```
 
-Gli HTML intermedi finiscono in `html/`, i PNG in `png/`. Per vedere l'anteprima senza
-rigenerare i PNG basta aprire un file di `html/` nel browser.
+Gli HTML intermedi finiscono in `html/`, i PNG direttamente in
+`tecnolinkSite/wwwroot/img/campagne/singola/`. Per vedere l'anteprima senza rigenerare i
+PNG basta aprire un file di `html/` nel browser.
 
 **Serve:** Node e Microsoft Edge (già presenti su Windows). Il rendering usa Edge in
 headless, così i font Poppins e Inter vengono resi come sul sito. Poppins e Inter sono

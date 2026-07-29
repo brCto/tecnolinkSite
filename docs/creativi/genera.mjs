@@ -51,7 +51,7 @@ const CONTENUTI = {
     ],
     garanzie: ['Nessun fermo del lavoro', 'I dati restano tuoi', 'Te lo spieghiamo di persona'],
     cta: 'Richiedi un\'analisi',
-    piede: 'Tecnolink · Firenze, da oltre 20 anni',
+    piede: 'Tecnolink · Firenze e dintorni',
   },
   privati: {
     chip: 'Check-up della rete di casa',
@@ -65,7 +65,7 @@ const CONTENUTI = {
     ],
     garanzie: ['Nessuna complicazione', 'I tuoi dati restano tuoi', 'Niente paroloni'],
     cta: 'Controlla la mia rete',
-    piede: 'Tecnolink · Firenze, da oltre 20 anni',
+    piede: 'Tecnolink · Firenze e dintorni',
   },
 };
 
