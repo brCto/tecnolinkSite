@@ -1,0 +1,376 @@
+@page "/interno/materiali-campagne"
+@{
+    ViewData["Title"] = "Materiali campagne (uso interno)";
+    ViewData["Description"] = "Indice interno dei creativi e dei documenti delle campagne a pagamento.";
+    ViewData["Robots"] = "noindex, nofollow";
+}
+
+@functions {
+    // Nome leggibile delle quattro varianti grafiche, in ordine di quanto la
+    // fotografia invade il testo.
+    static string NomeVariante(string v) => v switch
+    {
+        "bn" => "Bianco e nero — nessuna foto",
+        "foto" => "Foto a tutto fondo — massimo impatto, il testo ci sta sopra",
+        "fascia" => "Foto in fascia — nessuna sovrapposizione, testo su nero",
+        "riquadro" => "Foto in riquadro — la più composta, sembra una pagina",
+        _ => v,
+    };
+}
+
+@*
+    Pagina di servizio, non commerciale: è l'indice da cui si ritrovano i creativi
+    delle campagne senza doverli cercare nel repository. I PNG stanno in
+    wwwroot/img/campagne/ perché è da qui che vengono mostrati; i sorgenti che li
+    generano stanno in docs/creativi/, indicati sotto ogni sezione.
+
+    noindex, nofollow: non deve finire nei motori di ricerca. Non è protetta da
+    password — chi conosce l'indirizzo la vede, come i PNG che mostra. Sono
+    creativi pubblicitari destinati a diventare pubblici, quindi va bene così;
+    se un giorno ci finisse dentro materiale riservato, serve una vera protezione.
+*@
+
+<style>
+    .mc-head { background: var(--gradient-dark); color: #fff; padding: 9.5rem 0 4rem; }
+    .mc-head h1 { color: #fff; font-size: clamp(2rem, 3.6vw, 2.9rem); }
+    .mc-head p { color: rgba(255,255,255,0.78); max-width: 44rem; margin-top: 1rem; font-size: 1.05rem; }
+    .mc-flag {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        background: rgba(251,191,36,0.14); border: 1px solid rgba(251,191,36,0.45);
+        color: #fbbf24; border-radius: 100px; padding: 0.4rem 0.9rem;
+        font-size: 0.82rem; font-weight: 600; margin-bottom: 1.2rem;
+    }
+
+    .mc-set { margin-bottom: 3.5rem; }
+    .mc-set:last-child { margin-bottom: 0; }
+    .mc-set-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem; margin-bottom: 0.4rem; }
+    .mc-set-head h3 { font-size: 1.25rem; margin: 0; }
+    .mc-tag {
+        font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+        background: rgba(99,102,241,0.10); border: 1px solid rgba(99,102,241,0.28);
+        color: var(--violet-500); border-radius: 100px; padding: 0.2rem 0.7rem;
+    }
+    .mc-set > p { color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 1.4rem; max-width: 52rem; }
+    .mc-variante {
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--ink-soft); margin: 1.6rem 0 0.7rem; padding-bottom: 0.4rem;
+        border-bottom: 1px solid var(--line);
+    }
+
+    .mc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    @@media (max-width: 900px) { .mc-grid { grid-template-columns: repeat(2, 1fr); } }
+    .mc-grid.storie { grid-template-columns: repeat(6, 1fr); }
+    @@media (max-width: 900px) { .mc-grid.storie { grid-template-columns: repeat(3, 1fr); } }
+
+    .mc-item { display: block; text-decoration: none; }
+    .mc-item img {
+        width: 100%; display: block; border-radius: var(--radius-sm);
+        border: 1px solid var(--line); background: var(--paper);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .mc-item:hover img { transform: translateY(-3px); box-shadow: var(--shadow-soft); }
+    .mc-item span {
+        display: block; margin-top: 0.5rem; font-size: 0.78rem;
+        color: var(--ink-soft); word-break: break-all;
+    }
+
+    .mc-cmd {
+        background: var(--navy-800); color: #e6ecff; border-radius: var(--radius-sm);
+        padding: 0.9rem 1.1rem; font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+        font-size: 0.85rem; overflow-x: auto; margin: 0.6rem 0 0;
+    }
+    .mc-path { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.86rem; color: var(--violet-500); }
+
+    .mc-files { list-style: none; padding: 0; margin: 0; }
+    .mc-files li { padding: 0.7rem 0; border-bottom: 1px solid var(--line); font-size: 0.94rem; }
+    .mc-files li:last-child { border-bottom: none; }
+    .mc-files strong { display: block; margin-bottom: 0.15rem; }
+    .mc-files span { color: var(--ink-soft); font-size: 0.88rem; }
+
+    .mc-idea { border-left: 3px solid var(--violet-500); padding-left: 1.2rem; margin-bottom: 2.2rem; }
+    .mc-idea:last-child { margin-bottom: 0; }
+    .mc-idea h4 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+    .mc-idea p { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.5rem; }
+    .mc-idea .mc-meta { font-size: 0.85rem; color: var(--ink-soft); }
+    .mc-idea .mc-meta b { color: var(--ink); font-weight: 600; }
+</style>
+
+<!-- ============================== TESTA ============================== -->
+<section class="mc-head">
+    <div class="container-xl">
+        <span class="mc-flag"><i class="bi bi-lock"></i> Pagina interna · non indicizzata</span>
+        <h1>Materiali campagne</h1>
+        <p>
+            Tutto quello che serve per lanciare le campagne del check-up di sicurezza: i creativi
+            pronti, i sorgenti che li generano e i documenti con testi, targeting e UTM.
+            Questa pagina esiste per non doverli più cercare.
+        </p>
+    </div>
+</section>
+
+<!-- ============================== CAROSELLI ============================== -->
+<section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Caroselli · due varianti da confrontare</span>
+            <h2>Due sequenze da quattro carte, una per pubblico</h2>
+            <p>
+                Struttura identica, contenuto diverso: minaccia → cosa c'è in gioco → come si
+                risolve → azione. La terza carta è la più importante e non va tolta: una minaccia
+                senza via d'uscita fa scorrere oltre, non cliccare.
+            </p>
+            <p>
+                Ogni sequenza esiste in <strong>quattro varianti grafiche con le stesse identiche
+                parole</strong> — <span class="mc-tag">bn</span> <span class="mc-tag">foto</span>
+                <span class="mc-tag">fascia</span> <span class="mc-tag">riquadro</span> — che si
+                distinguono solo per quanto spazio prende la fotografia. Le due carte centrali sono
+                uguali dappertutto: la differenza da misurare sta nella prima.
+            </p>
+            <p>
+                <strong>Non vanno provate tutte e quattro insieme.</strong> Con un budget contenuto
+                nessuna raccoglierebbe abbastanza dati per dire qualcosa: se ne scelgono due e si
+                confrontano a parità di pubblico e di spesa.
+            </p>
+        </div>
+
+        @foreach (var pub in new[] { "facebook", "linkedin" })
+        {
+            <div class="mc-set">
+                <div class="mc-set-head">
+                    <h3>@(pub == "facebook" ? "Facebook e Instagram — privati" : "LinkedIn — aziende")</h3>
+                    <span class="mc-tag">1080 × 1080</span>
+                </div>
+                <p>
+                    @(pub == "facebook"
+                        ? "Rete di casa. La prima carta deve funzionare su chiunque abbia un router."
+                        : "Rete aziendale. La pressione arriva da clienti, normativa e polizze, non dagli hacker.")
+                </p>
+
+                @foreach (var v in new[] { "bn", "foto", "fascia", "riquadro" })
+                {
+                    <p class="mc-variante">@NomeVariante(v)</p>
+                    <div class="mc-grid">
+                        @foreach (var n in new[] { "01", "02", "03", "04" })
+                        {
+                            <a class="mc-item" href="~/img/campagne/caroselli/@(pub)-@(v)-quadrato-@(n).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/caroselli/@(pub)-@(v)-quadrato-@(n).png" alt="Carta @n, variante @v, @pub" loading="lazy" />
+                                <span>@(pub)-@(v)-quadrato-@(n).png</span>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Versione verticale</h3>
+                <span class="mc-tag">1080 × 1920 · storie e reel</span>
+            </div>
+            <p>Le stesse carte con le aree di sicurezza rispettate: 250 px liberi in alto, 340 in basso.</p>
+            <div class="mc-grid storie">
+                @foreach (var p in new[] { "facebook", "linkedin" })
+                {
+                    foreach (var v in new[] { "bn", "foto", "fascia", "riquadro" })
+                    {
+                        foreach (var n in new[] { "01", "02", "03", "04" })
+                        {
+                            <a class="mc-item" href="~/img/campagne/caroselli/@(p)-@(v)-storia-@(n).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/caroselli/@(p)-@(v)-storia-@(n).png" alt="Carta @n verticale, variante @v, @p" loading="lazy" />
+                                <span>@(p)-@(v)-storia-@(n).png</span>
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Le fotografie usate</h3>
+                <span class="mc-tag">Pexels · uso commerciale, senza attribuzione</span>
+            </div>
+            <p>
+                Scelte senza volti riconoscibili e senza marchi in vista: le licenze Pexels e Unsplash
+                coprono il diritto d'autore del fotografo, non il consenso della persona ritratta, e in
+                Italia usare l'immagine di qualcuno in pubblicità senza liberatoria è vietato.
+            </p>
+            <div class="mc-grid">
+                @foreach (var f in new[] { "privati-router", "privati-telecamera", "aziende-switch", "aziende-porte" })
+                {
+                    <a class="mc-item" href="~/img/campagne/foto/@(f).jpg" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/foto/@(f).jpg" alt="Fotografia @f" loading="lazy" />
+                        <span>@(f).jpg</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti e testi dei post: <span class="mc-path">docs/creativi/caroselli/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/caroselli &amp;&amp; node genera-caroselli.mjs &amp;&amp; ./render-caroselli.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== IMMAGINE SINGOLA ============================== -->
+<section class="tk-section bg-soft">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Immagine singola</span>
+            <h2>Presentazione del servizio, due palette</h2>
+            <p>
+                Un solo visual, uguale per tutte le varianti di copy: si tiene fissa la grafica e si
+                mette alla prova il testo. Da far girare in entrambe le palette e tenere quella che
+                porta i lead a meno.
+            </p>
+        </div>
+
+        @foreach (var pub in new[] { "aziende", "privati" })
+        {
+            <div class="mc-set">
+                <div class="mc-set-head">
+                    <h3>@(pub == "aziende" ? "Aziende — LinkedIn" : "Privati — Facebook e Instagram")</h3>
+                    <span class="mc-tag">feed 1080×1350 · storia 1080×1920 · quadrato 1080×1080</span>
+                </div>
+                <div class="mc-grid storie">
+                    @foreach (var tema in new[] { "chiaro", "vivido" })
+                    {
+                        foreach (var misura in new[] { "feed-verticale", "storia", "quadrato" })
+                        {
+                            <a class="mc-item" href="~/img/campagne/singola/@(pub)-@(tema)-@(misura).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/singola/@(pub)-@(tema)-@(misura).png" alt="@pub, palette @tema, @misura" loading="lazy" />
+                                <span>@(pub)-@(tema)-@(misura).png</span>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        }
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti: <span class="mc-path">docs/creativi/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi &amp;&amp; node genera.mjs &amp;&amp; ./render.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== ALTRE DIREZIONI ============================== -->
+<section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Da provare</span>
+            <h2>Altre direzioni possibili per i creativi</h2>
+            <p>
+                Nessuna di queste è pronta: sono strade alternative, con quello che serve per
+                percorrerle. In ordine di quanto pagherebbero rispetto a quello che c'è già.
+            </p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>1. Fotografia reale al posto della grafica</h4>
+            <p>
+                Un router dietro il mobile con la polvere sopra, un salotto la sera con la TV accesa,
+                una scrivania d'ufficio vera. Nel feed di Facebook lo scatto realistico sembra il post
+                di un conoscente invece di una pubblicità, e questo da solo cambia il tasso di
+                attenzione. Su LinkedIn rende meno: lì la grafica sobria regge bene.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> mezza giornata di scatti, o stock con licenza commerciale. <b>Dove:</b> Facebook e Instagram. <b>Da testare per prima.</b></p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>2. Una pagina del report, con i nomi oscurati</h4>
+            <p>
+                Mostrare il documento che si consegna invece di descriverlo: l'elenco delle severità,
+                il semaforo, il riepilogo. È la prova che il servizio esiste davvero e che il report è
+                leggibile — l'obiezione silenziosa di chi non ha mai comprato un check-up.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> un report reale da anonimizzare con attenzione. <b>Dove:</b> LinkedIn.</p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>3. Il volto di chi fa il lavoro</h4>
+            <p>
+                Una foto vera del tecnico che esegue il check-up, con una frase in prima persona
+                ("La prima cosa che guardo è sempre il router"). Sulle campagne B2B le persone reali
+                costruiscono fiducia più in fretta delle immagini di repertorio, ed è l'unica cosa che
+                un concorrente nazionale non può copiare.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> il consenso della persona e una foto decente. <b>Dove:</b> entrambe.</p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>4. Un numero solo, gigante</h4>
+            <p>
+                Una cifra vera che riempie tutta la carta: quanti dispositivi si trovano in media in
+                una casa, quante vulnerabilità critiche nel primo check-up di una PMI. È il creativo
+                più forte in assoluto — ma solo se il numero è vostro e verificabile. Inventarlo è il
+                modo più rapido per farsi segnalare dai concorrenti su LinkedIn.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> i dati dei primi dieci check-up. <b>Dove:</b> entrambe. <b>Non prima di averli.</b></p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>5. Video corto della scansione</h4>
+            <p>
+                Dieci secondi di schermo registrato: la scansione parte e i dispositivi compaiono uno
+                dopo l'altro. Il movimento nei primi istanti attiva la risposta di orientamento —
+                è il motivo per cui un video fermo il pollice più di un'immagine. Va progettato per
+                essere guardato senza audio.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> una registrazione dello strumento, ripulita. <b>Dove:</b> Reels, Stories, LinkedIn.</p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>6. Carosello "mito e realtà"</h4>
+            <p>
+                I quattro luoghi comuni già scritti sulla landing privati — l'antivirus basta, non ho
+                niente da nascondere, il router dell'operatore è sicuro, me ne accorgerei — uno per
+                carta, con la risposta sotto. Materiale già pronto, costa solo il tempo di impaginarlo.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> niente, il testo esiste. <b>Dove:</b> Facebook e Instagram.</p>
+        </div>
+
+        <div class="mc-idea">
+            <h4>7. Testo puro, senza grafica</h4>
+            <p>
+                Una frase su fondo pieno, come il fermo-immagine di una storia scritta a mano. Sembra
+                un contenuto e non un annuncio, e per questo scavalca l'abitudine a saltare le
+                pubblicità. Regge solo se la frase è ottima: qui non c'è niente dietro cui nascondersi.
+            </p>
+            <p class="mc-meta"><b>Serve:</b> niente. <b>Dove:</b> Instagram, storie.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== DOCUMENTI ============================== -->
+<section class="tk-section bg-soft">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Dove sta il resto</span>
+            <h2>I documenti nel repository</h2>
+            <p>Testi degli annunci, targeting, UTM e il ragionamento dietro ogni scelta.</p>
+        </div>
+        <ul class="mc-files">
+            <li>
+                <strong class="mc-path">docs/campagne-ads.md</strong>
+                <span>Le varianti di copy per LinkedIn e Facebook, il targeting, gli URL con UTM, come impostare i test e cosa manca ancora.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/README.md</strong>
+                <span>Il visual a immagine singola: le due palette, le tre misure, come cambiare i testi.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/caroselli/README.md</strong>
+                <span>I due caroselli: perché quattro carte e in quest'ordine, i testi dei post, le fonti sulle best practice.</span>
+            </li>
+            <li>
+                <strong>Le due landing</strong>
+                <span>
+                    <a asp-page="/Offerte/VulnerabilityAssessmentAziende">/offerte/vulnerability-assessment/aziende</a> ·
+                    <a asp-page="/Offerte/VulnerabilityAssessmentPrivati">/offerte/vulnerability-assessment/privati</a>
+                </span>
+            </li>
+        </ul>
+    </div>
+</section>

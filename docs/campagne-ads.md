@@ -25,8 +25,10 @@ Come si comportano: i tag si caricano **solo dopo il consenso** sul banner cooki
 all'invio del form scatta la conversione su tutte e tre le piattaforme
 (`generate_lead` su GA4, `Lead` su Meta, `conversion_id` su LinkedIn).
 
-Rimuovere prima del lancio le due voci di menu temporanee `VA · Aziende` e `VA · Privati`
-in `Pages/Shared/_Layout.cshtml` (cerca il commento `TEMP`).
+Rimuovere prima del lancio le tre voci di menu temporanee `VA · Aziende`, `VA · Privati`
+e `Materiali` in `Pages/Shared/_Layout.cshtml` (cerca il commento `TEMP`). La pagina
+`/interno/materiali-campagne` resta comunque raggiungibile per chi conosce l'indirizzo:
+è `noindex, nofollow`, non protetta da password.
 
 ### URL di destinazione
 
@@ -48,8 +50,10 @@ https://www.tecnolink.it/offerte/vulnerability-assessment/privati?utm_source=fac
 
 ### Immagini
 
-Le trovi già pronte in [`creativi/png/`](creativi/), nominate
-`<pubblico>-<palette>-<misura>.png`:
+Tutti i creativi si guardano insieme dalla pagina interna **`/interno/materiali-campagne`**
+(non indicizzata, raggiungibile dal menu del sito): è il posto da cui ritrovarli senza
+cercare nel repository. I file stanno in `tecnolinkSite/wwwroot/img/campagne/singola/`,
+nominati `<pubblico>-<palette>-<misura>.png`:
 
 - **pubblico**: `aziende` (dice "Check-up di sicurezza informatica") e `privati` ("Check-up della rete di casa") — usa quella giusta per la campagna, il nome sull'immagine deve combaciare con quello della landing
 - **palette**: `chiaro` (fondo bianco) e `vivido` (gradiente del marchio) — due direzioni diverse, da far girare entrambe e tenere quella che porta i lead a meno
@@ -59,6 +63,12 @@ Le trovi già pronte in [`creativi/png/`](creativi/), nominate
 sotto: si tiene fisso il visual e si mette alla prova il copy, altrimenti non si capisce
 cosa ha fatto la differenza. Per cambiare i testi dell'immagine vedi
 [`creativi/README.md`](creativi/README.md).
+
+**Caroselli in bianco e nero.** A parte, in [`creativi/caroselli/`](creativi/caroselli/),
+ci sono due sequenze da quattro carte 1080×1080, una per pubblico: minaccia → cosa c'è in
+gioco → come si risolve → CTA. Formato, palette e ordine delle carte sono motivati nel
+README di quella cartella. Hanno copy e UTM propri (`utm_content=carosello-bn`) e vanno
+misurati contro le varianti a immagine singola qui sotto.
 
 ---
 
@@ -109,7 +119,7 @@ delle visualizzazioni arriva da telefono.
 >
 > Un check-up di sicurezza informatica vi dice esattamente dove siete esposti — computer, server, stampanti, gestionali, telecamere — e cosa sistemare per primo. Nessun fermo del lavoro, i dati restano dentro la vostra azienda.
 >
-> Ne parliamo senza impegno. Da oltre 20 anni a Firenze.
+> Ne parliamo senza impegno. Siamo a Firenze.
 
 **Titolo:** `Quante porte aperte ha la rete della vostra azienda?`
 **Descrizione:** `Check-up di sicurezza informatica — Tecnolink, Firenze`
@@ -137,7 +147,7 @@ delle visualizzazioni arriva da telefono.
 ### Variante D — messaggio locale
 
 **Testo introduttivo**
-> Da oltre 20 anni ci occupiamo di sistemi informatici e sicurezza per le aziende di Firenze e dintorni. Persone con cui parlare, non un ticket in coda.
+> Ci occupiamo di sistemi informatici e sicurezza per le aziende di Firenze e dintorni. Persone con cui parlare, non un ticket in coda.
 >
 > Se non avete mai fatto un controllo di sicurezza sulla rete aziendale, il check-up di sicurezza è il modo più semplice per partire: individuiamo i punti deboli su ogni dispositivo collegato e vi spieghiamo di persona cosa sistemare, in che ordine e perché.
 >
@@ -291,8 +301,6 @@ Cose che oggi mancano e che alzerebbero la resa più di qualsiasi ritocco al tes
 - **Testimonianze di clienti** (anche solo nome di battesimo + settore + una frase). Sulla
   pagina aziende è quello che manca di più.
 - **Loghi dei clienti** che accettano di essere citati, nella sezione "Perché Tecnolink".
-- **Un impegno preciso sui tempi di risposta** ("ti richiamiamo entro 24 ore lavorative")
-  nel blocco "Cosa succede dopo": una riga, ma sposta il tasso di conversione.
 - **Un prezzo di riferimento per il controllo casa**: sul traffico Facebook l'assenza di
   qualsiasi indicazione economica è il primo motivo di abbandono.
 - **Il link LinkedIn nel footer** punta a `https://www.linkedin.com` invece che alla pagina
