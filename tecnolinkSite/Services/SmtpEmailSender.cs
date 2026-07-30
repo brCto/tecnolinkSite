@@ -17,7 +17,12 @@ public class SmtpEmailSender : IEmailSender
 
     public async Task<bool> SendAsync(string subject, string bodyHtml, string? replyToEmail, string? replyToName, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(_settings.Host) || string.IsNullOrWhiteSpace(_settings.ToAddress))
+        // Modalità di prova: si scrive il messaggio su disco invece di spedirlo, così
+        // si può verificare che i moduli producano la mail giusta senza avere ancora
+        // le credenziali del server di posta.
+        var scriveSuDisco = !string.IsNullOrWhiteSpace(_settings.PickupDirectory);
+
+        if ((!scriveSuDisco && string.IsNullOrWhiteSpace(_settings.Host)) || string.IsNullOrWhiteSpace(_settings.ToAddress))
         {
             _logger.LogWarning("SMTP non configurato: richiesta ricevuta ma non inoltrata via email. Oggetto: {Subject}. Mittente: {ReplyTo}", subject, replyToEmail);
             return false;
@@ -25,9 +30,20 @@ public class SmtpEmailSender : IEmailSender
 
         try
         {
+            // Il mittente resta un indirizzo di Tecnolink. Spedire "da" l'indirizzo di
+            // chi compila il modulo sarebbe spoofing: il server di posta rifiuterebbe il
+            // messaggio, oppure lo consegnerebbe in spam, perché SPF e DKIM del dominio
+            // del visitatore non autorizzano il nostro server a spedire per lui.
+            // Il risultato utile si ottiene lo stesso: nel nome visualizzato c'è chi ha
+            // scritto, così in casella si vede subito da chi arriva la richiesta, e il
+            // Reply-To qui sotto fa sì che "Rispondi" scriva davvero a lui.
+            var mittenteVisualizzato = string.IsNullOrWhiteSpace(replyToName)
+                ? _settings.FromName
+                : $"{replyToName} (via sito Tecnolink)";
+
             using var message = new MailMessage
             {
-                From = new MailAddress(_settings.FromAddress, _settings.FromName),
+                From = new MailAddress(_settings.FromAddress, mittenteVisualizzato),
                 Subject = subject,
                 Body = bodyHtml,
                 IsBodyHtml = true
@@ -39,13 +55,28 @@ public class SmtpEmailSender : IEmailSender
                 message.ReplyToList.Add(new MailAddress(replyToEmail, string.IsNullOrWhiteSpace(replyToName) ? replyToEmail : replyToName));
             }
 
-            using var client = new SmtpClient(_settings.Host, _settings.Port)
+            using var client = new SmtpClient();
+
+            if (scriveSuDisco)
             {
-                EnableSsl = _settings.EnableSsl,
-                Credentials = new NetworkCredential(_settings.User, _settings.Password)
-            };
+                Directory.CreateDirectory(_settings.PickupDirectory);
+                client.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+                client.PickupDirectoryLocation = _settings.PickupDirectory;
+            }
+            else
+            {
+                client.Host = _settings.Host;
+                client.Port = _settings.Port;
+                client.EnableSsl = _settings.EnableSsl;
+                client.Credentials = new NetworkCredential(_settings.User, _settings.Password);
+            }
 
             await client.SendMailAsync(message, ct);
+
+            if (scriveSuDisco)
+            {
+                _logger.LogInformation("Messaggio scritto in {Cartella} (modalità di prova, non spedito).", _settings.PickupDirectory);
+            }
             return true;
         }
         catch (Exception ex)

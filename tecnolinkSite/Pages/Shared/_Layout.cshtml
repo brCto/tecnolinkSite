@@ -116,13 +116,13 @@
     }
     <nav class="tk-nav @(isLanding ? "is-landing" : "")" id="tkNav">
         <div class="container-xl">
+            @* Il logo riporta alla home da qualunque pagina, landing comprese. *@
+            <a class="tk-brand" asp-area="" asp-page="/Index">
+                <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
+            </a>
+
             @if (isLanding)
             {
-                @* Landing: il logo non è un link verso l'esterno, resta sulla pagina. *@
-                <span class="tk-brand">
-                    <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
-                </span>
-
                 <div class="tk-nav-actions">
                     <a class="tk-nav-phone" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
                     <a class="btn-tk btn-tk-primary" href="#contatti">Richiedi un'analisi</a>
@@ -130,10 +130,6 @@
             }
             else
             {
-                <a class="tk-brand" asp-area="" asp-page="/Index">
-                    <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
-                </a>
-
                 <ul class="tk-nav-links">
                     <li><a asp-page="/Index" asp-fragment="home">Home</a></li>
                     <li><a asp-page="/Index" asp-fragment="servizi">Servizi</a></li>
