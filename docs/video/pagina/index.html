@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Tecnolink — video di presentazione</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+  html, body { margin: 0; height: 100%; background: #06090f; color: #fff;
+               font-family: Inter, "Segoe UI", sans-serif; }
+  /* In registrazione il canvas resta alla sua dimensione vera: MediaRecorder
+     incide i pixel del canvas, non quelli mostrati, ma una pagina che scrolla
+     in headless è comunque una sorgente di sorprese. */
+  body.registrazione { overflow: hidden; }
+  #scena { display: block; }
+  body:not(.registrazione) #scena { max-width: 100vw; max-height: 88vh; margin: 0 auto;
+                                     width: auto; height: auto; object-fit: contain; }
+  body.registrazione #scena { position: fixed; inset: 0; }
+  #barra { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 14px;
+           align-items: center; padding: 12px 18px; background: rgba(6,9,15,0.92);
+           font-size: 13px; }
+  body.registrazione #barra { display: none; }
+  #barra input[type=range] { flex: 1; accent-color: #22d3ee; }
+  button { background: #16204a; color: #fff; border: 1px solid #2c3a6b; border-radius: 8px;
+           padding: 7px 14px; font: inherit; cursor: pointer; }
+  #tempo { font-variant-numeric: tabular-nums; opacity: .75; min-width: 96px; }
+  #nota { opacity: .5 }
+</style>
+</head>
+<body>
+
+<canvas id="scena"></canvas>
+
+<div id="barra">
+  <button id="playPausa">Pausa</button>
+  <input type="range" id="cursore" min="0" max="1000" value="0">
+  <span id="tempo">0.0 / 0.0 s</span>
+  <span id="nota">?montaggio=breve · ?formato=9x16</span>
+</div>
+
+<script src="contenuti.js"></script>
+<script src="contenuti-breve.js"></script>
+<script src="risorse.js"></script>
+<script src="musica.js"></script>
+<script src="scena.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  const FORMATI = {
+    '16x9': { larghezza: 1920, altezza: 1080 },
+    '9x16': { larghezza: 1080, altezza: 1920 },
+  };
+
+  const parametri = new URLSearchParams(location.search);
+  const formato = FORMATI[parametri.get('formato')] || FORMATI['16x9'];
+  const registrazione = parametri.get('registra') === '1';
+  const breve = parametri.get('montaggio') === 'breve';
+  const contenuti = breve ? window.TK_CONTENUTI_BREVE : window.TK_CONTENUTI;
+
+  const canvas = document.getElementById('scena');
+  canvas.width = formato.larghezza;
+  canvas.height = formato.altezza;
+  if (registrazione) document.body.classList.add('registrazione');
+
+  /* ---------------------------------------------------------------- */
+  /* Risorse binarie passate da Node (clip e voce)                     */
+  /* ---------------------------------------------------------------- */
+
+  // Arrivano a pezzi in base64: un messaggio CDP con dentro dieci milioni di
+  // caratteri fa cadere la connessione.
+  const inArrivo = {};
+  const RISORSE = {};
+
+  window.tkRisorsaInizia = nome => { inArrivo[nome] = []; return true; };
+
+  window.tkRisorsaPezzo = (nome, b64) => {
+    const s = atob(b64);
+    const u = new Uint8Array(s.length);
+    for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i);
+    inArrivo[nome].push(u);
+    return true;
+  };
+
+  window.tkRisorsaFine = nome => {
+    const pezzi = inArrivo[nome];
+    const totale = pezzi.reduce((n, p) => n + p.length, 0);
+    const tutto = new Uint8Array(totale);
+    let o = 0;
+    for (const p of pezzi) { tutto.set(p, o); o += p.length; }
+    RISORSE[nome] = tutto;
+    delete inArrivo[nome];
+    return totale;
+  };
+
+  /** Chiamata da Node quando tutte le risorse sono arrivate. */
+  window.tkPrepara = async () => {
+    const clip = {};
+    for (const [nome, byte] of Object.entries(RISORSE)) {
+      if (nome.startsWith('clip:')) clip[nome.slice(5)] = byte;
+    }
+    const esito = await TK.prepara(canvas, contenuti, window.TK_RISORSE, clip);
+    TK.disegna(0);
+    window.tkPronto = true;
+    return JSON.stringify({ durata: esito.durata, clip: Object.keys(clip) });
+  };
+
+  // Senza Node (pagina aperta a mano) si prepara subito, senza clip.
+  const anteprima = registrazione ? null : TK.prepara(canvas, contenuti, window.TK_RISORSE, null);
+
+  /* ---------------------------------------------------------------- */
+  /* Anteprima: la pagina si guarda anche a mano                       */
+  /* ---------------------------------------------------------------- */
+
+  if (anteprima) anteprima.then(({ durata }) => {
+    const cursore = document.getElementById('cursore');
+    const tempo = document.getElementById('tempo');
+    const playPausa = document.getElementById('playPausa');
+    document.getElementById('nota').textContent =
+      (breve ? 'montaggio breve' : 'montaggio lungo') + ' · le clip si vedono solo in registrazione';
+    let inRiproduzione = true;
+    let t = 0;
+    let ultimo = performance.now();
+
+    playPausa.onclick = () => {
+      inRiproduzione = !inRiproduzione;
+      playPausa.textContent = inRiproduzione ? 'Pausa' : 'Riprendi';
+    };
+    cursore.oninput = () => { t = (cursore.value / 1000) * durata; };
+
+    (function ciclo(ora) {
+      const dt = (ora - ultimo) / 1000;
+      ultimo = ora;
+      if (inRiproduzione) t = (t + dt) % durata;
+      TK.disegna(t);
+      cursore.value = Math.round((t / durata) * 1000);
+      tempo.textContent = t.toFixed(1) + ' / ' + durata.toFixed(1) + ' s';
+      requestAnimationFrame(ciclo);
+    })(performance.now());
+  });
+
+  /* ---------------------------------------------------------------- */
+  /* Registrazione                                                     */
+  /* ---------------------------------------------------------------- */
+
+  const MIME_VIDEO = [
+    'video/mp4;codecs=avc1.42E01E',   // H.264: quello che accettano tutti
+    'video/webm;codecs=vp9',
+    'video/webm;codecs=vp8',
+  ];
+  const MIME_MISTO = [
+    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+    'video/webm;codecs=vp9,opus',
+    'video/webm;codecs=vp8,opus',
+  ];
+
+  /** Prepara musica e voce e restituisce la traccia audio da registrare. */
+  async function preparaAudio(durata, conVoce) {
+    const ac = new AudioContext({ sampleRate: 48000 });
+    await ac.resume();
+
+    // Gli istanti di stacco: servono al fruscio che accompagna i cambi di scena.
+    const stacchi = [];
+    let acc = 0;
+    for (const s of contenuti.scene) { acc += s.secondi; if (acc < durata) stacchi.push(acc); }
+
+    const narrazione = [];
+    if (conVoce) {
+      let inizio = 0;
+      for (let i = 0; i < contenuti.scene.length; i++) {
+        const byte = RISORSE[`voce:${i}`];
+        if (byte) {
+          // decodeAudioData consuma l'ArrayBuffer: se ne passa una copia, o
+          // una seconda registrazione nella stessa pagina troverebbe il vuoto.
+          const buffer = await ac.decodeAudioData(byte.slice().buffer);
+          narrazione.push({ quando: inizio + 0.15, buffer });
+        }
+        inizio += contenuti.scene[i].secondi;
+      }
+    }
+
+    const t0 = ac.currentTime + 0.2;
+    const destinazione = TK_MUSICA.componi(ac, { t0, durata, bpm: contenuti.bpm || 120, stacchi, narrazione });
+    return { ac, t0, destinazione, battute: narrazione.length };
+  }
+
+  /**
+   * Incide il canvas (e l'audio, se richiesto) e lascia il risultato in
+   * `window.__video`, da cui Node lo ritira a pezzi.
+   *
+   * MediaRecorder marca i fotogrammi con l'orologio di sistema, quindi la
+   * registrazione va per forza in tempo reale: il disegno viene agganciato al
+   * tempo trascorso e non al conteggio dei fotogrammi. Se una scena costa troppo
+   * si perde un fotogramma, ma la durata del video resta quella giusta.
+   */
+  window.tkRegistra = async function (opzioni) {
+    const { fps = 30, bitrate = 4_000_000, audio = false, voce = false } = opzioni || {};
+    const durata = TK.durata;
+
+    const suono = audio ? await preparaAudio(durata, voce) : null;
+    const mime = (suono ? MIME_MISTO : MIME_VIDEO).find(m => MediaRecorder.isTypeSupported(m));
+    if (!mime) throw new Error('Nessun codec disponibile in questo browser.');
+
+    const flusso = canvas.captureStream(fps);
+    if (suono) suono.destinazione.stream.getAudioTracks().forEach(tr => flusso.addTrack(tr));
+
+    const registratore = new MediaRecorder(flusso, {
+      mimeType: mime,
+      videoBitsPerSecond: bitrate,
+      ...(suono ? { audioBitsPerSecond: 160000 } : {}),
+    });
+    const pezzi = [];
+    registratore.ondataavailable = e => { if (e.data.size) pezzi.push(e.data); };
+    const conclusa = new Promise(r => { registratore.onstop = r; });
+
+    registratore.start();
+
+    // La musica è già programmata per partire a `t0`: il disegno si mette in
+    // pari aspettando lo stesso istante, altrimenti immagine e suono nascono
+    // sfalsati di qualche decimo e non si riallineano più.
+    if (suono) {
+      while (suono.ac.currentTime < suono.t0) {
+        TK.disegna(0);
+        await new Promise(r => requestAnimationFrame(r));
+      }
+    }
+
+    const t0 = performance.now();
+    let indiceUltimo = -1, disegnati = 0, persi = 0;
+
+    for (;;) {
+      const trascorso = (performance.now() - t0) / 1000;
+      if (trascorso >= durata) break;
+      const indice = Math.floor(trascorso * fps);
+      if (indice !== indiceUltimo) {
+        if (indice > indiceUltimo + 1) persi += indice - indiceUltimo - 1;
+        indiceUltimo = indice;
+        TK.disegna(indice / fps);
+        disegnati++;
+      }
+      await new Promise(r => requestAnimationFrame(r));
+    }
+
+    registratore.stop();
+    await conclusa;
+    flusso.getTracks().forEach(t => t.stop());
+    if (suono) await suono.ac.close();
+
+    const blob = new Blob(pezzi, { type: mime });
+    window.__video = { mime, byte: new Uint8Array(await blob.arrayBuffer()) };
+
+    return {
+      mime,
+      byte: window.__video.byte.length,
+      secondi: (performance.now() - t0) / 1000,
+      durataPrevista: durata,
+      fotogrammiDisegnati: disegnati,
+      fotogrammiPersi: persi,
+      battuteVoce: suono ? suono.battute : 0,
+    };
+  };
+
+  /** Un pezzo del video in base64, per il trasferimento verso Node. */
+  window.tkPezzo = function (inizio, lunghezza) {
+    const byte = window.__video.byte.subarray(inizio, inizio + lunghezza);
+    let s = '';
+    for (let i = 0; i < byte.length; i += 8192) {
+      s += String.fromCharCode.apply(null, byte.subarray(i, i + 8192));
+    }
+    return btoa(s);
+  };
+})();
+</script>
+</body>
+</html>

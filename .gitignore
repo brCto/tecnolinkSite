@@ -365,3 +365,17 @@ FodyWeavers.xsd
 # Creativi campagne: gli HTML sono output intermedio di docs/creativi/genera.mjs,
 # si rigenerano con "node genera.mjs". I PNG invece sono il deliverable e restano versionati.
 docs/creativi/html/
+
+# Video di presentazione: provini e fotogrammi di verifica sono materiale di
+# lavoro (decine di MB), si rigenerano con "node provini.mjs" e "node verifica.mjs".
+# Gli MP4 in docs/video/mp4/ sono il deliverable e restano versionati.
+docs/video/provini/
+docs/video/verifica/
+
+# Clip di repertorio (35 MB) e tracce della voce narrante: si riscaricano e si
+# rigenerano da codice, con "node clip/scarica.mjs" e "node narrazione.mjs".
+# Le clip in particolare NON vanno versionate: sono di Mixkit, non nostre, e la
+# licenza consente di usarle nei nostri video, non di ridistribuirle.
+docs/video/clip/*.mp4
+docs/video/narrazione/*.wav
+docs/video/narrazione/manifesto.json
