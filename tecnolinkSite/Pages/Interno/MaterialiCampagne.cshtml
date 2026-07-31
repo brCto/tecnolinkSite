@@ -16,6 +16,24 @@
         "riquadro" => "Foto in riquadro — la più composta, sembra una pagina",
         _ => v,
     };
+
+    // I quattro concetti dei manifesti, per pubblico: il nome del file e come
+    // apre il discorso. Stesso ordine del generatore.
+    static (string Nome, string Come)[] Manifesti(string pubblico) => pubblico == "aziende"
+        ? new[]
+        {
+            ("domanda", "Una domanda a cui non si sa rispondere"),
+            ("nis2", "La distinzione che sposta il problema"),
+            ("esito", "Il risultato, senza nominare la minaccia"),
+            ("questionario", "La pressione che arriva da fuori"),
+        }
+        : new[]
+        {
+            ("wifi", "Una domanda a cui non si sa rispondere"),
+            ("router", "Un fatto scomodo, detto piano"),
+            ("esito", "Il risultato, senza nominare la minaccia"),
+            ("telecamere", "L'abitudine che crea il problema"),
+        };
 }
 
 @*
@@ -108,8 +126,81 @@
     </div>
 </section>
 
-<!-- ============================== CAROSELLI ============================== -->
+<!-- ============================== MANIFESTI ============================== -->
 <section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Manifesti · per il traffico freddo</span>
+            <h2>Una frase sola, grande quanto l'immagine</h2>
+            <p>
+                Quattro concetti per pubblico, una frase e nient'altro: niente elenchi, niente
+                pulsanti disegnati, niente illustrazione. Sull'immagine ci va il gancio, il
+                ragionamento sta nel testo dell'annuncio — che non pesa sulla distribuzione,
+                mentre il testo sull'immagine sì.
+            </p>
+            <p>
+                Ogni concetto ha <strong>una superficie diversa</strong>, ed è voluto: in miniatura
+                due creativi con lo stesso fondo si somigliano anche quando dicono cose diverse, e
+                le piattaforme trattano gli annunci che si somigliano come se fossero uno solo.
+            </p>
+            <p>
+                Il concetto <span class="mc-tag">esito</span> è l'unico che non nomina nessuna
+                minaccia. È il termine di paragone: farlo girare contro uno degli altri, a parità
+                di pubblico e di spesa, dice se conviene aprire con il rischio o con il risultato.
+            </p>
+        </div>
+
+        @foreach (var pub in new[] { "aziende", "privati" })
+        {
+            <div class="mc-set">
+                <div class="mc-set-head">
+                    <h3>@(pub == "aziende" ? "Aziende — LinkedIn" : "Privati — Facebook e Instagram")</h3>
+                    <span class="mc-tag">1080 × 1350</span>
+                </div>
+                <div class="mc-grid">
+                    @foreach (var m in Manifesti(pub))
+                    {
+                        <a class="mc-item" href="~/img/campagne/manifesti/@(pub)-@(m.Nome)-feed-verticale.png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/manifesti/@(pub)-@(m.Nome)-feed-verticale.png" alt="Manifesto @m.Nome, @pub" loading="lazy" />
+                            <span>@m.Come</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Le altre due misure</h3>
+                <span class="mc-tag">storia 1080×1920 · quadrato 1080×1080</span>
+            </div>
+            <p>Le stesse frasi per storie e Reel, con le aree di sicurezza rispettate, e in quadrato per i posizionamenti che non accettano il 4:5.</p>
+            <div class="mc-grid storie">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var m in Manifesti(pub))
+                    {
+                        foreach (var misura in new[] { "storia", "quadrato" })
+                        {
+                            <a class="mc-item" href="~/img/campagne/manifesti/@(pub)-@(m.Nome)-@(misura).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/manifesti/@(pub)-@(m.Nome)-@(misura).png" alt="Manifesto @m.Nome @misura, @pub" loading="lazy" />
+                                <span>@(pub)-@(m.Nome)-@(misura).png</span>
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti e accostamento con i testi: <span class="mc-path">docs/creativi/manifesti/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/manifesti &amp;&amp; node genera-manifesti.mjs &amp;&amp; ./render-manifesti.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== CAROSELLI ============================== -->
+<section class="tk-section bg-soft">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Caroselli · due varianti da confrontare</span>
@@ -214,15 +305,21 @@
 </section>
 
 <!-- ============================== IMMAGINE SINGOLA ============================== -->
-<section class="tk-section bg-soft">
+<section class="tk-section">
     <div class="container-xl">
         <div class="tk-section-head">
-            <span class="eyebrow">Immagine singola</span>
+            <span class="eyebrow">Immagine singola · per chi vi sta già valutando</span>
             <h2>Presentazione del servizio, due palette</h2>
             <p>
                 Un solo visual, uguale per tutte le varianti di copy: si tiene fissa la grafica e si
                 mette alla prova il testo. Da far girare in entrambe le palette e tenere quella che
                 porta i lead a meno.
+            </p>
+            <p>
+                Sull'immagine ci sono circa sessanta parole, e risponde in un colpo solo alle domande
+                di chi il servizio lo sta valutando. Per questo <strong>rende in retargeting e sui
+                pubblici caldi</strong>: sul traffico freddo le piattaforme distribuiscono peggio le
+                immagini molto scritte, e lì è meglio un manifesto o un carosello.
             </p>
         </div>
 
@@ -255,8 +352,171 @@
     </div>
 </section>
 
-<!-- ============================== ALTRE DIREZIONI ============================== -->
+<!-- ============================== ALTRI FORMATI ============================== -->
+<section class="tk-section bg-soft">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Altri formati · uno per tipo</span>
+            <h2>Quattro modi diversi di impostare l'annuncio</h2>
+            <p>
+                Non sono varianti grafiche di quello che c'è sopra: sono quattro impostazioni
+                diverse, prodotte per poterle confrontare. Servono momenti diversi del percorso,
+                quindi non vanno pubblicate tutte insieme — si sceglie in base a dove sta il
+                pubblico, non a quale piace di più.
+            </p>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Confronto — due metà</h3>
+                <span class="mc-tag">traffico freddo</span>
+            </div>
+            <p>
+                Sopra quello che si vede, sotto quello che guardiamo noi. Si legge senza leggere:
+                l'impressione arriva prima delle parole, il testo la conferma. È il più adatto dei
+                quattro al feed, perché regge anche in miniatura.
+            </p>
+            <div class="mc-grid">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var misura in new[] { "feed-verticale", "storia" })
+                    {
+                        <a class="mc-item" href="~/img/campagne/formati/confronto-@(pub)-@(misura).png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/formati/confronto-@(pub)-@(misura).png" alt="Confronto @pub @misura" loading="lazy" />
+                            <span>confronto-@(pub)-@(misura).png</span>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Checklist — cinque domande</h3>
+                <span class="mc-tag">storie e retargeting</span>
+            </div>
+            <p>
+                Chi si ferma la legge fino in fondo e si dà una risposta da solo. Ha parecchie
+                parole, ed è voluto — ma proprio per questo <strong>non va nel feed freddo</strong>,
+                dove le immagini molto scritte vengono distribuite peggio.
+            </p>
+            <div class="mc-grid">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var misura in new[] { "feed-verticale", "storia" })
+                    {
+                        <a class="mc-item" href="~/img/campagne/formati/checklist-@(pub)-@(misura).png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/formati/checklist-@(pub)-@(misura).png" alt="Checklist @pub @misura" loading="lazy" />
+                            <span>checklist-@(pub)-@(misura).png</span>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Miti — carosello da sei carte</h3>
+                <span class="mc-tag">privati · Facebook e Instagram</span>
+            </div>
+            <p>
+                Le quattro convinzioni che lasciano la porta aperta, già scritte sulla landing
+                privati. Funziona perché il lettore riconosce la frase: è una cosa che ha pensato
+                lui. Se i testi cambiano sulla landing, vanno cambiati anche qui.
+            </p>
+            <div class="mc-grid">
+                @foreach (var n in new[] { "01", "02", "03", "04", "05", "06" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/miti-privati-quadrato-@(n).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/miti-privati-quadrato-@(n).png" alt="Carta @n del carosello miti" loading="lazy" />
+                        <span>miti-privati-quadrato-@(n).png</span>
+                    </a>
+                }
+            </div>
+            <p class="mc-variante">Le stesse carte in verticale, per storie e reel</p>
+            <div class="mc-grid storie">
+                @foreach (var n in new[] { "01", "02", "03", "04", "05", "06" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/miti-privati-storia-@(n).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/miti-privati-storia-@(n).png" alt="Carta @n verticale del carosello miti" loading="lazy" />
+                        <span>miti-privati-storia-@(n).png</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Anatomia — cosa vi resta in mano</h3>
+                <span class="mc-tag">aziende · retargeting</span>
+            </div>
+            <p>
+                La forma del report senza il contenuto: ci sono i nomi delle quattro parti, non i
+                risultati. Risponde all'obiezione silenziosa di chi non ha mai comprato un check-up.
+                Un report finto con numeri finti sarebbe un documento falso: quando avrete una
+                pagina vera da anonimizzare, quella sì che vale la pena mostrarla.
+            </p>
+            <div class="mc-grid">
+                @foreach (var misura in new[] { "feed-verticale", "quadrato" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/anatomia-aziende-@(misura).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/anatomia-aziende-@(misura).png" alt="Anatomia del report @misura" loading="lazy" />
+                        <span>anatomia-aziende-@(misura).png</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti: <span class="mc-path">docs/creativi/formati/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/formati &amp;&amp; node genera-formati.mjs &amp;&amp; ./render-formati.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== DOCUMENT AD ============================== -->
 <section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Document Ad · LinkedIn</span>
+            <h2>Otto pagine che si sfogliano dentro il feed</h2>
+            <p>
+                È il formato con il costo per lead più basso su LinkedIn, e il motivo è meccanico:
+                il documento si sfoglia senza uscire dalla piattaforma. La soglia da superare non è
+                «vale la pena cliccare» ma «vale la pena scorrere ancora una pagina».
+            </p>
+            <p>
+                Dà anche un dato che gli altri formati non hanno: <strong>quante pagine vengono
+                lette</strong>. Se quasi nessuno passa la terza il problema è il documento; se molti
+                arrivano in fondo e nessuno scrive, il problema è l'offerta.
+            </p>
+            <p>
+                <strong>Al primo giro senza modulo davanti:</strong> si sponsorizza per far leggere
+                e i lead si raccolgono dopo, in retargeting su chi lo ha sfogliato.
+                Due pagine hanno un <span class="mc-tag">da compilare</span> — le domande vere dei
+                questionari che ricevete e una pagina di report anonimizzata. Sono le due cose che
+                lo renderebbero vostro invece che generico.
+            </p>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-grid">
+                <a class="mc-item" href="~/img/campagne/documento/documento-linkedin.pdf" target="_blank" rel="noopener">
+                    <img src="~/img/campagne/documento/documento-copertina.png" alt="Copertina del Document Ad" loading="lazy" />
+                    <span>documento-linkedin.pdf — 8 pagine, 1080×1350</span>
+                </a>
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti e indice delle pagine: <span class="mc-path">docs/creativi/documento/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/documento &amp;&amp; node genera-documento.mjs &amp;&amp; ./render-documento.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== ALTRE DIREZIONI ============================== -->
+<section class="tk-section bg-soft">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Da provare</span>
@@ -264,6 +524,9 @@
             <p>
                 Nessuna di queste è pronta: sono strade alternative, con quello che serve per
                 percorrerle. In ordine di quanto pagherebbero rispetto a quello che c'è già.
+                Le proposte che riguardano i formati e l'impostazione delle campagne — Document Ad
+                per LinkedIn, modulo istantaneo su Meta, Thought Leader Ad — stanno in
+                <span class="mc-path">docs/creativi/revisione-2026.md</span>.
             </p>
         </div>
 
@@ -285,7 +548,11 @@
                 il semaforo, il riepilogo. È la prova che il servizio esiste davvero e che il report è
                 leggibile — l'obiezione silenziosa di chi non ha mai comprato un check-up.
             </p>
-            <p class="mc-meta"><b>Serve:</b> un report reale da anonimizzare con attenzione. <b>Dove:</b> LinkedIn.</p>
+            <p class="mc-meta">
+                <b>Serve:</b> un report reale da anonimizzare con attenzione. <b>Dove:</b> LinkedIn.
+                Nel frattempo il creativo <b>anatomia</b> qui sopra ne mostra la forma senza il
+                contenuto, e la pagina 07 del Document Ad aspetta questa stessa immagine.
+            </p>
         </div>
 
         <div class="mc-idea">
@@ -307,7 +574,7 @@
                 più forte in assoluto — ma solo se il numero è vostro e verificabile. Inventarlo è il
                 modo più rapido per farsi segnalare dai concorrenti su LinkedIn.
             </p>
-            <p class="mc-meta"><b>Serve:</b> i dati dei primi dieci check-up. <b>Dove:</b> entrambe. <b>Non prima di averli.</b></p>
+            <p class="mc-meta"><b>Serve:</b> i dati dei primi dieci check-up. <b>Dove:</b> entrambe. <b>Non prima di averli.</b> Il formato ormai c'è: si aggiunge un concetto ai manifesti con la cifra al posto della frase.</p>
         </div>
 
         <div class="mc-idea">
@@ -322,29 +589,29 @@
         </div>
 
         <div class="mc-idea">
-            <h4>6. Carosello "mito e realtà"</h4>
+            <h4>6. Carosello "mito e realtà" <span class="mc-tag">fatta</span></h4>
             <p>
                 I quattro luoghi comuni già scritti sulla landing privati — l'antivirus basta, non ho
                 niente da nascondere, il router dell'operatore è sicuro, me ne accorgerei — uno per
                 carta, con la risposta sotto. Materiale già pronto, costa solo il tempo di impaginarlo.
             </p>
-            <p class="mc-meta"><b>Serve:</b> niente, il testo esiste. <b>Dove:</b> Facebook e Instagram.</p>
+            <p class="mc-meta">È il carosello <b>miti</b> qui sopra: sei carte, quadrato e verticale.</p>
         </div>
 
         <div class="mc-idea">
-            <h4>7. Testo puro, senza grafica</h4>
+            <h4>7. Testo puro, senza grafica <span class="mc-tag">fatta</span></h4>
             <p>
                 Una frase su fondo pieno, come il fermo-immagine di una storia scritta a mano. Sembra
                 un contenuto e non un annuncio, e per questo scavalca l'abitudine a saltare le
                 pubblicità. Regge solo se la frase è ottima: qui non c'è niente dietro cui nascondersi.
             </p>
-            <p class="mc-meta"><b>Serve:</b> niente. <b>Dove:</b> Instagram, storie.</p>
+            <p class="mc-meta">Sono i <b>manifesti</b> in cima a questa pagina: otto, quattro per pubblico.</p>
         </div>
     </div>
 </section>
 
 <!-- ============================== DOCUMENTI ============================== -->
-<section class="tk-section bg-soft">
+<section class="tk-section">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Dove sta il resto</span>
@@ -354,7 +621,23 @@
         <ul class="mc-files">
             <li>
                 <strong class="mc-path">docs/campagne-ads.md</strong>
-                <span>Le varianti di copy per LinkedIn e Facebook, il targeting, gli URL con UTM, come impostare i test e cosa manca ancora.</span>
+                <span>Le varianti di copy per LinkedIn e Facebook, il targeting, gli URL con UTM, quale manifesto va con quale testo, come impostare i test e cosa manca ancora.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/revisione-2026.md</strong>
+                <span>La revisione dei materiali: cosa dicono le raccomandazioni del 2026, cosa è stato cambiato e cosa converrebbe fare, in ordine di resa. Con le fonti.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/manifesti/README.md</strong>
+                <span>I manifesti: gli otto concetti, perché una frase sola e perché quattro superfici diverse.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/formati/README.md</strong>
+                <span>Confronto, checklist, miti e anatomia: cosa sono, dove sta bene ciascuno e cosa non va fatto con loro.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/documento/README.md</strong>
+                <span>Il Document Ad: l'indice delle otto pagine, le due cose ancora da compilare e come si pubblica.</span>
             </li>
             <li>
                 <strong class="mc-path">docs/creativi/README.md</strong>

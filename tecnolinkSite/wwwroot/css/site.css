@@ -578,11 +578,15 @@ section { position: relative; }
 }
 .tk-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   text-align: center;
 }
-@media (max-width: 767px) { .tk-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 767px) {
+  .tk-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Le voci sono dispari: l'ultima occupa tutta la riga invece di lasciare un vuoto. */
+  .tk-stats-grid > :last-child { grid-column: 1 / -1; }
+}
 .tk-stats-grid .num {
   font-family: var(--font-head);
   font-size: 2rem;
@@ -942,18 +946,6 @@ section { position: relative; }
 
 .tk-about-visual { position: relative; border-radius: var(--radius-lg); overflow: hidden; }
 .tk-about-visual img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
-.tk-about-visual .years-badge {
-  position: absolute; top: 1.3rem; right: 1.3rem;
-  background: var(--gradient-brand);
-  color: #061021;
-  border-radius: var(--radius-md);
-  padding: 1rem 1.3rem;
-  text-align: center;
-  font-family: var(--font-head);
-  box-shadow: 0 15px 30px -10px rgba(34,211,238,0.5);
-}
-.tk-about-visual .years-badge .n { font-size: 1.8rem; font-weight: 700; line-height: 1; }
-.tk-about-visual .years-badge .t { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
 .tk-quote {
   border-left: 3px solid var(--violet-500);
@@ -1195,6 +1187,13 @@ section { position: relative; }
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
   background-color: #fff;
 }
+
+/* Sotto i 16px iOS ingrandisce la pagina appena si tocca un campo, e da lì in poi
+   il modulo resta fuori quadro: sui telefoni i campi vanno tenuti a 16px esatti. */
+@media (max-width: 767px) {
+  .tk-form input, .tk-form textarea, .tk-form select,
+  .tk-scan-form input { font-size: 16px; }
+}
 .tk-form .fine-print { font-size: 0.78rem; color: var(--ink-soft); margin-top: -0.4rem; }
 #tk-form-success { display: none; }
 #tk-form-success.show { display: block; }
@@ -1210,8 +1209,11 @@ section { position: relative; }
 /* Honeypot: hidden from sighted users but present in the DOM for bots to fill */
 .tk-hp {
   position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  /* !important anche su dimensioni e padding: le regole dei form
+     (.tk-scan-form input, width 100% e padding) hanno specificità maggiore e lo
+     allargherebbero, sfondando il layout in orizzontale su mobile. */
+  width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px;
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
@@ -1261,6 +1263,13 @@ section { position: relative; }
 .tk-footer-landing-grid ul li { margin-bottom: 0; }
 .tk-footer-landing .tk-footer-bottom a { text-decoration: underline; }
 .tk-footer-landing .tk-footer-bottom a:hover { color: var(--cyan-300); }
+
+/* Numero e mail nel footer erano righe alte 17 px: da telefono si sbaglia il tocco.
+   Qui diventano bersagli da 44 px, senza cambiare l'aspetto sul desktop. */
+@media (max-width: 767px) {
+  .tk-footer ul li a { display: inline-flex; align-items: center; min-height: 44px; }
+  .tk-footer-landing-grid ul { gap: 0 1.6rem; }
+}
 
 .tk-social { display: flex; gap: 0.7rem; }
 .tk-social a {

@@ -366,6 +366,9 @@ FodyWeavers.xsd
 # si rigenerano con "node genera.mjs". I PNG invece sono il deliverable e restano versionati.
 docs/creativi/html/
 docs/creativi/caroselli/html/
+docs/creativi/manifesti/html/
+docs/creativi/formati/html/
+docs/creativi/documento/html/
 
 # Video di presentazione: provini e fotogrammi di verifica sono materiale di
 # lavoro (decine di MB), si rigenerano con "node provini.mjs" e "node verifica.mjs".

@@ -18,6 +18,12 @@
       "runtimeExecutable": "dotnet",
       "runtimeArgs": ["run", "--project", "tecnolinkSite/tecnolinkSite.csproj", "--urls", "http://localhost:5199"],
       "port": 5199
+    },
+    {
+      "name": "tecnolinkSite-watch",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["watch", "--project", "tecnolinkSite/tecnolinkSite.csproj", "run", "--urls", "http://localhost:5200"],
+      "port": 5200
     }
   ]
 }

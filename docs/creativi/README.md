@@ -1,11 +1,23 @@
 # Creativi — presentazione del servizio
 
 > Questo è il visual di presentazione per l'**immagine singola**, uno solo, da affiancare
-> a tutte le varianti di copy. I **caroselli**, differenziati per pubblico e in quattro
-> varianti grafiche, sono un formato a sé e stanno in [`caroselli/`](caroselli/).
+> alle varianti di copy. Gli altri due formati stanno a parte: i **caroselli** in
+> [`caroselli/`](caroselli/) e i **manifesti** — una frase sola, per il traffico freddo —
+> in [`manifesti/`](manifesti/).
 
 Un solo visual, generale sul servizio, pensato per essere letto in verticale dal
 telefono. Lo stesso impianto in **due pubblici**, **due palette** e **tre misure**.
+
+### Dove sta bene questo creativo
+
+Sull'immagine ci sono circa sessanta parole: nome del servizio, promessa, quattro passi,
+tre garanzie, pulsante e firma. È tanto, e non per caso — risponde in un colpo solo alle
+domande di chi il servizio lo sta valutando. Il rovescio è che **sul traffico freddo
+lavora contro di sé**: le piattaforme distribuiscono peggio le immagini molto scritte, e
+chi scorre non legge un paragrafo per decidere se fermarsi.
+
+Quindi: **retargeting e pubblici caldi qui, traffico freddo ai manifesti e ai caroselli.**
+Il ragionamento per esteso, con le fonti, è in [`revisione-2026.md`](revisione-2026.md).
 
 I PNG stanno dentro il sito, in
 `tecnolinkSite/wwwroot/img/campagne/singola/<pubblico>-<palette>-<misura>.png`, e si
