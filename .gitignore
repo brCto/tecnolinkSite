@@ -366,3 +366,4 @@ FodyWeavers.xsd
 # si rigenerano con "node genera.mjs". I PNG invece sono il deliverable e restano versionati.
 docs/creativi/html/
 docs/creativi/caroselli/html/
+docs/creativi/manifesti/html/

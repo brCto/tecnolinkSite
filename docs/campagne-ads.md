@@ -70,6 +70,16 @@ gioco → come si risolve → CTA. Formato, palette e ordine delle carte sono mo
 README di quella cartella. Hanno copy e UTM propri (`utm_content=carosello-bn`) e vanno
 misurati contro le varianti a immagine singola qui sotto.
 
+**Manifesti — una frase sola.** In [`creativi/manifesti/`](creativi/manifesti/), otto
+creativi statici (quattro per pubblico) con **una frase e nient'altro**, ognuno su una
+superficie diversa. Sono il gancio per il **traffico freddo**: sull'immagine ci va poco
+testo, il ragionamento sta qui nel copy. Il visual di presentazione descritto sopra ha
+circa sessanta parole sull'immagine e rende meglio **in retargeting**, su chi ha già
+visto il nome e vuole capire cosa comprende il servizio.
+
+Come si accostano manifesti e testi è nella tabella al §3; il perché in
+[`creativi/revisione-2026.md`](creativi/revisione-2026.md).
+
 ---
 
 ## 1. LinkedIn — aziende
@@ -155,6 +165,28 @@ delle visualizzazioni arriva da telefono.
 
 **Titolo:** `Sicurezza informatica per le PMI di Firenze`
 **Descrizione:** `Preventivo prima di iniziare — Tecnolink`
+**CTA:** Scopri di più
+
+---
+
+### Variante E — l'esito, senza minaccia
+
+Le quattro varianti qui sopra partono tutte da un problema. Questa no, ed è il motivo per
+cui esiste: nel settore sicurezza il messaggio allarmistico si è consumato, e quello che
+sposta di più è la descrizione precisa di cosa si ottiene. Va fatta girare **contro** una
+delle altre, non insieme a tutte.
+
+**Testo introduttivo**
+> Alla fine di un check-up di sicurezza vi resta in mano una cosa sola: un elenco.
+>
+> Ogni dispositivo collegato alla vostra rete, cosa ci abbiamo trovato, quanto è grave e in che ordine conviene sistemarlo. Niente allarmi, niente sigle: un documento che potete leggere voi e far leggere a chi vi chiede garanzie.
+>
+> Alcune voci si chiudono in un pomeriggio, altre richiedono una decisione. Quali siano quali, ve lo diciamo noi.
+>
+> Nessun fermo del lavoro, i dati restano in azienda, preventivo prima di iniziare. Tecnolink, Firenze.
+
+**Titolo:** `Cosa vi resta in mano dopo un check-up di sicurezza`
+**Descrizione:** `Check-up di sicurezza informatica — Tecnolink, Firenze`
 **CTA:** Scopri di più
 
 ---
@@ -267,6 +299,44 @@ schermo del quadrato) e 1080×1920 per storie e reel.
 
 ---
 
+### Variante E — l'esito, senza minaccia
+
+Come la variante E di LinkedIn: nessun problema in apertura, solo cosa si ottiene. È il
+termine di paragone per capire se su questo pubblico conviene parlare di rischi o di
+risultati.
+
+**Testo principale**
+> Alla fine ti diciamo due cose: cosa conviene sistemare e in che ordine.
+>
+> Non un elenco di sigle: le cose scritte come le diresti tu. Questa la cambio io in dieci minuti, questa te la facciamo noi, questa può aspettare.
+>
+> Guardiamo tutto quello che è collegato al Wi-Fi — telefoni, computer, smart TV, telecamere, prese intelligenti — e ti spieghiamo cosa abbiamo visto, di persona.
+>
+> 🏠 Preventivo prima di iniziare
+> 📍 Firenze e dintorni
+> 🔒 I tuoi dati restano tuoi
+
+**Titolo:** `Cosa sistemare, e in che ordine`
+**Descrizione:** `Check-up della rete di casa · Tecnolink Firenze`
+**CTA:** Scopri di più
+
+---
+
+### Da testare in parallelo: modulo istantaneo Meta
+
+Come per il Lead Gen Form di LinkedIn, vale la pena confrontare **un gruppo di annunci
+con il modulo nativo di Meta** contro la stessa variante che porta alla landing. Sul
+pubblico privati porta di norma molti più lead a costo più basso, mediamente meno
+qualificati: su un check-up casalingo è un compromesso accettabile, molto meno su un
+contratto aziendale. Campi: nome, telefono, città. Nient'altro.
+
+> Attenzione, come per LinkedIn: quei lead **non passano dal form del sito**, quindi non
+> arrivano via mail e non portano con sé gli UTM. Vanno scaricati da Ads Manager o
+> collegati a un CRM, e vanno richiamati in fretta — chi compila un modulo istantaneo non
+> sta aspettando la vostra chiamata come chi ha compilato la landing.
+
+---
+
 ## 3. Impostazione dei test
 
 Non far girare quattro varianti in contemporanea con un budget piccolo: nessuna raccoglie
@@ -277,7 +347,33 @@ abbastanza dati per dire qualcosa.
    richiesta sta solo bruciando budget.
 3. Chi vince resta, e ci si affianca C (o D) contro di lui.
 4. Su LinkedIn **cambia la creatività ogni 4-6 settimane**: il bacino locale è piccolo e
-   si satura in fretta.
+   si satura in fretta. Vale anche su Meta, dove la saturazione su Firenze e provincia
+   arriva prima che su un pubblico nazionale.
+
+### Quale immagine con quale testo
+
+I manifesti sono ganci: ognuno regge il testo che porta a conclusione la sua frase.
+Accostarli a caso significa promettere una cosa nell'immagine e parlarne un'altra sotto.
+
+| Manifesto | Variante di copy | `utm_content` |
+|---|---|---|
+| `aziende-nis2` | A — NIS2 / conformità | `manifesto-nis2` |
+| `aziende-domanda` | B — «siamo troppo piccoli» | `manifesto-domanda` |
+| `aziende-questionario` | C — catena di fornitura | `manifesto-questionario` |
+| `aziende-esito` | E — l'esito, senza minaccia | `manifesto-esito` |
+| `privati-wifi` | A — Wi-Fi | `manifesto-wifi` |
+| `privati-telecamere` | B — telecamere e dispositivi smart | `manifesto-telecamere` |
+| `privati-router` | D — il router dell'operatore | `manifesto-router` |
+| `privati-esito` | E — l'esito, senza minaccia | `manifesto-esito` |
+
+La variante D di LinkedIn (messaggio locale) e la C dei privati (password e conti) non
+hanno un manifesto dedicato: vanno con il visual di presentazione, che è il creativo
+giusto per chi vi sta già valutando.
+
+**Il confronto che vale più di tutti:** `esito` contro uno qualsiasi degli altri, stesso
+pubblico e stessa spesa. Dice se su Firenze conviene aprire con il rischio o con il
+risultato — ed è una risposta che vale per tutto quello che scriverete dopo, annunci e
+sito compresi.
 
 **Budget iniziale:** `[DA DECIDERE]` — tieni presente che LinkedIn ha un minimo di circa
 10 €/giorno per gruppo di annunci e un costo per clic molto più alto di Meta, quindi va
@@ -304,4 +400,10 @@ Cose che oggi mancano e che alzerebbero la resa più di qualsiasi ritocco al tes
 - **Un prezzo di riferimento per il controllo casa**: sul traffico Facebook l'assenza di
   qualsiasi indicazione economica è il primo motivo di abbandono.
 - **Il link LinkedIn nel footer** punta a `https://www.linkedin.com` invece che alla pagina
-  aziendale (`Pages/Shared/_Layout.cshtml`). Da correggere prima di mandarci traffico.
+  aziendale (`Pages/Shared/_Layout.cshtml`, riga 195). Cercando, la pagina sembra essere
+  `https://www.linkedin.com/company/tecnolink_2` — da far confermare a chi la gestisce
+  prima di metterla lì. Da correggere prima di mandarci traffico.
+
+Le altre proposte — Document Ad per LinkedIn, Thought Leader Ad, rotazione dei creativi,
+video — stanno in [`creativi/revisione-2026.md`](creativi/revisione-2026.md), in ordine di
+quanto pagherebbero.

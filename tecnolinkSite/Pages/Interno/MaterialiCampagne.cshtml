@@ -16,6 +16,24 @@
         "riquadro" => "Foto in riquadro — la più composta, sembra una pagina",
         _ => v,
     };
+
+    // I quattro concetti dei manifesti, per pubblico: il nome del file e come
+    // apre il discorso. Stesso ordine del generatore.
+    static (string Nome, string Come)[] Manifesti(string pubblico) => pubblico == "aziende"
+        ? new[]
+        {
+            ("domanda", "Una domanda a cui non si sa rispondere"),
+            ("nis2", "La distinzione che sposta il problema"),
+            ("esito", "Il risultato, senza nominare la minaccia"),
+            ("questionario", "La pressione che arriva da fuori"),
+        }
+        : new[]
+        {
+            ("wifi", "Una domanda a cui non si sa rispondere"),
+            ("router", "Un fatto scomodo, detto piano"),
+            ("esito", "Il risultato, senza nominare la minaccia"),
+            ("telecamere", "L'abitudine che crea il problema"),
+        };
 }
 
 @*
@@ -108,8 +126,81 @@
     </div>
 </section>
 
-<!-- ============================== CAROSELLI ============================== -->
+<!-- ============================== MANIFESTI ============================== -->
 <section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Manifesti · per il traffico freddo</span>
+            <h2>Una frase sola, grande quanto l'immagine</h2>
+            <p>
+                Quattro concetti per pubblico, una frase e nient'altro: niente elenchi, niente
+                pulsanti disegnati, niente illustrazione. Sull'immagine ci va il gancio, il
+                ragionamento sta nel testo dell'annuncio — che non pesa sulla distribuzione,
+                mentre il testo sull'immagine sì.
+            </p>
+            <p>
+                Ogni concetto ha <strong>una superficie diversa</strong>, ed è voluto: in miniatura
+                due creativi con lo stesso fondo si somigliano anche quando dicono cose diverse, e
+                le piattaforme trattano gli annunci che si somigliano come se fossero uno solo.
+            </p>
+            <p>
+                Il concetto <span class="mc-tag">esito</span> è l'unico che non nomina nessuna
+                minaccia. È il termine di paragone: farlo girare contro uno degli altri, a parità
+                di pubblico e di spesa, dice se conviene aprire con il rischio o con il risultato.
+            </p>
+        </div>
+
+        @foreach (var pub in new[] { "aziende", "privati" })
+        {
+            <div class="mc-set">
+                <div class="mc-set-head">
+                    <h3>@(pub == "aziende" ? "Aziende — LinkedIn" : "Privati — Facebook e Instagram")</h3>
+                    <span class="mc-tag">1080 × 1350</span>
+                </div>
+                <div class="mc-grid">
+                    @foreach (var m in Manifesti(pub))
+                    {
+                        <a class="mc-item" href="~/img/campagne/manifesti/@(pub)-@(m.Nome)-feed-verticale.png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/manifesti/@(pub)-@(m.Nome)-feed-verticale.png" alt="Manifesto @m.Nome, @pub" loading="lazy" />
+                            <span>@m.Come</span>
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Le altre due misure</h3>
+                <span class="mc-tag">storia 1080×1920 · quadrato 1080×1080</span>
+            </div>
+            <p>Le stesse frasi per storie e Reel, con le aree di sicurezza rispettate, e in quadrato per i posizionamenti che non accettano il 4:5.</p>
+            <div class="mc-grid storie">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var m in Manifesti(pub))
+                    {
+                        foreach (var misura in new[] { "storia", "quadrato" })
+                        {
+                            <a class="mc-item" href="~/img/campagne/manifesti/@(pub)-@(m.Nome)-@(misura).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/manifesti/@(pub)-@(m.Nome)-@(misura).png" alt="Manifesto @m.Nome @misura, @pub" loading="lazy" />
+                                <span>@(pub)-@(m.Nome)-@(misura).png</span>
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti e accostamento con i testi: <span class="mc-path">docs/creativi/manifesti/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/manifesti &amp;&amp; node genera-manifesti.mjs &amp;&amp; ./render-manifesti.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== CAROSELLI ============================== -->
+<section class="tk-section bg-soft">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Caroselli · due varianti da confrontare</span>
@@ -214,15 +305,21 @@
 </section>
 
 <!-- ============================== IMMAGINE SINGOLA ============================== -->
-<section class="tk-section bg-soft">
+<section class="tk-section">
     <div class="container-xl">
         <div class="tk-section-head">
-            <span class="eyebrow">Immagine singola</span>
+            <span class="eyebrow">Immagine singola · per chi vi sta già valutando</span>
             <h2>Presentazione del servizio, due palette</h2>
             <p>
                 Un solo visual, uguale per tutte le varianti di copy: si tiene fissa la grafica e si
                 mette alla prova il testo. Da far girare in entrambe le palette e tenere quella che
                 porta i lead a meno.
+            </p>
+            <p>
+                Sull'immagine ci sono circa sessanta parole, e risponde in un colpo solo alle domande
+                di chi il servizio lo sta valutando. Per questo <strong>rende in retargeting e sui
+                pubblici caldi</strong>: sul traffico freddo le piattaforme distribuiscono peggio le
+                immagini molto scritte, e lì è meglio un manifesto o un carosello.
             </p>
         </div>
 
@@ -256,7 +353,7 @@
 </section>
 
 <!-- ============================== ALTRE DIREZIONI ============================== -->
-<section class="tk-section">
+<section class="tk-section bg-soft">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Da provare</span>
@@ -264,6 +361,9 @@
             <p>
                 Nessuna di queste è pronta: sono strade alternative, con quello che serve per
                 percorrerle. In ordine di quanto pagherebbero rispetto a quello che c'è già.
+                Le proposte che riguardano i formati e l'impostazione delle campagne — Document Ad
+                per LinkedIn, modulo istantaneo su Meta, Thought Leader Ad — stanno in
+                <span class="mc-path">docs/creativi/revisione-2026.md</span>.
             </p>
         </div>
 
@@ -307,7 +407,7 @@
                 più forte in assoluto — ma solo se il numero è vostro e verificabile. Inventarlo è il
                 modo più rapido per farsi segnalare dai concorrenti su LinkedIn.
             </p>
-            <p class="mc-meta"><b>Serve:</b> i dati dei primi dieci check-up. <b>Dove:</b> entrambe. <b>Non prima di averli.</b></p>
+            <p class="mc-meta"><b>Serve:</b> i dati dei primi dieci check-up. <b>Dove:</b> entrambe. <b>Non prima di averli.</b> Il formato ormai c'è: si aggiunge un concetto ai manifesti con la cifra al posto della frase.</p>
         </div>
 
         <div class="mc-idea">
@@ -332,19 +432,19 @@
         </div>
 
         <div class="mc-idea">
-            <h4>7. Testo puro, senza grafica</h4>
+            <h4>7. Testo puro, senza grafica <span class="mc-tag">fatta</span></h4>
             <p>
                 Una frase su fondo pieno, come il fermo-immagine di una storia scritta a mano. Sembra
                 un contenuto e non un annuncio, e per questo scavalca l'abitudine a saltare le
                 pubblicità. Regge solo se la frase è ottima: qui non c'è niente dietro cui nascondersi.
             </p>
-            <p class="mc-meta"><b>Serve:</b> niente. <b>Dove:</b> Instagram, storie.</p>
+            <p class="mc-meta">Sono i <b>manifesti</b> in cima a questa pagina: otto, quattro per pubblico.</p>
         </div>
     </div>
 </section>
 
 <!-- ============================== DOCUMENTI ============================== -->
-<section class="tk-section bg-soft">
+<section class="tk-section">
     <div class="container-xl">
         <div class="tk-section-head">
             <span class="eyebrow">Dove sta il resto</span>
@@ -354,7 +454,15 @@
         <ul class="mc-files">
             <li>
                 <strong class="mc-path">docs/campagne-ads.md</strong>
-                <span>Le varianti di copy per LinkedIn e Facebook, il targeting, gli URL con UTM, come impostare i test e cosa manca ancora.</span>
+                <span>Le varianti di copy per LinkedIn e Facebook, il targeting, gli URL con UTM, quale manifesto va con quale testo, come impostare i test e cosa manca ancora.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/revisione-2026.md</strong>
+                <span>La revisione dei materiali: cosa dicono le raccomandazioni del 2026, cosa è stato cambiato e cosa converrebbe fare, in ordine di resa. Con le fonti.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/manifesti/README.md</strong>
+                <span>I manifesti: gli otto concetti, perché una frase sola e perché quattro superfici diverse.</span>
             </li>
             <li>
                 <strong class="mc-path">docs/creativi/README.md</strong>
