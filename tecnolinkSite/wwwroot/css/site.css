@@ -269,6 +269,17 @@ section { position: relative; }
   list-style: none;
   margin: 0; padding: 0;
 }
+/* Il logo non deve stare attaccato alla prima voce: con il menu pieno lo
+   spazio avanzato è poco e "Home" finiva appiccicato al marchio. */
+.tk-brand { margin-right: 1.75rem; }
+
+/* Sulle landing il menu completo non c'è (è voluto: non si offrono vie
+   d'uscita al traffico a pagamento), ma un modo di tornare alla home sì.
+   Deve vedersi anche da telefono, dove `.tk-nav-links` sparisce dietro
+   l'hamburger — che però sulle landing non c'è. */
+@media (max-width: 991px) {
+  .tk-nav-links.tk-nav-links-minimo { display: flex; }
+}
 .tk-nav-links a {
   color: rgba(255,255,255,0.78);
   font-size: 0.93rem;
@@ -278,14 +289,22 @@ section { position: relative; }
 .tk-nav-links a:hover { color: #fff; }
 
 .tk-nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+/* Solo la cornetta, senza numero scritto: il numero resta nel `href` e
+   nell'`aria-label`, quindi chi tocca chiama lo stesso e chi legge con lo
+   screen reader lo sente per intero. */
 .tk-nav-phone {
   color: rgba(255,255,255,0.85);
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 1.05rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.16);
+  transition: border-color 0.25s ease, color 0.25s ease;
 }
+.tk-nav-phone:hover { color: #fff; border-color: rgba(103,232,249,0.6); }
 
 .tk-nav-toggle {
   display: none;
@@ -419,6 +438,20 @@ section { position: relative; }
 }
 @media (max-width: 991px) { .tk-hero-trust { justify-content: center; } }
 .tk-hero-trust strong { color: #fff; display: block; font-family: var(--font-head); font-size: 1.4rem; }
+
+/* Il marchio in chiaro in cima all'hero. Più grande del logo nella barra,
+   perché lì fa da segnalibro e qui invece deve dire "sei sul sito giusto". */
+.tk-hero-logo {
+  height: 46px;
+  width: auto;
+  margin-bottom: 1.4rem;
+}
+@media (max-width: 991px) {
+  .tk-hero-logo { margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 575px) {
+  .tk-hero-logo { height: 38px; }
+}
 
 /* --------------------------------------------------------------------- */
 /* Video nell'hero, da desktop                                             */

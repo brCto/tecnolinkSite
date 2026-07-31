@@ -123,8 +123,13 @@
 
             @if (isLanding)
             {
+                @* Anche sulle landing resta un modo esplicito di tornare alla home:
+                   il logo ci porta già, ma non tutti lo sanno o ci provano. *@
+                <ul class="tk-nav-links tk-nav-links-minimo">
+                    <li><a asp-page="/Index" asp-fragment="home">Home</a></li>
+                </ul>
                 <div class="tk-nav-actions">
-                    <a class="tk-nav-phone" href="tel:+39055617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="tk-nav-phone" href="tel:+39055617008" aria-label="Telefono 055 617008"><i class="bi bi-telephone-fill"></i></a>
                     <a class="btn-tk btn-tk-primary" href="#contatti">Richiedi un'analisi</a>
                 </div>
             }
@@ -146,7 +151,7 @@
                 </ul>
 
                 <div class="tk-nav-actions">
-                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+39055617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+39055617008" aria-label="Telefono 055 617008"><i class="bi bi-telephone-fill"></i></a>
                     <a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a>
                     <button class="tk-nav-toggle" id="tkNavToggle" aria-label="Apri menu" aria-expanded="false"><i class="bi bi-list"></i></button>
                 </div>

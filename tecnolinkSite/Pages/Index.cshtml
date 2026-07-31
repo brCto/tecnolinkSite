@@ -25,6 +25,11 @@
     <div class="container-xl">
         <div class="tk-hero-grid">
             <div>
+                @* Il marchio in chiaro sopra al titolo: chi arriva da un annuncio
+                   o da una ricerca deve capire in un colpo d'occhio dove è
+                   finito, senza dover cercare il logo piccolo nella barra. *@
+                <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink"
+                     class="tk-hero-logo" width="180" height="51" loading="eager" />
                 <span class="tk-hero-badge"><i class="bi bi-shield-check"></i> Sicurezza informatica a Firenze</span>
                 <h1>La sicurezza informatica <span class="gradient-text">su misura</span>, senza compromessi tra privacy e sicurezza.</h1>
                 <p class="lead">Progettiamo sistemi informatici, protezione cyber e soluzioni data science pensate sulle esigenze reali della tua azienda. Non ti chiediamo di scegliere: ti offriamo il meglio di entrambi.</p>
@@ -277,7 +282,13 @@
     <div class="container-xl">
         <div class="tk-about-grid">
             <div class="tk-about-visual reveal">
-                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" alt="Il team Tecnolink al lavoro" loading="lazy" width="900" height="1125" />
+                @* Prima qui c'era una foto d'archivio di Unsplash con scritto
+                   alt="Il team Tecnolink al lavoro": gente che con Tecnolink non
+                   c'entra niente, presentata come se fosse il team. Ora è un
+                   fotogramma delle stesse clip del video, senza persone e senza
+                   dichiarare niente di falso — ed è servito dal nostro dominio,
+                   non agganciato a un sito esterno. *@
+                <img src="~/img/chi-siamo.jpg" alt="Scheda elettronica" loading="lazy" width="1280" height="720" />
             </div>
             <div class="reveal">
                 <span class="eyebrow">Chi siamo</span>
