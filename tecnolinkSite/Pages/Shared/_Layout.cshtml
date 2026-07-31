@@ -5,7 +5,7 @@
         ? "Tecnolink | Sistemi Informatici &amp; Cybersecurity a Firenze"
         : $"{pageTitle} - Tecnolink";
     var description = ViewData["Description"] as string
-        ?? "Tecnolink: da 20 anni sistemi informatici, sicurezza informatica e servizi di data science su misura per aziende e professionisti a Firenze. Scopri tecnoSHIELD.";
+        ?? "Tecnolink: sistemi informatici, sicurezza informatica e servizi di data science su misura per aziende e professionisti a Firenze. Scopri tecnoSHIELD.";
     var robots = ViewData["Robots"] as string ?? "index, follow";
     var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
     var ogImage = $"{Context.Request.Scheme}://{Context.Request.Host}/img/og-image.png";
@@ -124,7 +124,7 @@
             @if (isLanding)
             {
                 <div class="tk-nav-actions">
-                    <a class="tk-nav-phone" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="tk-nav-phone" href="tel:+39055617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
                     <a class="btn-tk btn-tk-primary" href="#contatti">Richiedi un'analisi</a>
                 </div>
             }
@@ -146,7 +146,7 @@
                 </ul>
 
                 <div class="tk-nav-actions">
-                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+390556617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
+                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+39055617008"><i class="bi bi-telephone-fill"></i> 055 617008</a>
                     <a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a>
                     <button class="tk-nav-toggle" id="tkNavToggle" aria-label="Apri menu" aria-expanded="false"><i class="bi bi-list"></i></button>
                 </div>
@@ -168,7 +168,7 @@
                     </span>
                     <ul>
                         <li><i class="bi bi-geo-alt me-2"></i>Via Aretina 167/M, 50136 Firenze</li>
-                        <li><i class="bi bi-telephone me-2"></i><a href="tel:+390556617008">055 617008</a></li>
+                        <li><i class="bi bi-telephone me-2"></i><a href="tel:+39055617008">055 617008</a></li>
                         <li><i class="bi bi-envelope me-2"></i><a href="mailto:info@tecnolink.it">info@tecnolink.it</a></li>
                     </ul>
                 </div>
@@ -188,11 +188,11 @@
                     <a class="tk-brand" asp-area="" asp-page="/Index" style="margin-bottom:1rem;">
                         <img src="~/img/logo-tecnolink-bianco-180x51.png" alt="Tecnolink" class="tk-logo" />
                     </a>
-                    <p>Da 20 anni progettiamo sistemi informatici e soluzioni di sicurezza su misura per aziende e professionisti di Firenze e delle zone limitrofe, senza chiedere ai nostri clienti di scegliere tra privacy e sicurezza.</p>
+                    <p>Progettiamo sistemi informatici e soluzioni di sicurezza su misura per aziende e professionisti di Firenze e delle zone limitrofe, senza chiedere ai nostri clienti di scegliere tra privacy e sicurezza.</p>
                     <div class="tk-social">
-                        <a href="tel:+390556617008" aria-label="Telefono"><i class="bi bi-telephone"></i></a>
+                        <a href="tel:+39055617008" aria-label="Telefono"><i class="bi bi-telephone"></i></a>
                         <a href="mailto:info@tecnolink.it" aria-label="Email"><i class="bi bi-envelope"></i></a>
-                        <a href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="https://www.linkedin.com/company/tecnolink_2" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
                 <div>
@@ -218,7 +218,7 @@
                     <h5>Contatti</h5>
                     <ul>
                         <li><i class="bi bi-geo-alt me-2"></i>Via Aretina 167/M, 50136 Firenze</li>
-                        <li><i class="bi bi-telephone me-2"></i><a href="tel:+390556617008">055 617008</a></li>
+                        <li><i class="bi bi-telephone me-2"></i><a href="tel:+39055617008">055 617008</a></li>
                         <li><i class="bi bi-envelope me-2"></i><a href="mailto:info@tecnolink.it">info@tecnolink.it</a></li>
                     </ul>
                 </div>

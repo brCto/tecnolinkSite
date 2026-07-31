@@ -241,16 +241,14 @@ situazione di chi legge. Vale anche per i manifesti nuovi.
 
 ---
 
-## 5. Due cose ancora aperte sul sito
+## 5. Sul sito
 
-- **Il link LinkedIn nel footer** punta ancora a `https://www.linkedin.com`
-  (`Pages/Shared/_Layout.cshtml`, riga 195). Cercando, la pagina aziendale sembra essere
-  `https://www.linkedin.com/company/tecnolink_2` — profilo di Firenze, informatica,
-  fondata nel 1994: **da confermare da chi gestisce la pagina** prima di metterla nel
-  footer. Va sistemato prima di mandare traffico da LinkedIn: chi arriva dall'annuncio e
-  clicca l'icona finisce sulla home di LinkedIn.
+- **Il link LinkedIn nel footer** puntava a `https://www.linkedin.com` invece che alla
+  pagina aziendale. Sistemato il 31/07/2026 su `master` (`linkedin.com/company/tecnolink_2`,
+  confermato con il cliente): chi arriva dall'annuncio e clicca l'icona ora atterra dove
+  deve.
 - **Le tre voci di menu temporanee** (`VA · Aziende`, `VA · Privati`, `Materiali`, blocco
-  `TEMP` in `_Layout.cshtml`) vanno tolte prima del lancio.
+  `TEMP` in `_Layout.cshtml`) vanno tolte prima del lancio. *Ancora aperto.*
 
 ---
 
