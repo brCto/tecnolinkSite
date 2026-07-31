@@ -380,6 +380,19 @@ Le clip però non si vedono, perché arrivano da Node solo in registrazione.
     parte dal bordo destro e con gli `fr` il titolo gli finiva sotto. Sotto ai
     ~600px di colonna i due pulsanti si impilano: per questo fra 992 e 1365px
     c'è uno scalino che restringe il video e allarga il testo.
+
+  **Trappola, costata una segnalazione del cliente (corretta il 31/07/2026).**
+  Tutte le regole qui sopra valgono **solo per l'hero della home**, che porta la
+  classe `has-video` (`.tk-hero.has-video` in `site.css`). All'inizio non era
+  così: stavano su `.tk-hero` e basta, e l'hero del sito non è uno solo. Sopra i
+  992px nascondevano l'illustrazione a destra (`.frame { display: none }`) e
+  rendevano statica la colonna su **ogni** pagina — comprese le cinque del
+  check-up, che il video non ce l'hanno. Lì spariva il disegno a destra e i due
+  riquadri, rimasti assoluti rispetto all'hero invece che alla colonna,
+  cadevano in alto a sinistra: sopra al selettore Base/Intermedia/Tecnica.
+  **Chi aggiunge regole per il video le metta sotto `.tk-hero.has-video`**, e
+  prima di dire fatto guardi anche `/offerte/vulnerability-assessment` e le sue
+  quattro sorelle, non solo la home.
 - Valutare se pubblicare il video sulla pagina interna dei materiali campagne
   (`/interno/materiali-campagne`), dove stanno già i creativi statici.
 - Se un domani il verticale scendesse sotto il tempo reale, la leva è 25 fps
