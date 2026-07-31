@@ -352,6 +352,169 @@
     </div>
 </section>
 
+<!-- ============================== ALTRI FORMATI ============================== -->
+<section class="tk-section bg-soft">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Altri formati · uno per tipo</span>
+            <h2>Quattro modi diversi di impostare l'annuncio</h2>
+            <p>
+                Non sono varianti grafiche di quello che c'è sopra: sono quattro impostazioni
+                diverse, prodotte per poterle confrontare. Servono momenti diversi del percorso,
+                quindi non vanno pubblicate tutte insieme — si sceglie in base a dove sta il
+                pubblico, non a quale piace di più.
+            </p>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Confronto — due metà</h3>
+                <span class="mc-tag">traffico freddo</span>
+            </div>
+            <p>
+                Sopra quello che si vede, sotto quello che guardiamo noi. Si legge senza leggere:
+                l'impressione arriva prima delle parole, il testo la conferma. È il più adatto dei
+                quattro al feed, perché regge anche in miniatura.
+            </p>
+            <div class="mc-grid">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var misura in new[] { "feed-verticale", "storia" })
+                    {
+                        <a class="mc-item" href="~/img/campagne/formati/confronto-@(pub)-@(misura).png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/formati/confronto-@(pub)-@(misura).png" alt="Confronto @pub @misura" loading="lazy" />
+                            <span>confronto-@(pub)-@(misura).png</span>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Checklist — cinque domande</h3>
+                <span class="mc-tag">storie e retargeting</span>
+            </div>
+            <p>
+                Chi si ferma la legge fino in fondo e si dà una risposta da solo. Ha parecchie
+                parole, ed è voluto — ma proprio per questo <strong>non va nel feed freddo</strong>,
+                dove le immagini molto scritte vengono distribuite peggio.
+            </p>
+            <div class="mc-grid">
+                @foreach (var pub in new[] { "aziende", "privati" })
+                {
+                    foreach (var misura in new[] { "feed-verticale", "storia" })
+                    {
+                        <a class="mc-item" href="~/img/campagne/formati/checklist-@(pub)-@(misura).png" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/formati/checklist-@(pub)-@(misura).png" alt="Checklist @pub @misura" loading="lazy" />
+                            <span>checklist-@(pub)-@(misura).png</span>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Miti — carosello da sei carte</h3>
+                <span class="mc-tag">privati · Facebook e Instagram</span>
+            </div>
+            <p>
+                Le quattro convinzioni che lasciano la porta aperta, già scritte sulla landing
+                privati. Funziona perché il lettore riconosce la frase: è una cosa che ha pensato
+                lui. Se i testi cambiano sulla landing, vanno cambiati anche qui.
+            </p>
+            <div class="mc-grid">
+                @foreach (var n in new[] { "01", "02", "03", "04", "05", "06" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/miti-privati-quadrato-@(n).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/miti-privati-quadrato-@(n).png" alt="Carta @n del carosello miti" loading="lazy" />
+                        <span>miti-privati-quadrato-@(n).png</span>
+                    </a>
+                }
+            </div>
+            <p class="mc-variante">Le stesse carte in verticale, per storie e reel</p>
+            <div class="mc-grid storie">
+                @foreach (var n in new[] { "01", "02", "03", "04", "05", "06" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/miti-privati-storia-@(n).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/miti-privati-storia-@(n).png" alt="Carta @n verticale del carosello miti" loading="lazy" />
+                        <span>miti-privati-storia-@(n).png</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Anatomia — cosa vi resta in mano</h3>
+                <span class="mc-tag">aziende · retargeting</span>
+            </div>
+            <p>
+                La forma del report senza il contenuto: ci sono i nomi delle quattro parti, non i
+                risultati. Risponde all'obiezione silenziosa di chi non ha mai comprato un check-up.
+                Un report finto con numeri finti sarebbe un documento falso: quando avrete una
+                pagina vera da anonimizzare, quella sì che vale la pena mostrarla.
+            </p>
+            <div class="mc-grid">
+                @foreach (var misura in new[] { "feed-verticale", "quadrato" })
+                {
+                    <a class="mc-item" href="~/img/campagne/formati/anatomia-aziende-@(misura).png" target="_blank" rel="noopener">
+                        <img src="~/img/campagne/formati/anatomia-aziende-@(misura).png" alt="Anatomia del report @misura" loading="lazy" />
+                        <span>anatomia-aziende-@(misura).png</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti: <span class="mc-path">docs/creativi/formati/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/formati &amp;&amp; node genera-formati.mjs &amp;&amp; ./render-formati.sh</pre>
+    </div>
+</section>
+
+<!-- ============================== DOCUMENT AD ============================== -->
+<section class="tk-section">
+    <div class="container-xl">
+        <div class="tk-section-head">
+            <span class="eyebrow">Document Ad · LinkedIn</span>
+            <h2>Otto pagine che si sfogliano dentro il feed</h2>
+            <p>
+                È il formato con il costo per lead più basso su LinkedIn, e il motivo è meccanico:
+                il documento si sfoglia senza uscire dalla piattaforma. La soglia da superare non è
+                «vale la pena cliccare» ma «vale la pena scorrere ancora una pagina».
+            </p>
+            <p>
+                Dà anche un dato che gli altri formati non hanno: <strong>quante pagine vengono
+                lette</strong>. Se quasi nessuno passa la terza il problema è il documento; se molti
+                arrivano in fondo e nessuno scrive, il problema è l'offerta.
+            </p>
+            <p>
+                <strong>Al primo giro senza modulo davanti:</strong> si sponsorizza per far leggere
+                e i lead si raccolgono dopo, in retargeting su chi lo ha sfogliato.
+                Due pagine hanno un <span class="mc-tag">da compilare</span> — le domande vere dei
+                questionari che ricevete e una pagina di report anonimizzata. Sono le due cose che
+                lo renderebbero vostro invece che generico.
+            </p>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-grid">
+                <a class="mc-item" href="~/img/campagne/documento/documento-linkedin.pdf" target="_blank" rel="noopener">
+                    <img src="~/img/campagne/documento/documento-copertina.png" alt="Copertina del Document Ad" loading="lazy" />
+                    <span>documento-linkedin.pdf — 8 pagine, 1080×1350</span>
+                </a>
+            </div>
+        </div>
+
+        <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
+            Sorgenti e indice delle pagine: <span class="mc-path">docs/creativi/documento/</span>
+        </p>
+        <pre class="mc-cmd">cd docs/creativi/documento &amp;&amp; node genera-documento.mjs &amp;&amp; ./render-documento.sh</pre>
+    </div>
+</section>
+
 <!-- ============================== ALTRE DIREZIONI ============================== -->
 <section class="tk-section bg-soft">
     <div class="container-xl">
@@ -385,7 +548,11 @@
                 il semaforo, il riepilogo. È la prova che il servizio esiste davvero e che il report è
                 leggibile — l'obiezione silenziosa di chi non ha mai comprato un check-up.
             </p>
-            <p class="mc-meta"><b>Serve:</b> un report reale da anonimizzare con attenzione. <b>Dove:</b> LinkedIn.</p>
+            <p class="mc-meta">
+                <b>Serve:</b> un report reale da anonimizzare con attenzione. <b>Dove:</b> LinkedIn.
+                Nel frattempo il creativo <b>anatomia</b> qui sopra ne mostra la forma senza il
+                contenuto, e la pagina 07 del Document Ad aspetta questa stessa immagine.
+            </p>
         </div>
 
         <div class="mc-idea">
@@ -422,13 +589,13 @@
         </div>
 
         <div class="mc-idea">
-            <h4>6. Carosello "mito e realtà"</h4>
+            <h4>6. Carosello "mito e realtà" <span class="mc-tag">fatta</span></h4>
             <p>
                 I quattro luoghi comuni già scritti sulla landing privati — l'antivirus basta, non ho
                 niente da nascondere, il router dell'operatore è sicuro, me ne accorgerei — uno per
                 carta, con la risposta sotto. Materiale già pronto, costa solo il tempo di impaginarlo.
             </p>
-            <p class="mc-meta"><b>Serve:</b> niente, il testo esiste. <b>Dove:</b> Facebook e Instagram.</p>
+            <p class="mc-meta">È il carosello <b>miti</b> qui sopra: sei carte, quadrato e verticale.</p>
         </div>
 
         <div class="mc-idea">
@@ -463,6 +630,14 @@
             <li>
                 <strong class="mc-path">docs/creativi/manifesti/README.md</strong>
                 <span>I manifesti: gli otto concetti, perché una frase sola e perché quattro superfici diverse.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/formati/README.md</strong>
+                <span>Confronto, checklist, miti e anatomia: cosa sono, dove sta bene ciascuno e cosa non va fatto con loro.</span>
+            </li>
+            <li>
+                <strong class="mc-path">docs/creativi/documento/README.md</strong>
+                <span>Il Document Ad: l'indice delle otto pagine, le due cose ancora da compilare e come si pubblica.</span>
             </li>
             <li>
                 <strong class="mc-path">docs/creativi/README.md</strong>

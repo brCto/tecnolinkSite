@@ -90,7 +90,33 @@ minaccia: *«Un elenco di cose da sistemare, in ordine di urgenza»*. Serve a mi
 punto 8 sul vostro pubblico invece che in generale — minaccia contro risultato, stesso
 pubblico, stessa spesa.
 
-### c) Il visual di presentazione non va buttato: va spostato
+### c) Quattro formati nuovi, uno per tipo
+
+Il punto 3 chiede varietà vera. Otto manifesti sono otto ganci, ma tutti costruiti allo
+stesso modo: in [`formati/`](formati/) ci sono quattro **impostazioni** diverse, prodotte
+per poterle confrontare.
+
+| Tipo | Cos'è | Dove |
+|---|---|---|
+| **confronto** | Due metà: sopra quello che si vede, sotto quello che guardiamo noi | Traffico freddo — si legge senza leggere |
+| **checklist** | Cinque domande con le caselle vuote | Storie e retargeting, **non** il feed freddo |
+| **miti** | Carosello da sei carte sulle convinzioni che lasciano la porta aperta | Privati, Facebook e Instagram |
+| **anatomia** | La forma del report, senza il contenuto | Aziende, retargeting |
+
+I testi dei miti sono quelli già sulla landing privati: se cambiano lì vanno cambiati
+anche qui. L'anatomia mostra i nomi delle quattro parti del report e non i risultati —
+un report finto con numeri finti sarebbe un documento falso, e non è una strada
+percorribile.
+
+### d) Il Document Ad per LinkedIn, fatto
+
+Era la proposta numero 1 di questa revisione. Il PDF di otto pagine c'è, in
+[`documento/`](documento/), con l'indice e le regole seguite nel README di quella
+cartella. Due pagine hanno un `[DA COMPILARE]`, in un riquadro che si vede: le domande
+vere dei questionari che ricevete e una pagina di report anonimizzata. Sono le due cose
+che lo rendono vostro invece che generico.
+
+### e) Il visual di presentazione non va buttato: va spostato
 
 Resta un buon creativo **per il retargeting**, dove chi guarda ha già visto il nome e sta
 cercando di capire cosa comprende il servizio: lì i quattro passi e le tre garanzie
@@ -101,12 +127,16 @@ di file: traffico freddo → manifesti e caroselli, retargeting → presentazion
 
 ## 3. Modifiche proposte, in ordine di resa
 
-### 1. Un Document Ad per LinkedIn — *l'intervento che paga di più*
+### 1. Un Document Ad per LinkedIn — ~~*l'intervento che paga di più*~~ **fatto**
+
+> Il PDF è in [`documento/`](documento/). Restano da compilare le pagine 04 e 07 —
+> le domande vere dei questionari e una pagina di report anonimizzata. L'indice qui
+> sotto è quello effettivamente impaginato.
 
 È il formato con il costo per lead più basso su LinkedIn, e voi avete già il contenuto
 sparso tra landing e documenti interni. Non serve inventare niente: serve impaginare.
 
-Proposta di indice, otto pagine, formato verticale:
+Indice, otto pagine, formato verticale:
 
 | Pagina | Contenuto |
 |---|---|
@@ -158,6 +188,11 @@ Traccia utile: *«La prima cosa che guardo quando entro in una rete aziendale»*
 Già segnalato in `campagne-ads.md` §4, e la ricerca lo conferma: sul traffico consumer
 l'assenza di qualsiasi indicazione economica è il primo motivo di abbandono. Anche solo
 «a partire da» o una forbice.
+
+### 4-bis. Il carosello «mito e realtà», fatto
+
+Era l'idea 6 della pagina interna, e i testi erano già scritti sulla landing privati: ora
+è impaginato, sei carte, in [`formati/`](formati/). Costava solo il tempo di farlo.
 
 ### 5. Il carosello con l'apertura «esito»
 

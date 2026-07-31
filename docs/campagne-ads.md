@@ -77,6 +77,17 @@ testo, il ragionamento sta qui nel copy. Il visual di presentazione descritto so
 circa sessanta parole sull'immagine e rende meglio **in retargeting**, su chi ha già
 visto il nome e vuole capire cosa comprende il servizio.
 
+**Altri quattro formati.** In [`creativi/formati/`](creativi/formati/) ci sono quattro
+impostazioni diverse, da confrontare: **confronto** (due metà, per il feed freddo),
+**checklist** (cinque domande, per storie e retargeting), **miti** (carosello da sei
+carte sui luoghi comuni, privati) e **anatomia** (la forma del report, aziende). Il
+README di quella cartella dice dove sta bene ciascuno.
+
+**Document Ad per LinkedIn.** In [`creativi/documento/`](creativi/documento/) un PDF di
+otto pagine da pubblicare come Document Ad: è il formato con il costo per lead più basso
+su LinkedIn. Al primo giro va senza modulo davanti, e i lead si raccolgono in retargeting
+su chi lo ha sfogliato. Due pagine restano `[DA COMPILARE]`.
+
 Come si accostano manifesti e testi è nella tabella al §3; il perché in
 [`creativi/revisione-2026.md`](creativi/revisione-2026.md).
 
