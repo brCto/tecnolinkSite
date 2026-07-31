@@ -146,12 +146,17 @@
                     <li><a asp-page="/Interno/MaterialiCampagne">Materiali</a></li>
                     @* /TEMP *@
                     <li><a asp-page="/Index" asp-fragment="chi-siamo">Chi siamo</a></li>
-                    <li><a asp-page="/Index" asp-fragment="contatti">Contatti</a></li>
+                    @* "Contatti" tolto dal menu: ci portano già la cornetta qui
+                       accanto e il pulsante "Richiedi Consulenza". La sezione
+                       #contatti resta al suo posto, è solo la voce che se ne va. *@
                     <li class="d-lg-none"><a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a></li>
                 </ul>
 
                 <div class="tk-nav-actions">
-                    <a class="tk-nav-phone d-none d-lg-flex" href="tel:+39055617008" aria-label="Telefono 055 617008"><i class="bi bi-telephone-fill"></i></a>
+                    @* Niente "d-none d-lg-flex": la cornetta si vede anche da
+                       telefono, dov'è il gesto più diretto che ci sia — si tocca
+                       e parte la chiamata. Ora che è solo un'icona ci sta. *@
+                    <a class="tk-nav-phone" href="tel:+39055617008" aria-label="Telefono 055 617008"><i class="bi bi-telephone-fill"></i></a>
                     <a class="btn-tk btn-tk-primary" asp-page="/Index" asp-fragment="contatti">Richiedi Consulenza</a>
                     <button class="tk-nav-toggle" id="tkNavToggle" aria-label="Apri menu" aria-expanded="false"><i class="bi bi-list"></i></button>
                 </div>

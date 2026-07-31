@@ -316,7 +316,10 @@ section { position: relative; }
 }
 
 @media (max-width: 991px) {
-  .tk-nav-links, .tk-nav-phone { display: none; }
+  /* La cornetta resta: da telefono è l'azione più diretta, si tocca e parte la
+     chiamata. Sulle landing conta il doppio, perché lì sotto i 992px non c'è né
+     hamburger né pulsante e la barra rimarrebbe con il solo logo. */
+  .tk-nav-links { display: none; }
   .tk-nav-toggle { display: block; }
   .tk-nav-actions .btn-tk-primary { display: none; }
   .tk-nav.menu-open .tk-nav-links {
@@ -439,18 +442,50 @@ section { position: relative; }
 @media (max-width: 991px) { .tk-hero-trust { justify-content: center; } }
 .tk-hero-trust strong { color: #fff; display: block; font-family: var(--font-head); font-size: 1.4rem; }
 
-/* Il marchio in chiaro in cima all'hero. Più grande del logo nella barra,
-   perché lì fa da segnalibro e qui invece deve dire "sei sul sito giusto". */
+/* Il marchio in chiaro in cima all'hero. Molto più grande del logo nella barra,
+   perché lì fa da segnalibro e qui invece deve dire "sei sul sito giusto".
+   La riga sotto al titolo è la scritta di fianco, divisa da un filetto. */
+.tk-hero-marchio {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.6rem;
+}
 .tk-hero-logo {
-  height: 46px;
+  height: 72px;
   width: auto;
-  margin-bottom: 1.4rem;
+  flex-shrink: 0;
 }
+.tk-hero-marchio-testo {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(255,255,255,0.82);
+  max-width: 11rem;
+}
+/* Il filetto verticale fra logo e scritta, nei colori del marchio. */
+.tk-hero-marchio-testo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 2.6em;
+  border-radius: 2px;
+  background: var(--gradient-brand);
+}
+
 @media (max-width: 991px) {
-  .tk-hero-logo { margin-left: auto; margin-right: auto; }
+  .tk-hero-marchio { justify-content: center; }
+  .tk-hero-marchio-testo { text-align: left; }
 }
-@media (max-width: 575px) {
-  .tk-hero-logo { height: 38px; }
+@media (max-width: 480px) {
+  .tk-hero-logo { height: 54px; }
+  .tk-hero-marchio { gap: 0.8rem; }
+  .tk-hero-marchio-testo { font-size: 0.85rem; padding-left: 0.8rem; max-width: 9.5rem; }
 }
 
 /* --------------------------------------------------------------------- */
