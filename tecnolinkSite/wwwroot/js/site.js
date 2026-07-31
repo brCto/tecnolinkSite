@@ -477,3 +477,73 @@
     runStep();
   });
 })();
+
+// Video di presentazione
+// Ce ne sono due in pagina, con lo stesso file: uno nell'hero, che si vede solo
+// da desktop, e uno nella sua sezione, che si vede solo da telefono. Ne parte
+// uno soltanto — quello nascosto non viene nemmeno scaricato, ed è il motivo per
+// cui l'attributo `autoplay` non c'è sul tag: lo farebbe scaricare comunque
+// tutti e due. Il file non ha traccia audio (generato con "--muto"), quindi non
+// c'è niente da silenziare e può partire da solo senza dare noia.
+(function () {
+  var nellHero = document.getElementById('tkVideoHero');
+  var nellaSezione = document.getElementById('tkVideoHome');
+  var tutti = [nellHero, nellaSezione].filter(Boolean);
+  if (!tutti.length) return;
+
+  var bottone = document.getElementById('tkVideoPausa');
+  var fermatoAMano = false;
+  var daDesktop = window.matchMedia('(min-width: 992px)');
+  // Qui NON si guarda `prefers-reduced-motion`, ed è una scelta: su Windows
+  // quell'impostazione risulta attiva a un sacco di gente che non l'ha mai
+  // toccata (basta avere gli effetti di animazione spenti), e il video restava
+  // fermo sul poster senza che si capisse perché. Non ha traccia audio e c'è il
+  // comando di pausa, quindi parte sempre.
+
+  // Quale dei due è quello buono adesso: lo decide la stessa soglia del CSS.
+  function attivo() {
+    return daDesktop.matches ? nellHero : nellaSezione;
+  }
+
+  function aggiornaBottone() {
+    if (!bottone || !nellaSezione) return;
+    var inPausa = nellaSezione.paused;
+    bottone.querySelector('span').textContent = inPausa ? 'Riprendi' : 'Pausa';
+    bottone.querySelector('i').className = inPausa ? 'bi bi-play-fill' : 'bi bi-pause-fill';
+    bottone.setAttribute('aria-label', inPausa ? 'Riprendi il video' : 'Metti in pausa il video');
+  }
+
+  function avvia(v) {
+    if (!v) return;
+    if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+    // play() torna una promise rifiutata se il browser blocca la riproduzione:
+    // senza il catch finisce un errore in console a ogni giro.
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { aggiornaBottone(); });
+  }
+
+  function sistema() {
+    var buono = attivo();
+    tutti.forEach(function (v) {
+      if (v !== buono && !v.paused) v.pause();
+    });
+    if (fermatoAMano) return;
+    avvia(buono);
+  }
+
+  if (bottone && nellaSezione) {
+    bottone.addEventListener('click', function () {
+      if (nellaSezione.paused) { fermatoAMano = false; avvia(nellaSezione); }
+      else { fermatoAMano = true; nellaSezione.pause(); }
+      aggiornaBottone();
+    });
+    nellaSezione.addEventListener('play', aggiornaBottone);
+    nellaSezione.addEventListener('pause', aggiornaBottone);
+  }
+
+  // Al cambio di larghezza si scambiano i ruoli: parte l'altro e questo si ferma.
+  if (daDesktop.addEventListener) daDesktop.addEventListener('change', sistema);
+  else if (daDesktop.addListener) daDesktop.addListener(sistema);
+
+  sistema();
+})();

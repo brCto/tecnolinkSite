@@ -543,12 +543,19 @@
     // sul telefono, spesso a schermo piccolo, e un corpo tarato sul 16:9 sarebbe
     // illeggibile. Da qui la scala diversa fra i due formati.
     const S = { W, H, vert, s: vert ? W / 1000 : W / 1920 };
-    S.m = vert ? 70 : 150 * S.s;
+    // Quanto questa risoluzione è più piccola di quella di riferimento del suo
+    // formato (1920×1080 e 1080×1920). I margini sono in pixel, e senza questo
+    // fattore un 720p non sarebbe la stessa impaginazione rimpicciolita ma
+    // un'altra impaginazione, con il testo più stretto e più schiacciato in alto.
+    // Alle risoluzioni di riferimento vale 1, quindi i video già approvati non
+    // cambiano di un pixel.
+    S.r = vert ? W / 1080 : W / 1920;
+    S.m = (vert ? 70 : 150) * S.r;
     S.cw = W - S.m * 2;
     // In verticale il contenuto sta lontano dai bordi corti: nelle storie, sopra
     // e sotto ci finiscono nome account, didascalia e pulsanti dell'app.
-    S.top = vert ? 210 : 118;
-    S.bot = vert ? H - 270 : H - 118;
+    S.top = (vert ? 210 : 118) * S.r;
+    S.bot = H - (vert ? 270 : 118) * S.r;
     S.cy = (S.top + S.bot) / 2;
     S.ch = S.bot - S.top;
     return S;

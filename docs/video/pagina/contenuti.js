@@ -57,13 +57,19 @@ window.TK_CONTENUTI = {
       occhiello: 'Chi siamo',
       // Righe già spezzate a mano: i segmenti con `g: true` prendono il gradiente
       // cyan → viola del marchio.
+      // Tre righe e non due: "Sicurezza informatica a Firenze." su una riga sola
+      // esce dai margini in verticale, dove la riga utile è 940 px su 1080.
       titoloRighe: [
         [{ t: 'Tecnolink.' }],
-        [{ t: 'Da ' }, { t: 'vent’anni', g: true }, { t: ' a Firenze.' }],
+        [{ t: 'Sicurezza informatica', g: true }],
+        [{ t: 'a Firenze.' }],
       ],
       testo: 'Affianchiamo aziende e professionisti di Firenze e delle zone limitrofe nella gestione dei sistemi informatici: sicurezza, efficienza e attenzione al dettaglio.',
+      // Il claim sugli anni di esperienza ("Da vent'anni", "20+ Anni") è stato
+      // tolto da tutto il sito, non solo dai materiali delle campagne: qui il
+      // titolo riprende parola per parola quello che l'ha sostituito nell'hero
+      // della home, e il dato è stato tolto come lì. Restano due dati, non tre.
       dati: [
-        { valore: '20+', etichetta: 'Anni di esperienza' },
         { valore: '24/7', etichetta: 'Monitoraggio continuo' },
         { valore: '100%', etichetta: 'Soluzioni su misura' },
       ],

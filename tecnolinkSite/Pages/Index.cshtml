@@ -8,6 +8,20 @@
 <!-- ============================== HERO ============================== -->
 <section class="tk-hero" id="home">
     <canvas id="tkHeroCanvas" class="tk-hero-canvas"></canvas>
+
+    @* Solo da desktop: il video occupa la metà destra dell'hero fino al bordo
+       dello schermo, tagliato in diagonale. Da telefono resta nascosto e il
+       video sta nella sua sezione più in basso — qui non ci starebbe. *@
+    <div class="tk-hero-video" aria-hidden="true">
+        <video id="tkVideoHero"
+               width="1280" height="720"
+               muted loop playsinline preload="none"
+               poster="~/img/video-presentazione-poster.jpg"
+               tabindex="-1">
+            <source src="~/video/tecnolink-presentazione-30s.mp4" type="video/mp4" />
+        </video>
+    </div>
+
     <div class="container-xl">
         <div class="tk-hero-grid">
             <div>
@@ -23,24 +37,31 @@
                     <div><strong>24/7</strong> Monitoraggio continuo</div>
                     <div><strong>100%</strong> Soluzioni su misura</div>
                 </div>
+
+                @* Stavano sopra all'immagine dell'hero. Ora lì c'è il video, e
+                   coprirlo non aveva senso: sono scesi qui sotto al testo, dove
+                   c'è spazio vero — nella fascia libera sotto al video non ci
+                   stavano senza accavallarsi ai numeri. *@
+                <div class="tk-hero-badges">
+                    <div class="tk-float-card">
+                        <div class="icon-wrap"><i class="bi bi-hdd-network"></i></div>
+                        <div>
+                            <div class="label">Backup Monitor</div>
+                            <div class="value">Sempre protetti</div>
+                        </div>
+                    </div>
+                    <div class="tk-float-card">
+                        <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
+                        <div>
+                            <div class="label">Check Sicurezza</div>
+                            <div class="value">Zero pensieri</div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="tk-hero-visual">
                 <div class="frame">
                     <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80" alt="Specialista Tecnolink al lavoro su sistemi di sicurezza informatica" loading="eager" />
-                </div>
-                <div class="tk-float-card card-top">
-                    <div class="icon-wrap"><i class="bi bi-hdd-network"></i></div>
-                    <div>
-                        <div class="label">Backup Monitor</div>
-                        <div class="value">Sempre protetti</div>
-                    </div>
-                </div>
-                <div class="tk-float-card card-bottom">
-                    <div class="icon-wrap"><i class="bi bi-shield-check"></i></div>
-                    <div>
-                        <div class="label">Check Sicurezza</div>
-                        <div class="value">Zero pensieri</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -67,6 +88,35 @@
                 <div class="num"><span class="counter" data-target="100" data-suffix="%">0</span></div>
                 <div class="label">Servizi personalizzati</div>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== VIDEO ============================== -->
+@* Questa sezione si vede solo da telefono: da desktop lo stesso video sta
+   nell'hero, tagliato in diagonale, e qui il CSS la nasconde. Il file non ha
+   traccia audio — è generato con "--muto" da docs/video/registra.mjs — quindi
+   può partire da solo senza dare noia a chi legge. *@
+<section class="tk-video" id="video" aria-labelledby="tk-video-titolo">
+    <div class="container-xl">
+        <div class="tk-video-head">
+            <span class="eyebrow" style="justify-content:center;color:var(--cyan-300);">In trenta secondi</span>
+            <h2 id="tk-video-titolo">Chi siamo, <span class="gradient-text">senza girarci intorno</span></h2>
+            <p>Cosa facciamo, per chi lo facciamo e da dove si comincia. Senza audio: guarda con calma.</p>
+        </div>
+
+        <div class="tk-video-frame reveal">
+            <video id="tkVideoHome"
+                   width="1280" height="720"
+                   muted loop playsinline preload="none"
+                   poster="~/img/video-presentazione-poster.jpg"
+                   aria-label="Video di presentazione di Tecnolink, 30 secondi, senza audio">
+                <source src="~/video/tecnolink-presentazione-30s.mp4" type="video/mp4" />
+                Il tuo browser non riproduce questo video.
+            </video>
+            <button type="button" class="tk-video-pausa" id="tkVideoPausa" aria-label="Metti in pausa il video">
+                <i class="bi bi-pause-fill" aria-hidden="true"></i><span>Pausa</span>
+            </button>
         </div>
     </div>
 </section>

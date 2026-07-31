@@ -25,6 +25,8 @@ const pagina = resolve(qui, 'pagina/index.html').replace(/\\/g, '/');
 const FORMATI = {
   '16x9': { larghezza: 1920, altezza: 1080 },
   '9x16': { larghezza: 1080, altezza: 1920 },
+  '16x9-720': { larghezza: 1280, altezza: 720 },
+  '9x16-720': { larghezza: 720, altezza: 1280 },
 };
 
 const argomenti = process.argv.slice(2);
@@ -73,3 +75,8 @@ try {
 } finally {
   await edge.chiudi();
 }
+
+// Come in `registra.mjs`: Edge e il WebSocket lasciano handle aperti e senza
+// questo node resta appeso a lavoro finito. Qui capita di rado, ma capita.
+await new Promise(ok => process.stdout.write('', ok));
+process.exit(0);

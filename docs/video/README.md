@@ -23,10 +23,32 @@ In `mp4/`, H.264 in contenitore MP4 a 30 fotogrammi al secondo:
 |---|---|---|
 | `tecnolink-presentazione-1920x1080.mp4` | 1920×1080 | Montaggio lungo, 9,8 MB |
 | `tecnolink-presentazione-1080x1920.mp4` | 1080×1920 | Montaggio lungo, 8,8 MB |
+| `tecnolink-presentazione-30s-1280x720.mp4` | 1280×720 | Montaggio breve, musica |
+| `tecnolink-presentazione-30s-720x1280.mp4` | 720×1280 | Montaggio breve, musica |
+| `tecnolink-presentazione-30s-voce-1280x720.mp4` | 1280×720 | Come sopra, con voce narrante |
+| `tecnolink-presentazione-30s-voce-720x1280.mp4` | 720×1280 | Come sopra, con voce narrante |
+| `tecnolink-presentazione-30s-muto-1280x720.mp4` | 1280×720 | **Senza traccia audio**, 2,5 Mbps — è la copia che va sul sito |
 
-Il montaggio breve **non ha ancora un file consegnabile**: l'ultima registrazione
-perdeva troppi fotogrammi. Il perché e cosa fare sono in
-[CONTINUARE.md](CONTINUARE.md#2-il-problema-aperto-il-montaggio-breve-perde-fotogrammi).
+Quest'ultimo è quello che gira sulla home, copiato in
+`tecnolinkSite/wwwroot/video/tecnolink-presentazione-30s.mp4`. Non ha proprio la
+traccia audio: `muted` nell'HTML basterebbe a non far uscire suono, ma la traccia
+si scaricherebbe lo stesso e un domani basterebbe un `muted` tolto per
+distrazione perché la home si mettesse a suonare addosso a chi legge. Per
+rifarlo, e rifare anche il fotogramma di anteprima:
+
+```bash
+node registra.mjs --montaggio breve --muto --bitrate 2.5 16x9-720
+cp mp4/tecnolink-presentazione-30s-muto-1280x720.mp4 \
+   ../../tecnolinkSite/wwwroot/video/tecnolink-presentazione-30s.mp4
+node poster.mjs
+```
+
+Il montaggio breve esce a **720p, ed è la risoluzione giusta, non un ripiego**: le
+clip di repertorio sono girate a 720p, quindi a 1280×720 non c'è nessun
+ingrandimento da fare e la codifica costa meno della metà. È anche ciò che tiene
+la registrazione dentro il tempo reale — a 1080p perdeva fotogrammi, la storia sta
+in [CONTINUARE.md](CONTINUARE.md#2-i-fotogrammi-persi-del-montaggio-breve-risolto).
+Il lungo resta a 1080p perché non ha clip da decodificare.
 
 Il montaggio lungo **non ha audio**, ed è una scelta: nei feed parte in muto e
 tutto il messaggio è già scritto a schermo. Il breve invece ha una colonna sonora
@@ -40,7 +62,7 @@ sintetizzata, e può avere anche una voce narrante.
 |---|---|---|---|
 | 1 | Apertura | 5,0 s | Logo, "sistemi informatici e cybersecurity", Firenze |
 | 2 | Il punto di partenza | 8,0 s | Il lavoro passa dai sistemi informatici — la rete, un nodo che si ferma |
-| 3 | Chi siamo | 8,0 s | Vent'anni a Firenze, i tre numeri della home |
+| 3 | Chi siamo | 8,0 s | Sicurezza informatica a Firenze, i due numeri della home |
 | 4 | Cosa facciamo | 14,0 s | Le quattro aree di servizio |
 | 5 | Ogni giorno | 8,0 s | Backup Monitor, Check Sicurezza, Verifica Hardware |
 | 6 | tecnoSHIELD | 11,5 s | Il servizio esclusivo e i suoi quattro vantaggi |
@@ -161,6 +183,17 @@ A fine registrazione lo script dice quanti fotogrammi ha disegnato e quanti ne h
 persi. Qualche fotogramma perso è fisiologico; oltre il 5% avvisa da solo, e vuol
 dire che la macchina non ce la faceva a stare dietro al tempo reale.
 
+**Quel numero misura tanto la macchina quanto la scena.** La stessa
+configurazione, nella stessa ora, ha dato 26 fotogrammi persi e 199: in mezzo non
+era cambiato il codice, era cambiato il carico. Le due cause viste dal vivo sono
+una copia di `pagina/index.html` lasciata aperta in un browser (parte da sola e
+disegna di continuo) e il processore che scalda dopo qualche registrazione di
+fila. Quindi: registra a macchina scarica, un formato alla volta, e se il numero
+non ti piace rilancia e tieni il migliore. Per capire se una modifica ha
+peggiorato le cose, confronta due configurazioni **di fila** — una misura sola non
+dice niente. Il dettaglio è in
+[CONTINUARE.md](CONTINUARE.md#il-numero-dei-fotogrammi-persi-dipende-dalla-macchina-non-solo-dalla-scena).
+
 ---
 
 ## Com'è fatto
@@ -179,6 +212,7 @@ browser già installato. Stessa impostazione dei creativi statici in
 | `pagina/risorse.js` | Il logo incorporato come data URI (generato) |
 | `pagina/index.html` | La pagina: anteprima a mano e registrazione |
 | `registra.mjs` · `provini.mjs` · `verifica.mjs` | I tre comandi |
+| `poster.mjs` | Il fotogramma di anteprima del video sulla home, in JPEG |
 | `narrazione.mjs` · `narrazione.ps1` | La voce narrante |
 | `clip/elenco.mjs` · `clip/scarica.mjs` | Le clip e la verifica della licenza |
 | `risorse.mjs` · `cdp.mjs` | Passaggio dei binari e client DevTools Protocol |
@@ -201,10 +235,20 @@ accostati a occhio.
 
 ## Se serve un altro formato
 
-I formati stanno in cima a `registra.mjs` e in `pagina/index.html`. Il motore si
-adatta da solo: cambia scala tipografica, margini e disposizione a seconda che il
-fotogramma sia orizzontale o verticale. Un 1:1 per i post quadrati si aggiunge con
-poche righe.
+I formati stanno in cima a `registra.mjs`, in `provini.mjs` e in
+`pagina/index.html` — vanno aggiunti in tutti e tre. Il motore si adatta da solo:
+cambia scala tipografica, margini e disposizione a seconda che il fotogramma sia
+orizzontale o verticale. Un 1:1 per i post quadrati si aggiunge con poche righe.
 
-In verticale il contenuto sta fra 210 px dal bordo alto e 270 px da quello basso,
-per non finire sotto ai comandi che l'app sovrappone nelle storie.
+I margini sono in pixel, ma vengono moltiplicati per `S.r`, cioè quanto la
+risoluzione è più piccola di quella di riferimento del suo formato (1920×1080 e
+1080×1920). Senza quel fattore un 720p non sarebbe la stessa impaginazione
+rimpicciolita ma un'altra impaginazione, col testo più stretto e più schiacciato
+in alto. Alle risoluzioni di riferimento `S.r` vale 1.
+
+In verticale, a 1080×1920, il contenuto sta fra 210 px dal bordo alto e 270 px da
+quello basso, per non finire sotto ai comandi che l'app sovrappone nelle storie.
+
+I tratti sottili — i bordi dei riquadri di vetro, la rete di particelle — restano
+invece a 1 e 1,5 px a ogni risoluzione: sono capelli, e rimpicciolirli li farebbe
+sparire.
