@@ -971,6 +971,13 @@ section { position: relative; }
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
   background-color: #fff;
 }
+
+/* Sotto i 16px iOS ingrandisce la pagina appena si tocca un campo, e da lì in poi
+   il modulo resta fuori quadro: sui telefoni i campi vanno tenuti a 16px esatti. */
+@media (max-width: 767px) {
+  .tk-form input, .tk-form textarea, .tk-form select,
+  .tk-scan-form input { font-size: 16px; }
+}
 .tk-form .fine-print { font-size: 0.78rem; color: var(--ink-soft); margin-top: -0.4rem; }
 #tk-form-success { display: none; }
 #tk-form-success.show { display: block; }
@@ -1040,6 +1047,13 @@ section { position: relative; }
 .tk-footer-landing-grid ul li { margin-bottom: 0; }
 .tk-footer-landing .tk-footer-bottom a { text-decoration: underline; }
 .tk-footer-landing .tk-footer-bottom a:hover { color: var(--cyan-300); }
+
+/* Numero e mail nel footer erano righe alte 17 px: da telefono si sbaglia il tocco.
+   Qui diventano bersagli da 44 px, senza cambiare l'aspetto sul desktop. */
+@media (max-width: 767px) {
+  .tk-footer ul li a { display: inline-flex; align-items: center; min-height: 44px; }
+  .tk-footer-landing-grid ul { gap: 0 1.6rem; }
+}
 
 .tk-social { display: flex; gap: 0.7rem; }
 .tk-social a {
