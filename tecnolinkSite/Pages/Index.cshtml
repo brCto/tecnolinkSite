@@ -6,7 +6,10 @@
 }
 
 <!-- ============================== HERO ============================== -->
-<section class="tk-hero" id="home">
+@* `has-video` accende le regole dell'hero tagliato in diagonale (site.css):
+   è l'unico hero del sito con il video, e senza questa classe quelle regole
+   andavano a rompere gli hero delle pagine del check-up. *@
+<section class="tk-hero has-video" id="home">
     <canvas id="tkHeroCanvas" class="tk-hero-canvas"></canvas>
 
     @* Solo da desktop: il video occupa la metà destra dell'hero fino al bordo
@@ -82,10 +85,6 @@
             <div class="reveal">
                 <div class="num"><span>24/7</span></div>
                 <div class="label">Monitoraggio continuo</div>
-            </div>
-            <div class="reveal">
-                <div class="num"><span class="counter" data-target="4" data-suffix="">0</span></div>
-                <div class="label">Aree di competenza</div>
             </div>
             <div class="reveal">
                 <div class="num"><span class="counter" data-target="100" data-suffix="%">0</span></div>

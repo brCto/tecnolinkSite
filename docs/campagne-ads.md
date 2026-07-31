@@ -405,6 +405,15 @@ capisce a colpo d'occhio quale annuncio ha portato quale richiesta. Da confronta
 
 Cose che oggi mancano e che alzerebbero la resa più di qualsiasi ritocco al testo:
 
+- **L'immagine di un report vero.** Nell'hero delle pagine del check-up — quella generale e
+  quella per i privati — a destra c'è il riquadro con la prima pagina di un report. Oggi è
+  un disegno segnaposto (`Pages/Shared/_HeroReport.cshtml`), con i numeri dichiarati come
+  esempio dentro l'immagine stessa. Serve al suo posto la **foto o la schermata di un report
+  reale**, ripulita dai dati del cliente: nome, indirizzi IP, nomi dei dispositivi. Formato
+  verticale 4:5 (es. 840×1050), leggibile a ~430 px di larghezza — quindi titoli e numeri
+  grandi, testo di dettaglio anche sfocato. Quando arriva, si sostituisce il solo file della
+  partial e cambia su tutte le pagine che la usano; le istruzioni sono scritte in cima al
+  file stesso.
 - **Testimonianze di clienti** (anche solo nome di battesimo + settore + una frase). Sulla
   pagina aziende è quello che manca di più.
 - **Loghi dei clienti** che accettano di essere citati, nella sezione "Perché Tecnolink".

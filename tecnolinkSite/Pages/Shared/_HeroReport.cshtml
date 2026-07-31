@@ -1,0 +1,109 @@
+@*
+    Il riquadro a destra dell'hero sulle pagine del check-up di sicurezza.
+
+    DA FARE — questo è un segnaposto. Al suo posto va la foto/schermata di un
+    report vero, che il cliente deve ancora fornire (vedi docs/campagne-ads.md,
+    "4. Da sistemare quando avrete il materiale"). Quando arriva basta sostituire
+    l'SVG qui sotto con:
+
+        <img class="va-img" src="~/img/report-esempio.jpg"
+             alt="Prima pagina del report di un check-up di sicurezza"
+             loading="eager" width="840" height="1050" />
+
+    e il cambio vale per tutte le pagine che includono questa partial.
+
+    Finché è un disegno, i numeri restano dichiarati come esempio dentro
+    l'immagine stessa: sono inventati, e farli passare per il referto di un
+    cliente vero sarebbe una bugia — oltre che un problema in caso di verifica
+    sugli annunci.
+*@
+<svg viewBox="0 0 420 525" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Esempio della prima pagina di un report di check-up: riepilogo dei punti deboli trovati, divisi per gravità.">
+    <defs>
+        <linearGradient id="repBrand" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#22d3ee" />
+            <stop offset="1" stop-color="#6366f1" />
+        </linearGradient>
+        <linearGradient id="repFondo" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#16204a" />
+            <stop offset="1" stop-color="#0b1024" />
+        </linearGradient>
+    </defs>
+
+    <rect width="420" height="525" fill="url(#repFondo)" />
+
+    <!-- Il foglio -->
+    <rect x="26" y="22" width="368" height="481" rx="10" fill="#ffffff" />
+    <path d="M36 22 h348 a10 10 0 0 1 10 10 v2 H26 v-2 a10 10 0 0 1 10 -10 z" fill="url(#repBrand)" />
+
+    <!-- Intestazione -->
+    <text x="46" y="62" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0b1024">Report del check-up</text>
+    <text x="46" y="80" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" fill="#64748b">Rete analizzata · 42 dispositivi · esempio</text>
+    <circle cx="360" cy="64" r="16" fill="#eef2ff" />
+    <path d="M353 64 l5 5 l10 -11" fill="none" stroke="#6366f1" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="46" y1="96" x2="374" y2="96" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Riepilogo per gravità -->
+    <g font-family="Segoe UI, Arial, sans-serif" text-anchor="middle">
+        <rect x="46" y="112" width="76" height="54" rx="8" fill="#f8fafc" stroke="#e2e8f0" />
+        <text x="84" y="140" font-size="18" font-weight="700" fill="#ef4444">2</text>
+        <text x="84" y="155" font-size="8" fill="#64748b">Critiche</text>
+
+        <rect x="130" y="112" width="76" height="54" rx="8" fill="#f8fafc" stroke="#e2e8f0" />
+        <text x="168" y="140" font-size="18" font-weight="700" fill="#f59e0b">5</text>
+        <text x="168" y="155" font-size="8" fill="#64748b">Alte</text>
+
+        <rect x="214" y="112" width="76" height="54" rx="8" fill="#f8fafc" stroke="#e2e8f0" />
+        <text x="252" y="140" font-size="18" font-weight="700" fill="#6366f1">11</text>
+        <text x="252" y="155" font-size="8" fill="#64748b">Medie</text>
+
+        <rect x="298" y="112" width="76" height="54" rx="8" fill="#f8fafc" stroke="#e2e8f0" />
+        <text x="336" y="140" font-size="18" font-weight="700" fill="#34d399">8</text>
+        <text x="336" y="155" font-size="8" fill="#64748b">Basse</text>
+    </g>
+
+    <!-- Barre per gravità -->
+    <text x="46" y="192" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="1.2" fill="#94a3b8">PUNTI DEBOLI PER GRAVITÀ</text>
+    <g font-family="Segoe UI, Arial, sans-serif" font-size="9" fill="#475569">
+        <text x="46" y="213">Critiche</text>
+        <rect x="110" y="206" width="264" height="8" rx="4" fill="#eef2f7" />
+        <rect x="110" y="206" width="44" height="8" rx="4" fill="#ef4444" />
+
+        <text x="46" y="239">Alte</text>
+        <rect x="110" y="232" width="264" height="8" rx="4" fill="#eef2f7" />
+        <rect x="110" y="232" width="106" height="8" rx="4" fill="#f59e0b" />
+
+        <text x="46" y="265">Medie</text>
+        <rect x="110" y="258" width="264" height="8" rx="4" fill="#eef2f7" />
+        <rect x="110" y="258" width="200" height="8" rx="4" fill="#6366f1" />
+
+        <text x="46" y="291">Basse</text>
+        <rect x="110" y="284" width="264" height="8" rx="4" fill="#eef2f7" />
+        <rect x="110" y="284" width="150" height="8" rx="4" fill="#34d399" />
+    </g>
+
+    <line x1="46" y1="312" x2="374" y2="312" stroke="#e2e8f0" stroke-width="1" />
+
+    <!-- Elenco dei rilievi -->
+    <text x="46" y="334" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="1.2" fill="#94a3b8">PRINCIPALI RILIEVI</text>
+    <g font-family="Segoe UI, Arial, sans-serif">
+        <circle cx="50" cy="356" r="4" fill="#ef4444" />
+        <text x="62" y="359" font-size="9.5" fill="#0f172a">Router — firmware non aggiornato</text>
+        <text x="62" y="371" font-size="8" fill="#94a3b8">Da correggere subito</text>
+        <line x1="46" y1="382" x2="374" y2="382" stroke="#f1f5f9" stroke-width="1" />
+
+        <circle cx="50" cy="400" r="4" fill="#f59e0b" />
+        <text x="62" y="403" font-size="9.5" fill="#0f172a">Telecamera — password predefinita</text>
+        <text x="62" y="415" font-size="8" fill="#94a3b8">Entro pochi giorni</text>
+        <line x1="46" y1="426" x2="374" y2="426" stroke="#f1f5f9" stroke-width="1" />
+
+        <circle cx="50" cy="444" r="4" fill="#6366f1" />
+        <text x="62" y="447" font-size="9.5" fill="#0f172a">Cartella condivisa aperta a tutti</text>
+        <text x="62" y="459" font-size="8" fill="#94a3b8">Da pianificare</text>
+    </g>
+
+    <!-- Piede -->
+    <rect x="46" y="474" width="86" height="20" rx="10" fill="url(#repBrand)" />
+    <text x="89" y="488" font-family="Segoe UI, Arial, sans-serif" font-size="8.5" font-weight="700" fill="#061021" text-anchor="middle">TECNOLINK</text>
+    <text x="374" y="488" font-family="Segoe UI, Arial, sans-serif" font-size="8" fill="#94a3b8" text-anchor="end">Report di esempio</text>
+</svg>

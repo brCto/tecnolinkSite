@@ -268,6 +268,11 @@ section { position: relative; }
   gap: 2rem;
   list-style: none;
   margin: 0; padding: 0;
+  /* Le voci stanno attaccate al marchio, e lo spazio che avanza va tutto a
+     destra prima dei pulsanti. Con il solo `space-between` della barra, sulle
+     landing — dove di voce ce n'è una sola — "Home" finiva a metà schermo,
+     lontano da tutto. */
+  margin-right: auto;
 }
 /* Il logo non deve stare attaccato alla prima voce: con il menu pieno lo
    spazio avanzato è poco e "Home" finiva appiccicato al marchio. */
@@ -531,32 +536,39 @@ section { position: relative; }
     object-fit: cover;
     clip-path: polygon(calc(7% + 4px) 0, 100% 0, 100% 100%, 4px 100%);
   }
+  /* Da qui in giù vale solo per l'hero che il video ce l'ha davvero: la home.
+     Senza `.has-video` queste regole colpivano anche gli hero delle pagine del
+     check-up, che il video non ce l'hanno: lì l'illustrazione a destra spariva
+     (`.frame { display: none }`) e i due riquadri, rimasti assoluti rispetto
+     all'hero invece che alla colonna, cadevano in cima a sinistra — sopra al
+     selettore Base/Intermedia/Tecnica. */
+
   /* La colonna del testo si misura in percentuale dello schermo, non in `fr`.
      Il video è largo il 48% e parte dal bordo destro: il testo deve stare
      dentro il 46%, se no le righe lunghe del titolo gli finiscono sotto — con
      gli `fr` su un contenitore a tutta larghezza succedeva esattamente questo.
      Il 46% non è a caso: sotto, i due pulsanti non ci stanno più affiancati e
      vanno a capo uno sotto l'altro. */
-  .tk-hero-grid { grid-template-columns: minmax(0, 46%) 1fr; }
+  .tk-hero.has-video .tk-hero-grid { grid-template-columns: minmax(0, 46%) 1fr; }
 
   /* Il testo si sposta verso il bordo sinistro. Il video arriva fino al bordo
      destro dello schermo, quindi lasciare a sinistra il margine del contenitore
      centrato faceva sembrare tutto spostato: da una parte niente aria,
      dall'altra parecchia. */
-  .tk-hero .container-xl {
+  .tk-hero.has-video .container-xl {
     max-width: none;
     padding-left: clamp(1.5rem, 4.5vw, 5rem);
     padding-right: 0;
   }
 
   /* L'immagine di prima sparisce: al suo posto c'è il video. */
-  .tk-hero-visual .frame { display: none; }
+  .tk-hero.has-video .tk-hero-visual .frame { display: none; }
   /* Statico apposta: così i due riquadri qui sotto si posizionano rispetto
      all'hero e non a questa colonna, e possono uscire dal video.
      Il selettore è doppio per forza: più in basso nel foglio c'è
      `.tk-hero-visual { position: relative }`, e stare dentro una media query
      non conta niente sulla specificità — vincerebbe quella. */
-  .tk-hero .tk-hero-visual { position: static; }
+  .tk-hero.has-video .tk-hero-visual { position: static; }
 
 }
 
@@ -564,7 +576,7 @@ section { position: relative; }
    i due pulsanti dell'hero: sotto ai ~600px di colonna si impilano. */
 @media (min-width: 992px) and (max-width: 1365px) {
   .tk-hero-video { width: 46%; }
-  .tk-hero-grid { grid-template-columns: minmax(0, 48%) 1fr; }
+  .tk-hero.has-video .tk-hero-grid { grid-template-columns: minmax(0, 48%) 1fr; }
 }
 
 /* I due riquadri "Backup Monitor" e "Check Sicurezza" stanno sotto al testo
@@ -646,14 +658,9 @@ section { position: relative; }
 }
 .tk-stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   text-align: center;
-}
-@media (max-width: 767px) {
-  .tk-stats-grid { grid-template-columns: repeat(2, 1fr); }
-  /* Le voci sono dispari: l'ultima occupa tutta la riga invece di lasciare un vuoto. */
-  .tk-stats-grid > :last-child { grid-column: 1 / -1; }
 }
 .tk-stats-grid .num {
   font-family: var(--font-head);
