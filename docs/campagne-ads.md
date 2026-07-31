@@ -303,5 +303,9 @@ Cose che oggi mancano e che alzerebbero la resa più di qualsiasi ritocco al tes
 - **Loghi dei clienti** che accettano di essere citati, nella sezione "Perché Tecnolink".
 - **Un prezzo di riferimento per il controllo casa**: sul traffico Facebook l'assenza di
   qualsiasi indicazione economica è il primo motivo di abbandono.
-- **Il link LinkedIn nel footer** punta a `https://www.linkedin.com` invece che alla pagina
-  aziendale (`Pages/Shared/_Layout.cshtml`). Da correggere prima di mandarci traffico.
+
+Già sistemati il 31/07/2026: il link LinkedIn del footer ora punta alla pagina aziendale
+(`linkedin.com/company/tecnolink_2`), e il numero di telefono è stato uniformato a
+`055 617008` — i link `tel:` contenevano un `6` di troppo, quindi **ogni tocco sul numero
+da telefono componeva un numero inesistente**. Confermato con il cliente e con il sito in
+produzione.

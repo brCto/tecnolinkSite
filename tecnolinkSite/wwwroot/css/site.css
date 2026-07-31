@@ -470,11 +470,15 @@ section { position: relative; }
 }
 .tk-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   text-align: center;
 }
-@media (max-width: 767px) { .tk-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 767px) {
+  .tk-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  /* Le voci sono dispari: l'ultima occupa tutta la riga invece di lasciare un vuoto. */
+  .tk-stats-grid > :last-child { grid-column: 1 / -1; }
+}
 .tk-stats-grid .num {
   font-family: var(--font-head);
   font-size: 2rem;
@@ -726,18 +730,6 @@ section { position: relative; }
 
 .tk-about-visual { position: relative; border-radius: var(--radius-lg); overflow: hidden; }
 .tk-about-visual img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
-.tk-about-visual .years-badge {
-  position: absolute; top: 1.3rem; right: 1.3rem;
-  background: var(--gradient-brand);
-  color: #061021;
-  border-radius: var(--radius-md);
-  padding: 1rem 1.3rem;
-  text-align: center;
-  font-family: var(--font-head);
-  box-shadow: 0 15px 30px -10px rgba(34,211,238,0.5);
-}
-.tk-about-visual .years-badge .n { font-size: 1.8rem; font-weight: 700; line-height: 1; }
-.tk-about-visual .years-badge .t { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
 .tk-quote {
   border-left: 3px solid var(--violet-500);
@@ -994,8 +986,11 @@ section { position: relative; }
 /* Honeypot: hidden from sighted users but present in the DOM for bots to fill */
 .tk-hp {
   position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
+  /* !important anche su dimensioni e padding: le regole dei form
+     (.tk-scan-form input, width 100% e padding) hanno specificità maggiore e lo
+     allargherebbero, sfondando il layout in orizzontale su mobile. */
+  width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px;
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
