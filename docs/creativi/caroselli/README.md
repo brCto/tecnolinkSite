@@ -1,7 +1,7 @@
-# Caroselli — due sequenze da quattro carte, in due varianti grafiche
+# Caroselli — tre sequenze, in quattro varianti grafiche
 
 Un carosello per pubblico, differenziato nel contenuto e nel tono, identico
-nell'impianto. Quattro carte ciascuno, in quest'ordine:
+nell'impianto. Le due storiche hanno quattro carte ciascuna, in quest'ordine:
 
 | | Facebook / Instagram — privati | LinkedIn — aziende |
 |---|---|---|
@@ -9,6 +9,30 @@ nell'impianto. Quattro carte ciascuno, in quest'ordine:
 | **02** ⬜ | *Non cercano i tuoi segreti. Cercano i tuoi accessi.* Cosa c'è in gioco, in quattro voci. | *Quattro strade diverse, la stessa domanda.* NIS2, GDPR art. 32, polizze, questionari fornitori. |
 | **03** ⬜ | *Si scopre in poche ore. E quasi sempre si sistema con poco.* La via d'uscita. | *Vulnerability Assessment: dall'inventario al piano di intervento.* Cosa fa il servizio, in concreto. |
 | **04** ⬛ | *Scopri quali porte sono aperte.* + CTA | *Sapete dire dove siete esposti?* + CTA |
+
+## La terza sequenza: `stanze`
+
+Accanto alle due qui sopra c'è una sequenza **da cinque carte**, sempre per i privati, che
+serve a mettere alla prova l'apertura. Non parte dalla minaccia: fa il giro della casa, un
+ambiente per carta — ingresso, salotto, studio e cucina — e arriva all'invito.
+
+| | Facebook / Instagram — privati, `stanze` |
+|---|---|
+| **01** ⬛ | *Ogni stanza ha una porta collegata.* Il giro di casa, senza allarme. |
+| **02** ⬜ | *Campanello e telecamera, installati e dimenticati.* L'ingresso. |
+| **03** ⬜ | *La televisione resta accesa in rete.* Il salotto. |
+| **04** ⬜ | *Computer, stampante, prese intelligenti.* Studio e cucina. |
+| **05** ⬛ | *Ti diciamo cosa sistemare, in ordine.* + CTA |
+
+Va confrontata con la sequenza `facebook`, stesso pubblico e stessa spesa: quella apre con
+il rischio, questa con il riconoscimento. `utm_content=carosello-stanze` contro
+`utm_content=carosello-bn`. È lo stesso confronto — rischio o risultato — che
+[`../../campagne-ads.md`](../../campagne-ads.md) §3 indica come quello che vale più di
+tutti, portato sul carosello.
+
+I testi e il ragionamento stanno in
+[`../../campagne-ads-privati-materiale-nuovo.md`](../../campagne-ads-privati-materiale-nuovo.md).
+
 
 ## Le quattro varianti
 
