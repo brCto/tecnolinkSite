@@ -27,8 +27,10 @@
  *
  * Formati
  * -------
- *   quadrato  1080x1080  la misura del carosello, su Meta e su LinkedIn
- *   storia    1080x1920  storie, Reel e Spotlight (aree di sicurezza rispettate)
+ *   feed-verticale  1080x1350  la principale: nel feed di Facebook e Instagram
+ *                              è la misura che occupa più schermo su mobile
+ *   quadrato        1080x1080  di riserva, e la misura buona su LinkedIn
+ *   storia          1080x1920  storie, Reel e Spotlight (aree di sicurezza rispettate)
  *
  *   node genera-caroselli.mjs && ./render-caroselli.sh
  */
@@ -44,6 +46,49 @@ mkdirSync(outDir, { recursive: true });
 const asset = (p) => 'file:///' + resolve(here, '../../../tecnolinkSite/wwwroot/img/', p).replace(/\\/g, '/');
 const LOGO = asset('logo-tecnolink-bianco-180x51.png');
 const FOTO = (nome) => asset('campagne/foto/' + nome);
+
+/* ------------------------------------------------------------------ */
+/* Inquadratura delle fotografie                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Dove sta il soggetto in orizzontale, da 0 (bordo sinistro) a 1 (destro).
+ * In nessuna delle quattro foto sta al centro geometrico, quindi il ritaglio
+ * centrato — che è quello che `background-position: center` fa di default —
+ * ne taglia via una parte: il router perde le antenne, le placche restano
+ * mezze fuori. Sono gli stessi numeri di docs/creativi/foto/ritaglia-foto.ps1:
+ * se si cambia una fotografia vanno rivisti in tutti e due i posti.
+ */
+const FUOCO = {
+  'privati-router.jpg': 0.56,
+  'privati-telecamera.jpg': 0.50,
+  'aziende-switch.jpg': 0.45,
+  'aziende-porte.jpg': 0.38,
+};
+
+// Tutte e quattro le fotografie sono 3:2 orizzontali.
+const RAPPORTO_FOTO = 3 / 2;
+
+/**
+ * Il `background-position` che porta il punto di fuoco al centro del ritaglio.
+ *
+ * Le percentuali di CSS non dicono "centra qui": dicono "allinea il punto al
+ * P% dell'immagine con il punto al P% del contenitore". Quindi per centrare il
+ * ritaglio sulla frazione u dell'immagine il numero da scrivere è un altro, e
+ * dipende da quanto il contenitore è più stretto dell'immagine scalata —
+ * cioè cambia da formato a formato e da modo a modo. Da qui il calcolo invece
+ * di quattro numeri fissi.
+ */
+const inquadratura = (nomeFoto, larghezza, altezza) => {
+  const u = FUOCO[nomeFoto];
+  if (u === undefined) return 'center';
+  // Contenitore più largo della foto: il "cover" taglia in verticale e in
+  // orizzontale non c'è margine da spostare. È il caso della fascia.
+  if (larghezza / altezza >= RAPPORTO_FOTO) return 'center';
+  const w = altezza * RAPPORTO_FOTO; // larghezza della foto una volta scalata
+  const p = (u * w - larghezza / 2) / (w - larghezza);
+  return `${(Math.min(1, Math.max(0, p)) * 100).toFixed(1)}% 50%`;
+};
 
 /* ------------------------------------------------------------------ */
 /* Contenuto                                                           */
@@ -180,6 +225,17 @@ const BIANCO = {
 /* ------------------------------------------------------------------ */
 
 const FORMATI = {
+  'feed-verticale': {
+    // La misura principale del feed su Facebook e Instagram: occupa quasi un
+    // terzo di schermo in più del quadrato, a parità di tutto il resto. Non ha
+    // aree di sicurezza da rispettare — è feed, non storia — quindi i margini
+    // stanno vicini a quelli del quadrato e l'altezza in più va tutta al testo.
+    w: 1080, h: 1350,
+    padTop: 88, padBottom: 88, padX: 84,
+    logo: 58, occhiello: 25, titolo: 74, titoloCta: 82, testo: 32,
+    voce: 32, indice: 23, cta: 32, piede: 22, segno: 5,
+    fascia: 480, riquadro: 440,
+  },
   quadrato: {
     w: 1080, h: 1080,
     padTop: 72, padBottom: 72, padX: 84,
@@ -253,18 +309,20 @@ const carta = (f, t, c, i, etichetta, modo) => {
   }
 
 ${modo === 'pieno' ? `
-  .foto{position:absolute;inset:0;background:url("${FOTO(c.foto)}") center/cover no-repeat}
+  .foto{position:absolute;inset:0;
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w, f.h)}/cover no-repeat}
   .foto::after{content:"";position:absolute;inset:0;background:${VELO}}
 ` : ''}
 ${modo === 'fascia' ? `
   /* La fascia parte dal bordo: una foto a filo taglia meglio di una incorniciata. */
   .fascia{position:absolute;top:0;left:0;right:0;height:${hFascia}px;
-    background:url("${FOTO(c.foto)}") center/cover no-repeat}
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w, hFascia)}/cover no-repeat}
 ` : ''}
 ${modo === 'riquadro' ? `
   .riquadro{width:100%;height:${hRiquadro}px;
     border-radius:${f.padX * 0.28}px;
-    background:url("${FOTO(c.foto)}") center/cover no-repeat;margin-bottom:${f.padX * 0.5}px}
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w - f.padX * 2, hRiquadro)}/cover no-repeat;
+    margin-bottom:${f.padX * 0.5}px}
 ` : ''}
   .wrap{
     position:relative;z-index:1;height:100%;display:flex;flex-direction:column;
