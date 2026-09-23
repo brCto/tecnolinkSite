@@ -29,7 +29,12 @@ scatta() { # <nome> <larghezza> <altezza>
     --user-data-dir="$profilo" --hide-scrollbars --force-device-scale-factor=1 \
     --disable-lcd-text --window-size="$2,$3" --virtual-time-budget=8000 \
     --screenshot="$PNG/$1.png" "file:///$HERE/html/$1.html" >/dev/null 2>&1 || true
-  rm -rf "$profilo"
+  # Quando `timeout` deve ammazzare Edge, i file del profilo restano aperti per
+  # qualche istante e la cancellazione fallisce con "Device or resource busy".
+  # Senza il `|| true` quel fallimento, con `set -e`, abbatte tutto il giro: è
+  # successo dopo sei carte su novantasei. Meglio lasciare indietro una cartella
+  # temporanea che perdere un quarto d'ora di rendering.
+  rm -rf "$profilo" 2>/dev/null || true
 }
 
 render() { # <nome> <larghezza> <altezza>
@@ -48,17 +53,19 @@ render() { # <nome> <larghezza> <altezza>
   fi
 }
 
-# Due pubblici × quattro varianti × quattro carte × due misure = 64 immagini.
+# Due pubblici × quattro varianti × quattro carte × tre misure = 96 immagini.
 # I PNG già presenti vengono rifatti solo se manca il file: così, se un giro si
 # interrompe a metà, rilanciare lo script riprende da dove era rimasto invece di
-# ricominciare da capo (sono una decina di minuti). Per rifare tutto: rm png/*.png
+# ricominciare da capo (è un quarto d'ora abbondante). Per rifare tutto: --tutto,
+# che serve ogni volta che si tocca la grafica e non solo i testi.
 if [ "${1:-}" = "--tutto" ]; then rm -f "$PNG"/*.png; fi
 
 for pubblico in facebook linkedin; do
   for variante in bn foto fascia riquadro; do
     for i in 01 02 03 04; do
-      render "$pubblico-$variante-quadrato-$i" 1080 1080
-      render "$pubblico-$variante-storia-$i"   1080 1920
+      render "$pubblico-$variante-feed-verticale-$i" 1080 1350
+      render "$pubblico-$variante-quadrato-$i"       1080 1080
+      render "$pubblico-$variante-storia-$i"         1080 1920
     done
   done
 done
