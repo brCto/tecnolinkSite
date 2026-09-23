@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
+# Indice interno dei materiali delle campagne: non è per i visitatori.
+# Il "noindex, nofollow" sulla pagina resta la difesa vera — questo tiene
+# soltanto l'indirizzo fuori dai log pubblici dei crawler.
+Disallow: /interno/
+
+# Gli endpoint dei moduli rispondono solo in POST: nell'indice non ci starebbero
+# comunque, ma è inutile farci passare i crawler.
+Disallow: /api/
+
 Sitemap: https://www.tecnolink.it/sitemap.xml

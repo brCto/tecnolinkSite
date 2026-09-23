@@ -19,7 +19,7 @@
 
     // Landing mode: pagine di destinazione delle campagne a pagamento. Nascondono
     // menu e footer completo per non offrire vie d'uscita al traffico acquistato.
-    // Le pagine restano comunque raggiungibili dal menu del sito generale.
+    // Dal menu del sito non ci si arriva: il traffico è quello degli annunci.
     var isLanding = (ViewData["Landing"] as bool?) ?? false;
 }
 <!DOCTYPE html>
@@ -107,7 +107,11 @@
     @if (analyticsEnabled)
     {
         <div class="tk-cookie-banner" id="tkCookieBanner">
-            <p>Utilizziamo cookie di analisi per capire come viene usato il sito e migliorarlo. Puoi accettare o rifiutare in qualsiasi momento — trovi i dettagli nella <a asp-page="/Privacy">Privacy Policy</a>.</p>
+            @* Il testo nomina anche la misurazione delle campagne: Pixel Meta e Insight
+               Tag di LinkedIn non servono solo a "capire come viene usato il sito", e un
+               banner che dicesse soltanto "analisi" chiederebbe il consenso per una cosa
+               e ne farebbe un'altra. *@
+            <p>Usiamo cookie e strumenti di misurazione per capire come viene usato il sito e per valutare i risultati delle nostre campagne pubblicitarie. Si attivano solo se acconsenti, e puoi cambiare idea quando vuoi — i dettagli sono nella <a asp-page="/Privacy">Privacy e Cookie Policy</a>.</p>
             <div class="tk-cookie-actions">
                 <button type="button" class="btn-tk btn-tk-outline" id="tkCookieDecline">Rifiuta</button>
                 <button type="button" class="btn-tk btn-tk-dark" id="tkCookieAccept">Accetta</button>
@@ -140,11 +144,11 @@
                     <li><a asp-page="/Index" asp-fragment="servizi">Servizi</a></li>
                     <li><a asp-page="/Index" asp-fragment="tecnoshield">tecnoSHIELD</a></li>
                     <li><a asp-page="/Offerte/VulnerabilityAssessment">Check-up di sicurezza</a></li>
-                    @* TEMP — accesso interno alle landing delle campagne (rimuovere prima del lancio degli ads) *@
-                    <li><a asp-page="/Offerte/VulnerabilityAssessmentAziende">VA · Aziende</a></li>
-                    <li><a asp-page="/Offerte/VulnerabilityAssessmentPrivati">VA · Privati</a></li>
-                    <li><a asp-page="/Interno/MaterialiCampagne">Materiali</a></li>
-                    @* /TEMP *@
+                    @* Le landing delle campagne (VA Aziende / VA Privati) e l'indice dei
+                       materiali non stanno nel menu: ci si arriva dagli annunci, non dal
+                       sito. Metterle qui manderebbe il traffico organico su pagine scritte
+                       per quello a pagamento, e sporcherebbe i dati delle campagne con
+                       visite che dagli annunci non sono mai passate. *@
                     <li><a asp-page="/Index" asp-fragment="chi-siamo">Chi siamo</a></li>
                     @* "Contatti" tolto dal menu: ci portano già la cornetta qui
                        accanto e il pulsante "Richiedi Consulenza". La sezione

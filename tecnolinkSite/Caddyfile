@@ -1,3 +1,36 @@
-tecnolink.it, www.tecnolink.it {
+# Caddy si occupa di HTTPS (certificato Let's Encrypt automatico, rinnovo compreso),
+# della compressione e di mandare tutto il traffico su un solo indirizzo.
+# L'applicazione gira dietro, sulla rete privata di Docker, e non è mai esposta
+# direttamente: l'unico container con porte pubblicate è questo.
+
+{
+	# Indirizzo a cui Let's Encrypt scrive se un rinnovo fallisce. Senza, gli avvisi
+	# di certificato in scadenza non arrivano a nessuno e il sito si scopre offline
+	# solo quando qualcuno se ne accorge.
+	email info@tecnolink.it
+}
+
+# Un solo indirizzo buono: www. Chi arriva su tecnolink.it viene spostato una volta
+# sola, con un 301. Serve perché il <link rel="canonical"> delle pagine è costruito
+# sull'host della richiesta: se il sito rispondesse su entrambi, Google vedrebbe due
+# copie dello stesso sito che si dichiarano ciascuna l'originale.
+tecnolink.it {
+	redir https://www.tecnolink.it{uri} permanent
+}
+
+www.tecnolink.it {
+	# HTML e CSS viaggiano compressi. Caddy, al contrario di altri proxy, non lo fa
+	# da solo: senza questa riga ogni pagina parte per intero.
+	encode zstd gzip
+
 	reverse_proxy app:8080
+
+	# Log degli accessi su file, ruotati da Caddy. Senza, l'unica traccia di chi ha
+	# visitato il sito sono i log dell'applicazione, che non le registrano.
+	log {
+		output file /data/access.log {
+			roll_size 10MiB
+			roll_keep 10
+		}
+	}
 }

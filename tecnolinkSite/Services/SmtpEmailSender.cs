@@ -67,6 +67,18 @@ public class SmtpEmailSender : IEmailSender
             {
                 client.Host = _settings.Host;
                 client.Port = _settings.Port;
+                // EnableSsl su SmtpClient significa STARTTLS: ci si connette in chiaro e
+                // si alza la cifratura subito dopo, con un comando. NON significa SSL
+                // implicito, quello della porta 465, dove la connessione nasce già
+                // cifrata: questa classe non lo sa fare e non lo saprà mai fare (è
+                // dichiarata obsoleta proprio per questo).
+                //
+                // Quindi la porta da configurare è quella STARTTLS del provider, di
+                // norma la 587. Con la 465 l'invio resta appeso fino al timeout, la
+                // richiesta non arriva a nessuno e il visitatore vede comunque il
+                // messaggio di conferma: il modo peggiore in cui questa cosa può
+                // rompersi. Se un giorno servisse davvero la 465, va sostituita la
+                // libreria (MailKit), non cambiata la porta.
                 client.EnableSsl = _settings.EnableSsl;
                 client.Credentials = new NetworkCredential(_settings.User, _settings.Password);
             }
