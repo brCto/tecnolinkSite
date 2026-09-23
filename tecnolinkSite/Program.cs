@@ -48,6 +48,38 @@ forwardedHeadersOptions.KnownIPNetworks.Clear();
 forwardedHeadersOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedHeadersOptions);
 
+// Intestazioni di sicurezza su ogni risposta, pagine ed errori compresi. Stanno qui
+// e non nel Caddyfile perché così viaggiano con l'applicazione: se un domani il sito
+// finisse dietro IIS o su App Service, non sparirebbero insieme al proxy.
+//
+// Si scrivono dentro OnStarting, non subito: il gestore delle eccezioni più sotto
+// azzera la risposta prima di rendere la pagina /Error, e intestazioni scritte adesso
+// se ne andrebbero con essa — proprio sulle risposte in cui servono di più.
+//
+// Manca di proposito una Content-Security-Policy: le pagine hanno stili e script in
+// linea in quantità, e una policy sensata li romperebbe. Vale la pena aggiungerla,
+// ma è un lavoro a sé, da fare con le pagine sotto gli occhi.
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        var headers = context.Response.Headers;
+        // Niente indovinelli sul tipo di contenuto: un .txt caricato da un modulo non
+        // deve poter essere eseguito come JavaScript perché il browser "ci ha visto" del codice.
+        headers["X-Content-Type-Options"] = "nosniff";
+        // Il referrer esce solo verso lo stesso sito o, fuori, ridotto al dominio.
+        headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+        // Nessuno ci carica dentro un iframe per sovrapporci sopra i propri pulsanti.
+        headers["X-Frame-Options"] = "SAMEORIGIN";
+        // Il sito non usa posizione, telecamera o microfono: che non possa chiederli
+        // nemmeno uno script di terze parti finito qui dentro.
+        headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=(), payment=()";
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -66,7 +98,19 @@ app.UseRateLimiter();
 
 app.UseAuthorization();
 
-app.UseStaticFiles();
+// Immagini, CSS, script e video non cambiano quasi mai, e quando cambiano il loro
+// indirizzo cambia con loro: site.css e site.js portano in coda una versione
+// calcolata sul contenuto (asp-append-version), le librerie hanno il numero di
+// versione nel percorso. Senza questa riga il browser li richiede di nuovo a ogni
+// visita: sono qualche megabyte, e il video da solo ne pesa più di tre.
+const int trentaGiorni = 60 * 60 * 24 * 30;
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.CacheControl = $"public, max-age={trentaGiorni}";
+    }
+});
 app.MapRazorPages();
 app.MapLeadEndpoints();
 

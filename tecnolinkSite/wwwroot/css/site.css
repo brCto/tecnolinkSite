@@ -1383,3 +1383,143 @@ section { position: relative; }
 .tk-simple-page { padding: 9rem 0 5rem; max-width: 800px; margin: 0 auto; }
 .tk-simple-page h1 { margin-bottom: 1.5rem; }
 .tk-simple-page p { color: var(--ink-soft); }
+
+/* Il blocco non sta dentro un .container: senza respiro laterale suo, su telefono
+   il testo finisce attaccato ai bordi dello schermo. */
+.tk-simple-page { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+/* --------------------------------------------------------------------- */
+/* Pagine legali (Privacy e Cookie Policy) */
+/* --------------------------------------------------------------------- */
+
+/* Una pagina che nessuno legge per piacere: l'unica cosa che può fare il testo
+   è togliersi di mezzo. Misura di riga più stretta, righe più arieggiate e
+   titoli che si distinguono a colpo d'occhio, così si trova il paragrafo che
+   serve senza leggere gli altri. */
+.tk-legal { max-width: 46rem; }
+.tk-legal p, .tk-legal li { line-height: 1.75; }
+
+.tk-legal-meta {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.tk-legal h2 {
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  margin: 3rem 0 1rem;
+  padding-top: 0.5rem;
+  color: var(--ink);
+}
+
+.tk-legal h3 {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  margin: 2rem 0 0.75rem;
+  color: var(--ink);
+}
+
+.tk-legal ul { color: var(--ink-soft); padding-left: 1.25rem; }
+.tk-legal li { margin-bottom: 0.75rem; }
+
+.tk-legal code {
+  background: var(--paper-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.85em;
+  color: var(--ink);
+}
+
+/* La tabella degli strumenti ha tre colonne di testo: su telefono non ci sta,
+   e comprimerla la renderebbe illeggibile. Meglio farla scorrere da sola. */
+.tk-legal-table-wrap { overflow-x: auto; margin: 1.5rem 0 2rem; }
+
+.tk-legal-table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.tk-legal-table th,
+.tk-legal-table td {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.tk-legal-table thead th {
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-soft);
+  border-bottom: 2px solid var(--line);
+}
+
+.tk-legal-table td { color: var(--ink-soft); }
+
+/* Il pulsante per rivedere il consenso: è l'unica cosa da fare in questa
+   pagina, e va trovata senza cercarla. */
+.tk-legal-action {
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  background: var(--paper-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.tk-legal-action p { margin-bottom: 1rem; }
+
+/* La regola globale è "a { color: inherit; text-decoration: none }": sulle pagine
+   di marketing va bene, perché i collegamenti sono pulsanti e schede che si vedono
+   da soli. Qui no — qui i collegamenti stanno dentro il testo, e sono proprio le
+   cose da cliccare: l'indirizzo a cui scrivere per esercitare i propri diritti, il
+   sito del Garante. Senza colore né sottolineatura erano indistinguibili dal
+   paragrafo che li contiene.
+
+   Il viola del marchio (#6366f1) su fondo bianco sta appena sotto il rapporto di
+   contrasto 4.5:1 richiesto per il testo normale: qui si usa una tinta più scura
+   della stessa famiglia, che lo supera, e la sottolineatura fa il resto per chi i
+   colori non li distingue. */
+.tk-legal a {
+  color: #4338ca;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.tk-legal a:hover { color: var(--violet-500); }
+
+/* Nel riquadro del consenso il collegamento è un pulsante: là la sottolineatura
+   sarebbe di troppo. */
+.tk-legal-action a { text-decoration: none; }
+
+/* --------------------------------------------------------------------- */
+/* Avvisi dei moduli: il caso "richiesta non recapitata" */
+/* --------------------------------------------------------------------- */
+
+/* Questi riquadri non dicono più soltanto "è andata male": quando la posta non
+   parte contengono il numero di telefono e l'indirizzo a cui scrivere, che sono
+   l'unica strada rimasta per non perdere il contatto. Devono quindi vedersi e
+   soprattutto essere toccabili da telefono, e la regola globale
+   "a { color: inherit; text-decoration: none }" li rendeva indistinguibili dal
+   testo intorno. */
+.tk-form-error a,
+.tk-scan-form-error a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  /* Area toccabile più generosa del solo testo: si legge questo messaggio col
+     telefono in mano, ed è il momento peggiore per mancare il bersaglio. */
+  display: inline-block;
+  padding: 0.15rem 0;
+}
+
+/* Il modulo contatti sta su una scheda bianca e il rosso scuro ci si legge. Il
+   Security Check invece sta su fondo scuro, dove lo stesso rosso sparisce: lì
+   serve una tinta chiara. */
+.tk-scan-form-error { color: #fca5a5; }

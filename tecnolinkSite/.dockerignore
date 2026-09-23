@@ -1,3 +1,7 @@
+# Contiene la password della posta: non deve finire nemmeno negli strati
+# intermedi dell'immagine, da cui si rileggerebbe con un "docker history".
+.env
+
 bin/
 obj/
 **/.vs/

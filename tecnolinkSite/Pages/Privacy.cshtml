@@ -1,14 +1,205 @@
 @page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
-    ViewData["Description"] = "Informativa sulla privacy di Tecnolink: come trattiamo i dati personali raccolti tramite il sito e i moduli di contatto.";
+    ViewData["Title"] = "Privacy e Cookie Policy";
+    ViewData["Description"] = "Informativa sulla privacy di Tecnolink: quali dati raccogliamo dai moduli del sito, quali cookie e strumenti di misurazione usiamo, per quanto li conserviamo e come esercitare i tuoi diritti.";
 }
 
-<div class="tk-simple-page">
+@*
+    Questa informativa descrive quello che il sito fa davvero: i campi sono quelli di
+    Services/LeadRequests.cs, i tag sono quelli di wwwroot/js/site.js. Se si tocca un
+    modulo o si aggiunge uno strumento di misurazione, questa pagina va aggiornata
+    nello stesso commit, altrimenti smette di dire il vero — ed è una pagina in cui
+    dire il falso ha conseguenze.
+
+    Restano tre punti da confermare, segnalati sotto con il commento CONFERMARE: la
+    ragione sociale completa, i fornitori di hosting e posta, i tempi di conservazione
+    delle email. Fino ad allora il testo è corretto ma resta generico dove dovrebbe
+    essere preciso.
+*@
+
+<div class="tk-simple-page tk-legal">
     <span class="eyebrow">Privacy</span>
-    <h1>Informativa sulla Privacy</h1>
-    <p>Tecnolink tratta i dati personali raccolti tramite questo sito nel rispetto del Regolamento (UE) 2016/679 (GDPR). I dati forniti attraverso il modulo di contatto sono utilizzati esclusivamente per rispondere alle richieste ricevute e non vengono ceduti a terzi per finalità di marketing senza esplicito consenso.</p>
-    <p>Per qualsiasi domanda relativa al trattamento dei tuoi dati personali, contattaci all'indirizzo <a href="mailto:info@tecnolink.it">info@tecnolink.it</a> oppure al numero <a href="tel:+39055617008">055 617008</a>.</p>
-    <p>Titolare del trattamento: Tecnolink — Via Aretina 167/M, 50136 Firenze (FI) — P.IVA 04609110483.</p>
+    <h1>Privacy e Cookie Policy</h1>
+    <p class="tk-legal-meta">Ultimo aggiornamento: settembre 2026</p>
+
+    <p>
+        Questa pagina spiega quali dati personali raccogliamo attraverso il sito
+        <strong>www.tecnolink.it</strong>, perché li raccogliamo, per quanto tempo li teniamo e come
+        puoi intervenire. È scritta per essere letta, non per essere archiviata: se qualcosa non è
+        chiaro, scrivici e te lo spieghiamo a voce.
+    </p>
+
+    <h2>1. Chi tratta i tuoi dati</h2>
+    @* CONFERMARE: ragione sociale completa (S.r.l., S.n.c., ...) come da visura camerale. *@
+    <p>
+        Il titolare del trattamento è <strong>Tecnolink</strong>, Via Aretina 167/M, 50136 Firenze (FI),
+        P.IVA 04609110483. Per qualsiasi questione relativa ai tuoi dati personali puoi scrivere a
+        <a href="mailto:info@tecnolink.it">info@tecnolink.it</a> o telefonare allo
+        <a href="tel:+39055617008">055 617008</a>.
+    </p>
+
+    <h2>2. Quali dati raccogliamo</h2>
+
+    <h3>I moduli di contatto</h3>
+    <p>
+        Quando compili un modulo del sito — la richiesta di consulenza, la richiesta di check-up di
+        sicurezza — raccogliamo quello che ci scrivi: <strong>nome</strong> e
+        <strong>indirizzo email</strong> e, se li indichi, <strong>telefono, azienda, dimensione
+        della rete e il testo del messaggio</strong>. Solo nome ed email sono obbligatori; il resto
+        lo lasci se ti è utile che lo sappiamo prima di sentirci.
+    </p>
+    <p>
+        Insieme al messaggio registriamo <strong>da quale pagina è partita la richiesta</strong> e, se
+        ci sei arrivato da un annuncio, i <strong>parametri della campagna</strong> — i cosiddetti UTM,
+        o gli identificativi <code>fbclid</code> e <code>li_fat_id</code> che Facebook e LinkedIn
+        aggiungono al collegamento. Servono a capire quali annunci funzionano: non ci dicono chi sei,
+        ci dicono da dove sei arrivato.
+    </p>
+    <p>
+        Queste informazioni ci arrivano <strong>via email</strong> all'indirizzo
+        <a href="mailto:info@tecnolink.it">info@tecnolink.it</a>. Il sito non ha una banca dati dei
+        contatti: quello che ci mandi vive nella nostra casella di posta e, se dalla richiesta nasce
+        un lavoro, negli strumenti con cui lo gestiamo.
+    </p>
+
+    <h3>I dati di navigazione</h3>
+    <p>
+        Come qualsiasi sito, i nostri server registrano nei log tecnici l'indirizzo IP, la data e l'ora
+        della richiesta, la pagina richiesta e il tipo di browser. Servono a far funzionare il sito, a
+        diagnosticare i guasti e a difenderlo dagli abusi: l'indirizzo IP, in particolare, resta in
+        memoria per qualche minuto per impedire che qualcuno invii centinaia di richieste dallo stesso
+        punto. Non li usiamo per profilare nessuno.
+    </p>
+
+    <h3>Cookie e strumenti di misurazione</h3>
+    <p>
+        Il sito <strong>non installa cookie di analisi o di marketing finché non li accetti</strong> sul
+        banner che compare alla prima visita. Se rifiuti, o se non scegli, nessuno di questi strumenti
+        viene caricato: il codice non parte proprio.
+    </p>
+    <p>
+        La scelta che fai viene salvata nella memoria locale del tuo browser, sotto la voce
+        <code>tk_cookie_consent</code>. È l'unica cosa che scriviamo senza chiedertelo, ed è necessaria
+        proprio per non doverti richiedere il consenso a ogni pagina.
+    </p>
+
+    <div class="tk-legal-table-wrap">
+        <table class="tk-legal-table">
+            <thead>
+                <tr>
+                    <th>Strumento</th>
+                    <th>A cosa serve</th>
+                    <th>Chi lo gestisce</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Google Analytics 4</td>
+                    <td>Contare le visite e capire quali pagine vengono lette, in forma aggregata.</td>
+                    <td>Google Ireland Ltd.</td>
+                </tr>
+                <tr>
+                    <td>Meta Pixel</td>
+                    <td>Misurare i risultati delle campagne su Facebook e Instagram e mostrare annunci a chi ha già visitato il sito.</td>
+                    <td>Meta Platforms Ireland Ltd.</td>
+                </tr>
+                <tr>
+                    <td>LinkedIn Insight Tag</td>
+                    <td>Misurare i risultati delle campagne su LinkedIn e le richieste che ne derivano.</td>
+                    <td>LinkedIn Ireland Unlimited Company</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>
+        Le pagine caricano inoltre i caratteri tipografici da <strong>Google Fonts</strong> e le icone da
+        <strong>jsDelivr</strong>. Sono due servizi di distribuzione di file: per consegnarti quei file
+        ricevono il tuo indirizzo IP, come accade con qualsiasi indirizzo che il browser apra. Non
+        installano cookie e non ti seguono da un sito all'altro.
+    </p>
+
+    <div class="tk-legal-action">
+        <p>
+            <strong>Hai cambiato idea?</strong> Puoi rivedere o revocare il consenso quando vuoi: il
+            banner ricompare e scegli di nuovo.
+        </p>
+        <button type="button" class="btn-tk btn-tk-primary" id="tkConsentReset">
+            <i class="bi bi-arrow-counterclockwise"></i> Rivedi le preferenze sui cookie
+        </button>
+    </div>
+
+    <h2>3. Perché possiamo trattarli</h2>
+    <ul>
+        <li>
+            <strong>Per rispondere alle tue richieste</strong> — la base giuridica è l'esecuzione di
+            misure precontrattuali richieste da te (art. 6.1.b GDPR). Senza nome ed email non possiamo
+            richiamarti.
+        </li>
+        <li>
+            <strong>Per far funzionare e proteggere il sito</strong> — legittimo interesse (art. 6.1.f
+            GDPR) a mantenere il servizio disponibile e al riparo dagli abusi.
+        </li>
+        <li>
+            <strong>Per misurare le campagne e le visite</strong> — il tuo consenso (art. 6.1.a GDPR),
+            quello che dai o neghi sul banner, revocabile in ogni momento.
+        </li>
+    </ul>
+
+    <h2>4. Per quanto li conserviamo</h2>
+    @* CONFERMARE: allineare i tempi qui sotto alla politica di conservazione della casella di posta. *@
+    <ul>
+        <li>
+            <strong>Le richieste dai moduli</strong>: per il tempo necessario a gestirle e, se ne nasce
+            un rapporto di lavoro, per tutta la sua durata e per i termini previsti dalla legge in
+            materia contabile e fiscale. Se la richiesta non porta a nulla, le eliminiamo quando non
+            servono più.
+        </li>
+        <li><strong>I log tecnici</strong>: pochi giorni, il tempo di diagnosticare un guasto.</li>
+        <li>
+            <strong>I dati degli strumenti di misurazione</strong>: secondo i tempi stabiliti dai
+            rispettivi fornitori, indicati nelle loro informative.
+        </li>
+    </ul>
+
+    <h2>5. Con chi li condividiamo</h2>
+    @* CONFERMARE: indicare per nome il fornitore di hosting e quello della posta, una volta scelti. *@
+    <p>
+        I tuoi dati non vengono venduti né ceduti a terzi per finalità di marketing. Li trattano, per
+        nostro conto e su nostre istruzioni, soltanto i fornitori che ci servono per lavorare: chi ospita
+        il sito, chi ci fornisce la posta elettronica e — se hai dato il consenso — i gestori degli
+        strumenti di misurazione elencati sopra. Con ciascuno di loro è in essere un accordo che li
+        vincola al trattamento per i soli scopi concordati.
+    </p>
+
+    <h2>6. Trasferimenti fuori dall'Unione Europea</h2>
+    <p>
+        Google, Meta e LinkedIn possono trattare i dati anche negli Stati Uniti. Il trasferimento avviene
+        sulla base della decisione di adeguatezza della Commissione europea del 10 luglio 2023
+        (EU-U.S. Data Privacy Framework) e, dove necessario, delle clausole contrattuali tipo. Se non dai
+        il consenso, questi strumenti non vengono caricati e nessun dato parte verso di loro.
+    </p>
+
+    <h2>7. I tuoi diritti</h2>
+    <p>
+        Puoi chiederci in qualsiasi momento di <strong>accedere</strong> ai dati che ti riguardano, di
+        <strong>correggerli</strong>, di <strong>cancellarli</strong>, di <strong>limitarne</strong> il
+        trattamento, di <strong>riceverli</strong> in un formato leggibile da un computer, e puoi
+        <strong>opporti</strong> al trattamento fondato sul legittimo interesse (artt. 15-22 GDPR). Il
+        consenso ai cookie lo revochi da solo, con il pulsante qui sopra.
+    </p>
+    <p>
+        Per esercitarli scrivi a <a href="mailto:info@tecnolink.it">info@tecnolink.it</a>: rispondiamo
+        entro un mese. Se ritieni che il trattamento violi il Regolamento, hai diritto di proporre
+        reclamo al <strong>Garante per la protezione dei dati personali</strong>
+        (<a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>)
+        oppure di rivolgerti all'autorità giudiziaria.
+    </p>
+
+    <h2>8. Modifiche a questa informativa</h2>
+    <p>
+        Se cambiamo il modo in cui trattiamo i dati, aggiorniamo questa pagina e la data in cima. Vale la
+        pena riguardarla ogni tanto: è l'unico posto in cui questa roba è scritta per intero.
+    </p>
 </div>

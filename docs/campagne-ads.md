@@ -25,10 +25,12 @@ Come si comportano: i tag si caricano **solo dopo il consenso** sul banner cooki
 all'invio del form scatta la conversione su tutte e tre le piattaforme
 (`generate_lead` su GA4, `Lead` su Meta, `conversion_id` su LinkedIn).
 
-Rimuovere prima del lancio le tre voci di menu temporanee `VA · Aziende`, `VA · Privati`
-e `Materiali` in `Pages/Shared/_Layout.cshtml` (cerca il commento `TEMP`). La pagina
-`/interno/materiali-campagne` resta comunque raggiungibile per chi conosce l'indirizzo:
-è `noindex, nofollow`, non protetta da password.
+Le tre voci di menu temporanee (`VA · Aziende`, `VA · Privati`, `Materiali`) **sono state
+rimosse**: alle landing ci si arriva dagli annunci e basta. La pagina
+`/interno/materiali-campagne` resta raggiungibile per chi conosce l'indirizzo — è
+`noindex, nofollow` e `Disallow` nel robots.txt, ma **non è protetta da password**. Se un
+giorno dovesse contenere qualcosa che non può stare sotto gli occhi di chiunque, va messa
+dietro un'autenticazione: oggi non c'è.
 
 ### URL di destinazione
 
@@ -51,8 +53,8 @@ https://www.tecnolink.it/offerte/vulnerability-assessment/privati?utm_source=fac
 ### Immagini
 
 Tutti i creativi si guardano insieme dalla pagina interna **`/interno/materiali-campagne`**
-(non indicizzata, raggiungibile dal menu del sito): è il posto da cui ritrovarli senza
-cercare nel repository. I file stanno in `tecnolinkSite/wwwroot/img/campagne/singola/`,
+(non indicizzata, e non più nel menu: l'indirizzo va scritto a mano): è il posto da cui
+ritrovarli senza cercare nel repository. I file stanno in `tecnolinkSite/wwwroot/img/campagne/singola/`,
 nominati `<pubblico>-<palette>-<misura>.png`:
 
 - **pubblico**: `aziende` (dice "Check-up di sicurezza informatica") e `privati` ("Check-up della rete di casa") — usa quella giusta per la campagna, il nome sull'immagine deve combaciare con quello della landing

@@ -129,6 +129,26 @@
     }
   }
 
+  // Consent revocation (Privacy page). Clearing the stored choice is not enough on
+  // its own: if the visitor had accepted, GA4 / Pixel / Insight Tag are already loaded
+  // in this page and keep running until it goes away. So we clear and reload — the
+  // page comes back with no tag active and the banner asking again, which is what
+  // "revoca il consenso" has to mean if it means anything.
+  var resetBtn = document.getElementById('tkConsentReset');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      try { window.localStorage.removeItem(CONSENT_KEY); } catch (e) { /* storage unavailable */ }
+      if (hasAnalyticsConfigured) {
+        window.location.reload();
+      } else {
+        // Nothing is configured, so there is no banner to bring back and nothing was
+        // ever loaded. Saying so is better than a button that appears to do nothing.
+        resetBtn.disabled = true;
+        resetBtn.textContent = 'Nessuno strumento di misurazione è attivo su questo sito.';
+      }
+    });
+  }
+
   // Secondary engagement signals: phone / email link clicks.
   document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
     link.addEventListener('click', function () {
@@ -197,6 +217,33 @@
   items.forEach(function (el) { observer.observe(el); });
 })();
 
+// Messaggio mostrato quando la richiesta arriva al sito ma non riesce a uscire
+// verso la casella di posta — server SMTP irraggiungibile, credenziali sbagliate,
+// provider che rifiuta. Fino a ieri in questo caso il visitatore vedeva comunque
+// "Grazie! Ti contatteremo al più presto": la richiesta spariva e lui restava ad
+// aspettare una risposta che non sarebbe mai arrivata.
+//
+// Non dice "riprova", di proposito. Se la posta è rotta lo è anche al secondo
+// tentativo, e dopo cinque invii il limitatore anti-abuso blocca l'indirizzo IP
+// per dieci minuti: lo manderemmo a sbattere contro un muro. L'unica strada che
+// funziona davvero in quel momento è il telefono.
+// Mostra il riquadro d'errore di un modulo. Con "html" a null rimette il testo
+// che sta nell'HTML della pagina — quello generico dei guasti di rete — così il
+// messaggio giusto torna al suo posto anche dopo che è stato sostituito.
+function tkMostraErrore(el, html) {
+  if (!el) return;
+  if (el.getAttribute('data-testo-originale') === null) {
+    el.setAttribute('data-testo-originale', el.innerHTML);
+  }
+  el.innerHTML = html || el.getAttribute('data-testo-originale');
+  el.classList.add('show');
+}
+
+var TK_MSG_NON_RECAPITATO =
+  'La richiesta è arrivata al sito, ma non siamo riusciti a inoltrarla alla nostra casella. ' +
+  'Per non farti aspettare invano, chiamaci allo <a href="tel:+39055617008">055 617008</a> ' +
+  'o scrivi a <a href="mailto:info@tecnolink.it">info@tecnolink.it</a>.';
+
 // Contact form — submits to the /api/contact endpoint
 (function () {
   var form = document.getElementById('tkContactForm');
@@ -205,6 +252,7 @@
   var errorEl = document.getElementById('tk-form-error');
   var submitBtn = form.querySelector('button[type="submit"]');
   var originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+  function mostraErrore(html) { tkMostraErrore(errorEl, html); }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -238,16 +286,34 @@
         });
       })
       .then(function (result) {
-        if (result.httpOk && result.data && result.data.ok) {
+        var data = result.data || {};
+        var accettata = result.httpOk && data.ok;
+
+        // "delivered" dice se la mail è davvero partita verso la nostra casella.
+        // Il percorso honeypot risponde {ok:true} senza questo campo: lì l'assenza
+        // vale come successo, altrimenti un bot capirebbe di essere stato
+        // riconosciuto e la trappola smetterebbe di funzionare.
+        if (accettata && data.delivered === false) {
+          mostraErrore(TK_MSG_NON_RECAPITATO);
+          // Niente form.reset(): i dati restano nei campi, così se il visitatore
+          // preferisce scriverci a mano ha ancora sotto gli occhi quello che aveva
+          // compilato.
+          //
+          // E niente conversione verso GA4, Meta e LinkedIn. Una richiesta che non
+          // ci è mai arrivata non è un contatto acquisito: contarla insegnerebbe
+          // alle piattaforme a comprare altro traffico come quello, mentre la
+          // casella resta vuota — e i numeri sani nascondono il guasto proprio
+          // quando serve accorgersene.
+        } else if (accettata) {
           if (successEl) successEl.classList.add('show');
           form.reset();
           if (typeof tkTrackConversion === 'function') tkTrackConversion('contact_form');
-        } else if (errorEl) {
-          errorEl.classList.add('show');
+        } else {
+          mostraErrore(null);
         }
       })
       .catch(function () {
-        if (errorEl) errorEl.classList.add('show');
+        mostraErrore(null);
       })
       .finally(function () {
         if (submitBtn) {
@@ -445,10 +511,17 @@
     })
       .then(function (res) {
         return res.json().catch(function () { return {}; }).then(function (data) {
-          return res.ok && data && data.ok;
+          data = data || {};
+          // Come per il modulo contatti: "accettata" dice che la richiesta è
+          // arrivata al sito, "recapitata" che è uscita verso la nostra casella.
+          // Sono due cose diverse, e finora le trattavamo come una sola.
+          return {
+            accettata: res.ok && data.ok === true,
+            recapitata: data.delivered !== false
+          };
         });
       })
-      .catch(function () { return false; });
+      .catch(function () { return { accettata: false, recapitata: false }; });
 
     steps.forEach(function (s) { s.classList.remove('active', 'done'); });
     result.classList.remove('show');
@@ -461,15 +534,24 @@
         i++;
         setTimeout(runStep, 650);
       } else {
-        submitPromise.then(function (success) {
+        submitPromise.then(function (esito) {
           btn.disabled = false;
-          btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Invia un\'altra richiesta';
-          if (success) {
+          var etichettaRiprova = '<i class="bi bi-arrow-repeat"></i> Invia un\'altra richiesta';
+
+          if (esito.accettata && !esito.recapitata) {
+            // Il pulsante non invita a riprovare: se la posta è rotta adesso lo è
+            // anche al tentativo dopo, e al sesto invio il limitatore anti-abuso
+            // blocca l'IP per dieci minuti. Il messaggio manda al telefono.
+            btn.innerHTML = '<i class="bi bi-shield-exclamation"></i> Richiesta non recapitata';
+            tkMostraErrore(errorEl, TK_MSG_NON_RECAPITATO);
+          } else if (esito.accettata) {
+            btn.innerHTML = etichettaRiprova;
             result.classList.add('show');
             form.reset();
             if (typeof tkTrackConversion === 'function') tkTrackConversion('security_check');
-          } else if (errorEl) {
-            errorEl.classList.add('show');
+          } else {
+            btn.innerHTML = etichettaRiprova;
+            tkMostraErrore(errorEl, null);
           }
         });
       }

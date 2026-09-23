@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ci stanno solo le pagine con "index, follow". Le landing delle campagne
+  (/offerte/vulnerability-assessment/aziende e /privati), le pagine di settore
+  sotto /soluzioni/ e l'indice interno dei materiali sono "noindex": metterle
+  qui sarebbe un invito a indicizzarle contraddetto dalla pagina stessa, e
+  Search Console lo segnala come errore.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.tecnolink.it/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.tecnolink.it/offerte/vulnerability-assessment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.tecnolink.it/offerte/vulnerability-assessment-intermedio</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.tecnolink.it/offerte/vulnerability-assessment-tecnico</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.tecnolink.it/Privacy</loc>
