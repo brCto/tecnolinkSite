@@ -17,6 +17,32 @@
         _ => v,
     };
 
+    // Le sequenze di carosello, nell'ordine in cui vanno guardate. Il numero di carte
+    // sta qui e non nei cicli sotto: `stanze` ne ha cinque, le altre quattro, e prima
+    // di questa riga il numero era scritto a mano in tre punti diversi — bastava
+    // aggiungere una sequenza perché la pagina mostrasse riquadri rotti.
+    // `Feed` dice se la sequenza esiste anche in 1080×1350. Non tutte ce l'hanno:
+    // `stanze` è stata generata solo in quadrato e storia. Senza questo campo la
+    // pagina mostrerebbe venti riquadri rotti, che è il modo più rapido per farsi
+    // credere che manchino le immagini quando invece non sono mai state fatte.
+    record Sequenza(string Chiave, string Titolo, string Nota, int Carte, bool Feed);
+
+    static readonly Sequenza[] Sequenze =
+    {
+        new("facebook", "Facebook e Instagram — privati",
+            "Rete di casa. La prima carta deve funzionare su chiunque abbia un router.", 4, true),
+        new("stanze", "Facebook e Instagram — privati · stanza per stanza",
+            "Il giro della casa, un ambiente per carta. Non apre con la minaccia: è il termine di paragone della sequenza qui sopra.", 5, false),
+        new("linkedin", "LinkedIn — aziende",
+            "Rete aziendale. La pressione arriva da clienti, normativa e polizze, non dagli hacker.", 4, true),
+    };
+
+    static readonly string[] Varianti = { "bn", "foto", "fascia", "riquadro" };
+
+    // I numeri delle carte come compaiono nei nomi dei file: 01, 02, ...
+    static IEnumerable<string> Numeri(int carte) =>
+        Enumerable.Range(1, carte).Select(n => n.ToString("00"));
+
     // I quattro concetti dei manifesti, per pubblico: il nome del file e come
     // apre il discorso. Stesso ordine del generatore.
     static (string Nome, string Come)[] Manifesti(string pubblico) => pubblico == "aziende"
@@ -79,6 +105,10 @@
     @@media (max-width: 900px) { .mc-grid { grid-template-columns: repeat(2, 1fr); } }
     .mc-grid.storie { grid-template-columns: repeat(6, 1fr); }
     @@media (max-width: 900px) { .mc-grid.storie { grid-template-columns: repeat(3, 1fr); } }
+    /* Tre colonne, una riga per foto: le tre misure si guardano affiancate.
+       align-items:start perché la storia è alta il doppio delle altre due e
+       senza questo le trascinerebbe in mezzo alla riga. */
+    .mc-grid.ritagli { grid-template-columns: repeat(3, 1fr); align-items: start; }
 
     .mc-item { display: block; text-decoration: none; }
     .mc-item img {
@@ -203,18 +233,24 @@
 <section class="tk-section bg-soft">
     <div class="container-xl">
         <div class="tk-section-head">
-            <span class="eyebrow">Caroselli · due varianti da confrontare</span>
-            <h2>Due sequenze da quattro carte, una per pubblico</h2>
+            <span class="eyebrow">Caroselli · varianti da confrontare</span>
+            <h2>Tre sequenze, in quattro varianti grafiche</h2>
             <p>
                 Struttura identica, contenuto diverso: minaccia → cosa c'è in gioco → come si
                 risolve → azione. La terza carta è la più importante e non va tolta: una minaccia
                 senza via d'uscita fa scorrere oltre, non cliccare.
             </p>
             <p>
+                La sequenza <span class="mc-tag">stanze</span> è l'eccezione, ed è voluta: cinque
+                carte invece di quattro, e non apre con la minaccia ma con il giro di casa. Sta lì
+                per essere misurata contro <span class="mc-tag">facebook</span>, che apre con il
+                rischio — stesso pubblico, stessa spesa, <code>utm_content</code> diverso.
+            </p>
+            <p>
                 Ogni sequenza esiste in <strong>quattro varianti grafiche con le stesse identiche
                 parole</strong> — <span class="mc-tag">bn</span> <span class="mc-tag">foto</span>
                 <span class="mc-tag">fascia</span> <span class="mc-tag">riquadro</span> — che si
-                distinguono solo per quanto spazio prende la fotografia. Le due carte centrali sono
+                distinguono solo per quanto spazio prende la fotografia. Le carte centrali sono
                 uguali dappertutto: la differenza da misurare sta nella prima.
             </p>
             <p>
@@ -222,30 +258,41 @@
                 nessuna raccoglierebbe abbastanza dati per dire qualcosa: se ne scelgono due e si
                 confrontano a parità di pubblico e di spesa.
             </p>
+            <p>
+                Le misure sono tre: <span class="mc-tag">1080 × 1350</span> per il feed di
+                Facebook e Instagram — la principale, occupa quasi un terzo di schermo in più
+                del quadrato — <span class="mc-tag">1080 × 1080</span> per LinkedIn, e
+                <span class="mc-tag">1080 × 1920</span> per storie e Reel. Le ha tutte e tre
+                <span class="mc-tag">facebook</span> e <span class="mc-tag">linkedin</span>;
+                <span class="mc-tag">stanze</span> esiste solo in quadrato e storia, quindi per
+                mandarla nel feed va prima generata nel 4:5. Dentro un carosello le schede
+                vanno tutte della stessa misura: mescolarle fa ritagliare tutto alla
+                piattaforma.
+            </p>
         </div>
 
-        @foreach (var pub in new[] { "facebook", "linkedin" })
+        @foreach (var seq in Sequenze)
         {
             <div class="mc-set">
                 <div class="mc-set-head">
-                    <h3>@(pub == "facebook" ? "Facebook e Instagram — privati" : "LinkedIn — aziende")</h3>
-                    <span class="mc-tag">1080 × 1080</span>
+                    <h3>@seq.Titolo</h3>
+                    <span class="mc-tag">@(seq.Feed ? "1080 × 1350" : "1080 × 1080") · @seq.Carte carte</span>
                 </div>
-                <p>
-                    @(pub == "facebook"
-                        ? "Rete di casa. La prima carta deve funzionare su chiunque abbia un router."
-                        : "Rete aziendale. La pressione arriva da clienti, normativa e polizze, non dagli hacker.")
-                </p>
+                <p>@seq.Nota</p>
 
-                @foreach (var v in new[] { "bn", "foto", "fascia", "riquadro" })
+                @* Misura principale della sequenza: il 4:5 dove esiste — occupa quasi un
+                   terzo di schermo in più nel feed — altrimenti il quadrato, che per
+                   `stanze` è l'unica in cui è stata generata. *@
+                @{ var misuraPrincipale = seq.Feed ? "feed-verticale" : "quadrato"; }
+                @foreach (var v in Varianti)
                 {
                     <p class="mc-variante">@NomeVariante(v)</p>
                     <div class="mc-grid">
-                        @foreach (var n in new[] { "01", "02", "03", "04" })
+                        @foreach (var n in Numeri(seq.Carte))
                         {
-                            <a class="mc-item" href="~/img/campagne/caroselli/@(pub)-@(v)-quadrato-@(n).png" target="_blank" rel="noopener">
-                                <img src="~/img/campagne/caroselli/@(pub)-@(v)-quadrato-@(n).png" alt="Carta @n, variante @v, @pub" loading="lazy" />
-                                <span>@(pub)-@(v)-quadrato-@(n).png</span>
+                            <a class="mc-item" href="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-@(misuraPrincipale)-@(n).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-@(misuraPrincipale)-@(n).png" alt="Carta @n, variante @v, @(seq.Chiave)" loading="lazy" />
+                                <span>@(seq.Chiave)-@(v)-@(misuraPrincipale)-@(n).png</span>
                             </a>
                         }
                     </div>
@@ -255,25 +302,57 @@
 
         <div class="mc-set">
             <div class="mc-set-head">
-                <h3>Versione verticale</h3>
-                <span class="mc-tag">1080 × 1920 · storie e reel</span>
+                <h3>Versione quadrata</h3>
+                <span class="mc-tag">1080 × 1080 · LinkedIn</span>
             </div>
-            <p>Le stesse carte con le aree di sicurezza rispettate: 250 px liberi in alto, 340 in basso.</p>
+            <p>
+                Tutte le carte in 1:1, <span class="mc-tag">stanze</span> compresa. È la misura
+                giusta su LinkedIn e per i posizionamenti che non accettano il 4:5; su Facebook e
+                Instagram, dove la verticale c'è, usare quella — occupa quasi un terzo di schermo
+                in più.
+            </p>
+            @* Le sequenze si leggono da Sequenze e non da un elenco scritto a mano:
+               era così che `stanze` spariva da questa sezione pur avendo tutte e
+               venti le carte quadrate sul disco. *@
             <div class="mc-grid storie">
-                @foreach (var p in new[] { "facebook", "linkedin" })
+                @foreach (var seq in Sequenze)
                 {
-                    foreach (var v in new[] { "bn", "foto", "fascia", "riquadro" })
+                    foreach (var v in Varianti)
                     {
-                        foreach (var n in new[] { "01", "02", "03", "04" })
+                        foreach (var n in Numeri(seq.Carte))
                         {
-                            <a class="mc-item" href="~/img/campagne/caroselli/@(p)-@(v)-storia-@(n).png" target="_blank" rel="noopener">
-                                <img src="~/img/campagne/caroselli/@(p)-@(v)-storia-@(n).png" alt="Carta @n verticale, variante @v, @p" loading="lazy" />
-                                <span>@(p)-@(v)-storia-@(n).png</span>
+                            <a class="mc-item" href="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-quadrato-@(n).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-quadrato-@(n).png" alt="Carta @n quadrata, variante @v, @(seq.Chiave)" loading="lazy" />
+                                <span>@(seq.Chiave)-@(v)-quadrato-@(n).png</span>
                             </a>
                         }
                     }
                 }
             </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Versione verticale</h3>
+                <span class="mc-tag">1080 × 1920 · storie e reel</span>
+            </div>
+            <p>Le stesse carte con le aree di sicurezza rispettate: 250 px liberi in alto, 340 in basso.</p>
+            <div class="mc-grid storie">
+                @foreach (var seq in Sequenze)
+                {
+                    foreach (var v in Varianti)
+                    {
+                        foreach (var n in Numeri(seq.Carte))
+                        {
+                            <a class="mc-item" href="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-storia-@(n).png" target="_blank" rel="noopener">
+                                <img src="~/img/campagne/caroselli/@(seq.Chiave)-@(v)-storia-@(n).png" alt="Carta @n verticale, variante @v, @(seq.Chiave)" loading="lazy" />
+                                <span>@(seq.Chiave)-@(v)-storia-@(n).png</span>
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        </div>
         </div>
 
         <div class="mc-set">
@@ -295,6 +374,39 @@
                     </a>
                 }
             </div>
+        </div>
+
+        <div class="mc-set">
+            <div class="mc-set-head">
+                <h3>Le stesse foto, tagliate per i social</h3>
+                <span class="mc-tag">feed 1080×1350 · quadrato 1080×1080 · storia 1080×1920</span>
+            </div>
+            <p>
+                Gli originali sono tutti 3:2 orizzontali, che nel feed di Facebook e Instagram è il
+                rapporto che occupa meno schermo di tutti. Qui sono rifatti nelle tre misure che
+                servono davvero, con il taglio centrato <b>sul soggetto e non sul centro del file</b>:
+                al centro esatto il router perde le antenne e le due placche restano mezze fuori.
+                La storia non è un ritaglio 9:16 — sarebbe il 37% dell'originale poi ingrandito del
+                44%, cioè molle — ma la foto intera a tutta larghezza su un fondo fatto di sé stessa,
+                sfocato e scurito: sopra e sotto resta lo spazio per il titolo, fuori dalle zone che
+                le app coprono.
+            </p>
+            <div class="mc-grid ritagli">
+                @foreach (var f in new[] { "privati-router", "privati-telecamera", "aziende-switch", "aziende-porte" })
+                {
+                    foreach (var misura in new[] { "feed-verticale", "quadrato", "storia" })
+                    {
+                        <a class="mc-item" href="~/img/campagne/foto/ritagli/@(f)-@(misura).jpg" target="_blank" rel="noopener">
+                            <img src="~/img/campagne/foto/ritagli/@(f)-@(misura).jpg" alt="Fotografia @f, @misura" loading="lazy" />
+                            <span>@(f)-@(misura).jpg</span>
+                        </a>
+                    }
+                }
+            </div>
+            <p style="margin-top:1.6rem;color:var(--ink-soft);font-size:0.92rem;">
+                Punti di fuoco e misure: <span class="mc-path">docs/creativi/foto/ritaglia-foto.ps1</span>
+            </p>
+            <pre class="mc-cmd">powershell -ExecutionPolicy Bypass -File docs/creativi/foto/ritaglia-foto.ps1</pre>
         </div>
 
         <p style="margin-top:2.5rem;color:var(--ink-soft);font-size:0.92rem;">
@@ -645,7 +757,7 @@
             </li>
             <li>
                 <strong class="mc-path">docs/creativi/caroselli/README.md</strong>
-                <span>I due caroselli: perché quattro carte e in quest'ordine, i testi dei post, le fonti sulle best practice.</span>
+                <span>Le tre sequenze: perché quelle carte e in quest&#8217;ordine, i testi dei post, le fonti sulle best practice.</span>
             </li>
             <li>
                 <strong>Le due landing</strong>

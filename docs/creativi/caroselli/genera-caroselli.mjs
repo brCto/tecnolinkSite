@@ -1,12 +1,13 @@
 /**
- * Caroselli in bianco e nero, uno per pubblico. Quattro carte ciascuno.
+ * Caroselli in bianco e nero. Tre sequenze, quattro o cinque carte ciascuna.
  *
  *   facebook  — rete di casa, pubblico generalista (Facebook e Instagram)
+ *   stanze    — rete di casa, il giro stanza per stanza (Facebook e Instagram)
  *   linkedin  — rete aziendale, decisori di PMI (LinkedIn)
  *
  * Perché quattro carte e perché in quest'ordine
  * ---------------------------------------------
- * Le due sequenze seguono lo stesso schema: minaccia → cosa c'è in gioco →
+ * Le due sequenze storiche seguono lo stesso schema: minaccia → cosa c'è in gioco →
  * la soluzione praticabile → l'azione. L'ordine non è estetico. La ricerca sui
  * "fear appeal" (modello EPPM) dice che una minaccia senza una via d'uscita
  * credibile produce evitamento, non azione: chi si spaventa e non vede cosa
@@ -27,8 +28,10 @@
  *
  * Formati
  * -------
- *   quadrato  1080x1080  la misura del carosello, su Meta e su LinkedIn
- *   storia    1080x1920  storie, Reel e Spotlight (aree di sicurezza rispettate)
+ *   feed-verticale  1080x1350  la principale: nel feed di Facebook e Instagram
+ *                              è la misura che occupa più schermo su mobile
+ *   quadrato        1080x1080  di riserva, e la misura buona su LinkedIn
+ *   storia          1080x1920  storie, Reel e Spotlight (aree di sicurezza rispettate)
  *
  *   node genera-caroselli.mjs && ./render-caroselli.sh
  */
@@ -44,6 +47,49 @@ mkdirSync(outDir, { recursive: true });
 const asset = (p) => 'file:///' + resolve(here, '../../../tecnolinkSite/wwwroot/img/', p).replace(/\\/g, '/');
 const LOGO = asset('logo-tecnolink-bianco-180x51.png');
 const FOTO = (nome) => asset('campagne/foto/' + nome);
+
+/* ------------------------------------------------------------------ */
+/* Inquadratura delle fotografie                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Dove sta il soggetto in orizzontale, da 0 (bordo sinistro) a 1 (destro).
+ * In nessuna delle quattro foto sta al centro geometrico, quindi il ritaglio
+ * centrato — che è quello che `background-position: center` fa di default —
+ * ne taglia via una parte: il router perde le antenne, le placche restano
+ * mezze fuori. Sono gli stessi numeri di docs/creativi/foto/ritaglia-foto.ps1:
+ * se si cambia una fotografia vanno rivisti in tutti e due i posti.
+ */
+const FUOCO = {
+  'privati-router.jpg': 0.56,
+  'privati-telecamera.jpg': 0.50,
+  'aziende-switch.jpg': 0.45,
+  'aziende-porte.jpg': 0.38,
+};
+
+// Tutte e quattro le fotografie sono 3:2 orizzontali.
+const RAPPORTO_FOTO = 3 / 2;
+
+/**
+ * Il `background-position` che porta il punto di fuoco al centro del ritaglio.
+ *
+ * Le percentuali di CSS non dicono "centra qui": dicono "allinea il punto al
+ * P% dell'immagine con il punto al P% del contenitore". Quindi per centrare il
+ * ritaglio sulla frazione u dell'immagine il numero da scrivere è un altro, e
+ * dipende da quanto il contenitore è più stretto dell'immagine scalata —
+ * cioè cambia da formato a formato e da modo a modo. Da qui il calcolo invece
+ * di quattro numeri fissi.
+ */
+const inquadratura = (nomeFoto, larghezza, altezza) => {
+  const u = FUOCO[nomeFoto];
+  if (u === undefined) return 'center';
+  // Contenitore più largo della foto: il "cover" taglia in verticale e in
+  // orizzontale non c'è margine da spostare. È il caso della fascia.
+  if (larghezza / altezza >= RAPPORTO_FOTO) return 'center';
+  const w = altezza * RAPPORTO_FOTO; // larghezza della foto una volta scalata
+  const p = (u * w - larghezza / 2) / (w - larghezza);
+  return `${(Math.min(1, Math.max(0, p)) * 100).toFixed(1)}% 50%`;
+};
 
 /* ------------------------------------------------------------------ */
 /* Contenuto                                                           */
@@ -94,6 +140,57 @@ const CONTENUTI = {
         titolo: 'Scopri quali porte sono aperte.',
         testo: 'Preventivo prima di iniziare. Niente tecnicismi. I tuoi dati restano tuoi.',
         cta: 'Controlla la mia rete',
+        piede: 'Tecnolink · Firenze e dintorni',
+      },
+    ],
+  },
+
+  // Seconda sequenza per i privati: invece della minaccia, il giro di casa. Cinque
+  // carte, una per ambiente. Va misurata contro `facebook` sopra, che apre con la
+  // minaccia: stesso pubblico, stessa spesa, utm_content diverso.
+  stanze: {
+    etichetta: 'Check-up della rete di casa',
+    carte: [
+      {
+        fondo: 'nero',
+        foto: 'privati-router.jpg',
+        occhiello: 'Stanza per stanza',
+        titolo: 'Ogni stanza ha una porta collegata.',
+        testo: 'Facciamo il giro della casa e guardiamo cosa è collegato al Wi-Fi, un ambiente alla volta.',
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'L\'ingresso',
+        titolo: 'Campanello e telecamera, installati e dimenticati.',
+        elenco: [
+          'Credenziali di fabbrica mai cambiate',
+          'Raggiungibili da fuori casa',
+          'Aggiornamenti fermi da anni',
+        ],
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'Il salotto',
+        titolo: 'La televisione resta accesa in rete.',
+        testo: 'Smart TV e box restano connessi per anni con programmi vecchi. Guardiamo versioni, servizi attivi e cosa lasciano aperto.',
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'Studio e cucina',
+        titolo: 'Computer, stampante, prese intelligenti.',
+        elenco: [
+          'Cartelle condivise rimaste aperte',
+          'Aggiornamenti mancanti sul computer',
+          'Piccoli oggetti che parlano con internet',
+        ],
+      },
+      {
+        fondo: 'nero',
+        foto: 'privati-telecamera.jpg',
+        occhiello: 'Check-up della rete di casa',
+        titolo: 'Ti diciamo cosa sistemare, in ordine.',
+        testo: 'Ci scrivi, ti richiamiamo entro 24 ore e ti diamo un preventivo prima di iniziare. Poi veniamo e sistemiamo.',
+        cta: 'Facciamo il giro di casa',
         piede: 'Tecnolink · Firenze e dintorni',
       },
     ],
@@ -180,6 +277,17 @@ const BIANCO = {
 /* ------------------------------------------------------------------ */
 
 const FORMATI = {
+  'feed-verticale': {
+    // La misura principale del feed su Facebook e Instagram: occupa quasi un
+    // terzo di schermo in più del quadrato, a parità di tutto il resto. Non ha
+    // aree di sicurezza da rispettare — è feed, non storia — quindi i margini
+    // stanno vicini a quelli del quadrato e l'altezza in più va tutta al testo.
+    w: 1080, h: 1350,
+    padTop: 88, padBottom: 88, padX: 84,
+    logo: 58, occhiello: 25, titolo: 74, titoloCta: 82, testo: 32,
+    voce: 32, indice: 23, cta: 32, piede: 22, segno: 5,
+    fascia: 480, riquadro: 440,
+  },
   quadrato: {
     w: 1080, h: 1080,
     padTop: 72, padBottom: 72, padX: 84,
@@ -207,9 +315,9 @@ const FORMATI = {
 /* Carta                                                               */
 /* ------------------------------------------------------------------ */
 
-/** Trattini di avanzamento: quattro segni, quello corrente è pieno e più lungo. */
-const segni = (t) => `
-  <div class="segni">${[0, 1, 2, 3].map((i) => `<i data-i="${i}"></i>`).join('')}</div>`;
+/** Trattini di avanzamento: uno per carta, quello corrente è pieno e più lungo. */
+const segni = (t, totale) => `
+  <div class="segni">${Array.from({ length: totale }, (_, i) => `<i data-i="${i}"></i>`).join('')}</div>`;
 
 /**
  * Velo scuro sopra la foto. Serve a due cose: rendere leggibile il testo bianco
@@ -231,7 +339,7 @@ const VELO = 'linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.30) 2
  *   riquadro  foto in un riquadro con aria intorno, su fondo nero. La più
  *             composta: sembra una pagina, non un annuncio
  */
-const carta = (f, t, c, i, etichetta, modo) => {
+const carta = (f, t, c, i, etichetta, modo, totale) => {
   // La carta di chiusura ha un elemento in più, il pulsante: la foto si accorcia
   // per far posto, altrimenti la CTA finisce addosso al piede.
   const hFascia = Math.round(f.fascia * (c.cta ? 0.88 : 1));
@@ -253,18 +361,20 @@ const carta = (f, t, c, i, etichetta, modo) => {
   }
 
 ${modo === 'pieno' ? `
-  .foto{position:absolute;inset:0;background:url("${FOTO(c.foto)}") center/cover no-repeat}
+  .foto{position:absolute;inset:0;
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w, f.h)}/cover no-repeat}
   .foto::after{content:"";position:absolute;inset:0;background:${VELO}}
 ` : ''}
 ${modo === 'fascia' ? `
   /* La fascia parte dal bordo: una foto a filo taglia meglio di una incorniciata. */
   .fascia{position:absolute;top:0;left:0;right:0;height:${hFascia}px;
-    background:url("${FOTO(c.foto)}") center/cover no-repeat}
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w, hFascia)}/cover no-repeat}
 ` : ''}
 ${modo === 'riquadro' ? `
   .riquadro{width:100%;height:${hRiquadro}px;
     border-radius:${f.padX * 0.28}px;
-    background:url("${FOTO(c.foto)}") center/cover no-repeat;margin-bottom:${f.padX * 0.5}px}
+    background:url("${FOTO(c.foto)}") ${inquadratura(c.foto, f.w - f.padX * 2, hRiquadro)}/cover no-repeat;
+    margin-bottom:${f.padX * 0.5}px}
 ` : ''}
   .wrap{
     position:relative;z-index:1;height:100%;display:flex;flex-direction:column;
@@ -314,7 +424,7 @@ ${modo === 'riquadro' ? `
   <div class="wrap">
     <div class="testa">
       <img class="logo" src="${LOGO}" alt="Tecnolink">
-      <span class="conta">${String(i + 1).padStart(2, '0')} / 04</span>
+      <span class="conta">${String(i + 1).padStart(2, '0')} / ${String(totale).padStart(2, "0")}</span>
     </div>
 
     <div class="centro">
@@ -329,7 +439,7 @@ ${modo === 'riquadro' ? `
 
     <div class="piedone">
       <span class="etichetta">${c.piede || etichetta}</span>
-      ${segni(t)}
+      ${segni(t, totale)}
     </div>
   </div>
 
@@ -382,7 +492,7 @@ for (const [pubblico, set] of Object.entries(CONTENUTI)) {
         const modo = modoFoto && c.foto ? modoFoto : 'piatto';
         const t = c.fondo === 'nero' || modo !== 'piatto' ? NERO : BIANCO;
         const nome = `${pubblico}-${variante}-${formato}-0${i + 1}`;
-        writeFileSync(resolve(outDir, `${nome}.html`), carta(f, t, c, i, set.etichetta, modo), 'utf8');
+        writeFileSync(resolve(outDir, `${nome}.html`), carta(f, t, c, i, set.etichetta, modo, set.carte.length), 'utf8');
         generati.push(`  ${nome}  ${f.w}x${f.h}`);
       });
     }

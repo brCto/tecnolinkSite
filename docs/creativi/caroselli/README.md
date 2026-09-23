@@ -1,7 +1,7 @@
-# Caroselli — due sequenze da quattro carte, in due varianti grafiche
+# Caroselli — tre sequenze, in quattro varianti grafiche
 
 Un carosello per pubblico, differenziato nel contenuto e nel tono, identico
-nell'impianto. Quattro carte ciascuno, in quest'ordine:
+nell'impianto. Le due storiche hanno quattro carte ciascuna, in quest'ordine:
 
 | | Facebook / Instagram — privati | LinkedIn — aziende |
 |---|---|---|
@@ -9,6 +9,30 @@ nell'impianto. Quattro carte ciascuno, in quest'ordine:
 | **02** ⬜ | *Non cercano i tuoi segreti. Cercano i tuoi accessi.* Cosa c'è in gioco, in quattro voci. | *Quattro strade diverse, la stessa domanda.* NIS2, GDPR art. 32, polizze, questionari fornitori. |
 | **03** ⬜ | *Si scopre in poche ore. E quasi sempre si sistema con poco.* La via d'uscita. | *Vulnerability Assessment: dall'inventario al piano di intervento.* Cosa fa il servizio, in concreto. |
 | **04** ⬛ | *Scopri quali porte sono aperte.* + CTA | *Sapete dire dove siete esposti?* + CTA |
+
+## La terza sequenza: `stanze`
+
+Accanto alle due qui sopra c'è una sequenza **da cinque carte**, sempre per i privati, che
+serve a mettere alla prova l'apertura. Non parte dalla minaccia: fa il giro della casa, un
+ambiente per carta — ingresso, salotto, studio e cucina — e arriva all'invito.
+
+| | Facebook / Instagram — privati, `stanze` |
+|---|---|
+| **01** ⬛ | *Ogni stanza ha una porta collegata.* Il giro di casa, senza allarme. |
+| **02** ⬜ | *Campanello e telecamera, installati e dimenticati.* L'ingresso. |
+| **03** ⬜ | *La televisione resta accesa in rete.* Il salotto. |
+| **04** ⬜ | *Computer, stampante, prese intelligenti.* Studio e cucina. |
+| **05** ⬛ | *Ti diciamo cosa sistemare, in ordine.* + CTA |
+
+Va confrontata con la sequenza `facebook`, stesso pubblico e stessa spesa: quella apre con
+il rischio, questa con il riconoscimento. `utm_content=carosello-stanze` contro
+`utm_content=carosello-bn`. È lo stesso confronto — rischio o risultato — che
+[`../../campagne-ads.md`](../../campagne-ads.md) §3 indica come quello che vale più di
+tutti, portato sul carosello.
+
+I testi e il ragionamento stanno in
+[`../../campagne-ads-privati-materiale-nuovo.md`](../../campagne-ads-privati-materiale-nuovo.md).
+
 
 ## Le quattro varianti
 
@@ -32,8 +56,8 @@ la superficie, mai il testo — così se una variante vince si sa esattamente co
 
 I PNG stanno dentro il sito, in
 `tecnolinkSite/wwwroot/img/campagne/caroselli/<pubblico>-<variante>-<formato>-<n>.png`
-— `facebook` / `linkedin`, `bn` / `foto` / `fascia` / `riquadro`, `quadrato` 1080×1080 e
-`storia` 1080×1920. Si
+— `facebook` / `linkedin`, `bn` / `foto` / `fascia` / `riquadro`, `feed-verticale`
+1080×1350, `quadrato` 1080×1080 e `storia` 1080×1920. Si
 guardano tutti insieme da **`/interno/materiali-campagne`**, la pagina interna che
 indicizza i materiali delle campagne (non indicizzata dai motori, raggiungibile dal menu).
 
@@ -49,6 +73,16 @@ consentito, nessuna attribuzione obbligatoria.
 | `privati-telecamera.jpg` | [Telecamera smart da interno](https://www.pexels.com/photo/smart-home-security-camera-24347621/) | Facebook, carta 04 |
 | `aziende-switch.jpg` | [Switch di rete con cavi collegati](https://www.pexels.com/photo/ethernet-cables-plugged-in-network-switch-2881224/) | LinkedIn, carta 01 |
 | `aziende-porte.jpg` | [Prese ethernet a muro](https://www.pexels.com/photo/close-up-of-plugged-in-ethernet-ports-with-led-37717004/) | LinkedIn, carta 04 |
+
+**L'inquadratura non è centrata, ed è voluto.** In nessuna delle quattro il soggetto sta
+al centro geometrico dell'immagine, quindi il ritaglio centrato — quello che
+`background-position: center` fa di default — ne taglia via un pezzo: il router perde le
+antenne, le placche restano mezze fuori. In cima a `genera-caroselli.mjs` c'è la mappa
+`FUOCO`, che per ogni foto dice dove sta il soggetto in orizzontale da 0 a 1, e la
+funzione `inquadratura()` traduce quel numero nella percentuale CSS giusta per ciascun
+formato. Sono gli stessi valori di
+[`../foto/ritaglia-foto.ps1`](../foto/ritaglia-foto.ps1): se si sostituisce una
+fotografia vanno rivisti in tutti e due i posti.
 
 **Criteri di scelta, se un giorno vanno sostituite.** Niente volti riconoscibili: le
 licenze Pexels e Unsplash coprono il diritto d'autore del fotografo, **non** il consenso
@@ -79,10 +113,14 @@ la miniatura. È anche l'unica palette che non litiga mai con l'interfaccia dell
 piattaforma. L'alternanza nero–bianco–bianco–nero dà il ritmo: le due carte nere aprono
 e chiudono, si capisce a colpo d'occhio a che punto si è.
 
-**1080×1080 e non 4:5.** Il quadrato è la misura del carosello sia su Meta sia su
-LinkedIn, e Meta lo ha riportato al centro delle specifiche anche per le sovrapposizioni
-nei Reels e per Marketplace. Il 4:5 resta migliore per l'immagine singola nel feed (è il
-formato dei creativi in [`../`](../)), non per il carosello.
+**Tre misure, con il 4:5 come principale su Meta.** Per un po' il quadrato è stato
+l'unica misura di questo carosello, e la ragione era buona: 1080×1080 è la misura del
+carosello sia su Meta sia su LinkedIn, e Meta l'ha riportata al centro delle specifiche
+anche per le sovrapposizioni nei Reels e per Marketplace. Su LinkedIn resta la scelta
+giusta. Su Facebook e Instagram no: il 4:5 occupa quasi un terzo di schermo in più su
+mobile, e lo spazio sullo schermo è la prima variabile del tasso di arresto dello scroll.
+Da qui `feed-verticale` 1080×1350, che è la misura da usare di default sul pubblico Meta;
+il quadrato resta generato per LinkedIn e per i posizionamenti che non accettano il 4:5.
 
 **Testo grande, leggibile senza audio e in miniatura.** Ogni carta si legge da ferma, in
 mezzo secondo, senza sonoro. Non c'è nessuna informazione affidata solo alla grafica.
@@ -137,10 +175,12 @@ https://www.tecnolink.it/offerte/vulnerability-assessment/aziende?utm_source=lin
 
 ## Come pubblicarlo
 
-**Carosello sponsorizzato** — le quattro carte `quadrato` di **una** variante, in ordine,
-stesso link su ogni scheda. Su LinkedIn il carosello dà il meglio con 3-5 carte: quattro
-è dentro. Per confrontare due varianti, due annunci nello stesso gruppo, stesso pubblico
-e stesso budget: cambia solo la creatività.
+**Carosello sponsorizzato** — le quattro carte di **una** variante, in ordine, stesso
+link su ogni scheda: `feed-verticale` su Facebook e Instagram, `quadrato` su LinkedIn.
+Su LinkedIn il carosello dà il meglio con 3-5 carte: quattro è dentro. Per confrontare
+due varianti, due annunci nello stesso gruppo, stesso pubblico e stesso budget: cambia
+solo la creatività. Non mescolare le misure dentro lo stesso carosello — le schede vanno
+tutte dello stesso rapporto, altrimenti la piattaforma le ritaglia per uniformarle.
 
 **Storie e Reel** — le carte `storia`, una per schermata. Per un Reel: 2 s alla prima,
 2,5 s alle due centrali, 3 s alla CTA (~10 secondi). Il primo fotogramma deve essere la

@@ -67,10 +67,12 @@ cosa ha fatto la differenza. Per cambiare i testi dell'immagine vedi
 [`creativi/README.md`](creativi/README.md).
 
 **Caroselli in bianco e nero.** A parte, in [`creativi/caroselli/`](creativi/caroselli/),
-ci sono due sequenze da quattro carte 1080×1080, una per pubblico: minaccia → cosa c'è in
-gioco → come si risolve → CTA. Formato, palette e ordine delle carte sono motivati nel
-README di quella cartella. Hanno copy e UTM propri (`utm_content=carosello-bn`) e vanno
-misurati contro le varianti a immagine singola qui sotto.
+ci sono tre sequenze 1080×1080. Due da quattro carte, una per pubblico: minaccia → cosa
+c'è in gioco → come si risolve → CTA. La terza, `stanze`, ha cinque carte e apre in modo
+opposto — il giro della casa invece del rischio — apposta per essere misurata contro
+quella dei privati. Formato, palette e ordine delle carte sono motivati nel README di
+quella cartella. Hanno copy e UTM propri (`utm_content=carosello-bn` e
+`carosello-stanze`) e vanno misurati contro le varianti a immagine singola qui sotto.
 
 **Manifesti — una frase sola.** In [`creativi/manifesti/`](creativi/manifesti/), otto
 creativi statici (quattro per pubblico) con **una frase e nient'altro**, ognuno su una
@@ -239,6 +241,11 @@ schermo del quadrato) e 1080×1920 per storie e reel.
 > è stata violata" viene bocciato. Le versioni qui sotto usano **domande e ipotesi**, mai
 > affermazioni sul destinatario: è anche il motivo per cui non trovi "sei stato hackerato"
 > in nessuna delle varianti.
+
+> **Per produrre materiale nuovo** — altre varianti di copy, statici fotografici, un
+> carosello, un reel, il modulo istantaneo — i prompt pronti stanno in
+> [`campagne-ads-prompt-privati.md`](campagne-ads-prompt-privati.md). Portano dentro tutto
+> il contesto di questa pagina, cosicché il modello non reinventi il servizio da zero.
 
 ---
 
