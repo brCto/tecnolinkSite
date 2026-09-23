@@ -1,12 +1,13 @@
 /**
- * Caroselli in bianco e nero, uno per pubblico. Quattro carte ciascuno.
+ * Caroselli in bianco e nero. Tre sequenze, quattro o cinque carte ciascuna.
  *
  *   facebook  — rete di casa, pubblico generalista (Facebook e Instagram)
+ *   stanze    — rete di casa, il giro stanza per stanza (Facebook e Instagram)
  *   linkedin  — rete aziendale, decisori di PMI (LinkedIn)
  *
  * Perché quattro carte e perché in quest'ordine
  * ---------------------------------------------
- * Le due sequenze seguono lo stesso schema: minaccia → cosa c'è in gioco →
+ * Le due sequenze storiche seguono lo stesso schema: minaccia → cosa c'è in gioco →
  * la soluzione praticabile → l'azione. L'ordine non è estetico. La ricerca sui
  * "fear appeal" (modello EPPM) dice che una minaccia senza una via d'uscita
  * credibile produce evitamento, non azione: chi si spaventa e non vede cosa
@@ -144,6 +145,57 @@ const CONTENUTI = {
     ],
   },
 
+  // Seconda sequenza per i privati: invece della minaccia, il giro di casa. Cinque
+  // carte, una per ambiente. Va misurata contro `facebook` sopra, che apre con la
+  // minaccia: stesso pubblico, stessa spesa, utm_content diverso.
+  stanze: {
+    etichetta: 'Check-up della rete di casa',
+    carte: [
+      {
+        fondo: 'nero',
+        foto: 'privati-router.jpg',
+        occhiello: 'Stanza per stanza',
+        titolo: 'Ogni stanza ha una porta collegata.',
+        testo: 'Facciamo il giro della casa e guardiamo cosa è collegato al Wi-Fi, un ambiente alla volta.',
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'L\'ingresso',
+        titolo: 'Campanello e telecamera, installati e dimenticati.',
+        elenco: [
+          'Credenziali di fabbrica mai cambiate',
+          'Raggiungibili da fuori casa',
+          'Aggiornamenti fermi da anni',
+        ],
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'Il salotto',
+        titolo: 'La televisione resta accesa in rete.',
+        testo: 'Smart TV e box restano connessi per anni con programmi vecchi. Guardiamo versioni, servizi attivi e cosa lasciano aperto.',
+      },
+      {
+        fondo: 'bianco',
+        occhiello: 'Studio e cucina',
+        titolo: 'Computer, stampante, prese intelligenti.',
+        elenco: [
+          'Cartelle condivise rimaste aperte',
+          'Aggiornamenti mancanti sul computer',
+          'Piccoli oggetti che parlano con internet',
+        ],
+      },
+      {
+        fondo: 'nero',
+        foto: 'privati-telecamera.jpg',
+        occhiello: 'Check-up della rete di casa',
+        titolo: 'Ti diciamo cosa sistemare, in ordine.',
+        testo: 'Ci scrivi, ti richiamiamo entro 24 ore e ti diamo un preventivo prima di iniziare. Poi veniamo e sistemiamo.',
+        cta: 'Facciamo il giro di casa',
+        piede: 'Tecnolink · Firenze e dintorni',
+      },
+    ],
+  },
+
   linkedin: {
     etichetta: 'Check-up di sicurezza informatica',
     carte: [
@@ -263,9 +315,9 @@ const FORMATI = {
 /* Carta                                                               */
 /* ------------------------------------------------------------------ */
 
-/** Trattini di avanzamento: quattro segni, quello corrente è pieno e più lungo. */
-const segni = (t) => `
-  <div class="segni">${[0, 1, 2, 3].map((i) => `<i data-i="${i}"></i>`).join('')}</div>`;
+/** Trattini di avanzamento: uno per carta, quello corrente è pieno e più lungo. */
+const segni = (t, totale) => `
+  <div class="segni">${Array.from({ length: totale }, (_, i) => `<i data-i="${i}"></i>`).join('')}</div>`;
 
 /**
  * Velo scuro sopra la foto. Serve a due cose: rendere leggibile il testo bianco
@@ -287,7 +339,7 @@ const VELO = 'linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.30) 2
  *   riquadro  foto in un riquadro con aria intorno, su fondo nero. La più
  *             composta: sembra una pagina, non un annuncio
  */
-const carta = (f, t, c, i, etichetta, modo) => {
+const carta = (f, t, c, i, etichetta, modo, totale) => {
   // La carta di chiusura ha un elemento in più, il pulsante: la foto si accorcia
   // per far posto, altrimenti la CTA finisce addosso al piede.
   const hFascia = Math.round(f.fascia * (c.cta ? 0.88 : 1));
@@ -372,7 +424,7 @@ ${modo === 'riquadro' ? `
   <div class="wrap">
     <div class="testa">
       <img class="logo" src="${LOGO}" alt="Tecnolink">
-      <span class="conta">${String(i + 1).padStart(2, '0')} / 04</span>
+      <span class="conta">${String(i + 1).padStart(2, '0')} / ${String(totale).padStart(2, "0")}</span>
     </div>
 
     <div class="centro">
@@ -387,7 +439,7 @@ ${modo === 'riquadro' ? `
 
     <div class="piedone">
       <span class="etichetta">${c.piede || etichetta}</span>
-      ${segni(t)}
+      ${segni(t, totale)}
     </div>
   </div>
 
@@ -440,7 +492,7 @@ for (const [pubblico, set] of Object.entries(CONTENUTI)) {
         const modo = modoFoto && c.foto ? modoFoto : 'piatto';
         const t = c.fondo === 'nero' || modo !== 'piatto' ? NERO : BIANCO;
         const nome = `${pubblico}-${variante}-${formato}-0${i + 1}`;
-        writeFileSync(resolve(outDir, `${nome}.html`), carta(f, t, c, i, set.etichetta, modo), 'utf8');
+        writeFileSync(resolve(outDir, `${nome}.html`), carta(f, t, c, i, set.etichetta, modo, set.carte.length), 'utf8');
         generati.push(`  ${nome}  ${f.w}x${f.h}`);
       });
     }

@@ -8,6 +8,8 @@ EDGE="/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe"
 
 # Edge vuole un percorso Windows (C:/...), non quello POSIX di Git Bash: `pwd -W` lo converte.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -W)"
+# Per il glob su html/ serve invece il percorso POSIX: Edge vuole uno, la shell l'altro.
+HERE_POSIX="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # I PNG vivono dentro il sito, non qui accanto: servono alla pagina interna
 # /interno/materiali-campagne, che è il posto da cui si ritrovano.
@@ -53,21 +55,33 @@ render() { # <nome> <larghezza> <altezza>
   fi
 }
 
-# Due pubblici × quattro varianti × quattro carte × tre misure = 96 immagini.
+# Tutte le carte generate, in tutte le misure in cui esistono. Oggi sono tre sequenze
+# per quattro varianti grafiche: facebook e linkedin con quattro carte in tre misure,
+# stanze con cinque carte in due (di quella il 4:5 non è mai stato generato). 136 immagini.
 # I PNG già presenti vengono rifatti solo se manca il file: così, se un giro si
 # interrompe a metà, rilanciare lo script riprende da dove era rimasto invece di
 # ricominciare da capo (è un quarto d'ora abbondante). Per rifare tutto: --tutto,
 # che serve ogni volta che si tocca la grafica e non solo i testi.
 if [ "${1:-}" = "--tutto" ]; then rm -f "$PNG"/*.png; fi
 
-for pubblico in facebook linkedin; do
-  for variante in bn foto fascia riquadro; do
-    for i in 01 02 03 04; do
-      render "$pubblico-$variante-feed-verticale-$i" 1080 1350
-      render "$pubblico-$variante-quadrato-$i"       1080 1080
-      render "$pubblico-$variante-storia-$i"         1080 1920
-    done
-  done
+# I nomi delle carte non sono più elencati qui: si leggono da quelle che
+# genera-caroselli.mjs ha appena scritto in html/. Così aggiungere una sequenza a
+# CONTENUTI — o cambiare il numero di carte di una che c'è già — non obbliga a venire
+# a correggere anche questo script, che è esattamente il modo in cui prima si
+# finiva per generare l'HTML di carte che poi nessuno convertiva in PNG.
+# La misura si deduce dal nome: <chiave>-<variante>-<formato>-NN.
+for f in "$HERE_POSIX"/html/*.html; do
+  [ -e "$f" ] || { echo "Nessuna carta in html/: lancia prima node genera-caroselli.mjs" >&2; exit 1; }
+  nome="$(basename "$f" .html)"
+  case "$nome" in
+    # Il 4:5 del feed resta in elenco: è la misura principale su Facebook e
+    # Instagram, e lasciarlo fuori dai formati riconosciuti — come era successo —
+    # non dà errore, stampa "ignorato" e si porta via quarantotto immagini.
+    *-feed-verticale-*) render "$nome" 1080 1350 ;;
+    *-quadrato-*)       render "$nome" 1080 1080 ;;
+    *-storia-*)         render "$nome" 1080 1920 ;;
+    *)                  echo "  ignorato, formato non riconosciuto: $nome" >&2 ;;
+  esac
 done
 
 echo "Fatto."
